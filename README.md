@@ -6,7 +6,7 @@ Le Festival international de musique universitaire ([FIMU](https://www.fimu.com/
 
 ## Qu'est ce que FIMOBILE ?
 
-FIMOBILE est un projet réalisé par 5 étudiant en 2ème année de Bachelors universitaire de technologie, l'objectif de se projet est d'avoir une application qui puisse évoler facilement d'années en années, que cette même application est une prise en main simple pour que l'équipe du FIMU puisse faires des mise à jour, l'application à 3 couleurs qui peut être modifiées en fonction du visuel de l'édition, et que l'application soit une appli peu gourmande en bande passante au cas ou il y aurais beaucoup de monde dessus.
+FIMOBILE est un projet réalisé par 5 étudiants en 2ème année de Bachelors universitaire de technologie, l'objectif de se projet est d'avoir une application qui puisse évoler facilement d'années en années, que cette même application est une prise en main simple pour que l'équipe du FIMU puisse faires des mise à jour, l'application à 3 couleurs qui peut être modifiées en fonction du visuel de l'édition, et que l'application soit une appli peu gourmande en bande passante au cas ou il y aurais beaucoup de monde dessus.
 
 ## Que va t'il y avoir dans l'appli FIMOBILE ?
 
@@ -22,4 +22,4 @@ L'appli FIMOBILE est constitués de:
 * Une page pour présenter nos partenaire et mécènes
 * Notification
 * Rubrique à l'accueil
-* Sauvegarde de ses artistes favori
+* Sauvegarde de ses artistes favoris
