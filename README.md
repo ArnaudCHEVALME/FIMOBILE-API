@@ -23,7 +23,3 @@ L'appli FIMOBILE est constitués de:
 * Notification
 * Rubrique à l'accueil
 * Sauvegarde de ses artistes favori
-
-
-FIMOB
-Backend + Appli android pour le FIMU
