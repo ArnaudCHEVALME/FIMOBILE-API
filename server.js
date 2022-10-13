@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 
 const path = require('path')
 require('dotenv').config({
-    path: path.resolve(__dirname, '../.env')
+    path: path.resolve(__dirname, './.env')
 })
 const app = express();
 
@@ -30,8 +30,8 @@ db.sequelize.sync({ force: true }) // For developpement, drop every table
 require("./backend/routers/genre.router")(app);
 
 // set port, listen for requests
-const PORT = process.env.PORT;
-const HOST = process.env.HOST;
+const PORT = process.env._FIMU_PORT;
+const HOST = process.env._FIMU_HOST;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
     console.log(`http://${HOST}:${PORT}.`);

@@ -1,10 +1,10 @@
 require("dotenv").config();
 
 module.exports = {
-    HOST: process.env.HOST,
-    USER: process.env.USER,
-    PASSWORD: process.env.MDP,
-    DB: process.env.DB,
+    HOST: process.env._FIMU_HOST,
+    USER: process.env._FIMU_USER,
+    PASSWORD: process.env._FIMU_MDP,
+    DB: process.env._FIMU_DB,
     dialect: "postgres",
     pool: {
         max: 20,
