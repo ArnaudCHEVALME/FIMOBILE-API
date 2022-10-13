@@ -33,4 +33,8 @@ db.artistes.belongsTo(db.genres);
 db.artistes.belongsToMany(db.sous_genres, { through: "ArtistesSousGenres" });
 db.sous_genres.belongsToMany(db.artistes, { through: "ArtistesSousGenres" });
 
+
+
 module.exports = db;
+
+
