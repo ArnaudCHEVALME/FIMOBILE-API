@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const service = sequelize.define("genre", {
-        serviceId: {
+    const type_poi = sequelize.define("genre", {
+        type_poiId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
@@ -11,5 +11,5 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         }
     });
-    return service;
+    return type_poi;
 };
