@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const poi = sequelize.define("genre", {
+    const Poi = sequelize.define("poi", {
         poiId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -23,5 +23,5 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: true
         }
     });
-    return poi;
+    return Poi;
 };

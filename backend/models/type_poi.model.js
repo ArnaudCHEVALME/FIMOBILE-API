@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const type_poi = sequelize.define("genre", {
+    const Type_poi = sequelize.define("type_poi", {
         type_poiId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -11,5 +11,5 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         }
     });
-    return type_poi;
+    return Type_poi;
 };

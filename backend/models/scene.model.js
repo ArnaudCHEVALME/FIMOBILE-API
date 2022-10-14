@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const scene = sequelize.define("genre", {
+    const Scene = sequelize.define("scene", {
         sceneId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -23,5 +23,5 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         }
     });
-    return scene;
+    return Scene;
 };

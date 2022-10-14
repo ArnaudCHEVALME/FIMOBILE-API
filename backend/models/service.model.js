@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const service = sequelize.define("genre", {
+    const Service = sequelize.define("service", {
         serviceId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -11,5 +11,5 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         }
     });
-    return service;
+    return Service;
 };
