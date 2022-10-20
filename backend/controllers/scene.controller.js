@@ -1,0 +1,164 @@
+const db = require("../models");
+const Scene = db.scene;
+const Op = db.Sequelize.Op;
+
+// Create and Save a new scene type
+exports.create = (req, res) => {
+    // Validate request
+    if (!req.body.nom) {
+        res.status(400).send({
+            message: "Name cannot be empty!"
+        });
+        return;
+    }
+    if(!req.body.latitude) {
+        res.status(400).send({
+            message: "Latitude cannot be empty"
+        })
+        return;
+    }
+    if(!req.body.longitude) {
+        res.status(400).send({
+            message: "Longitude cannot be empty"
+        })
+        return;
+    }
+    if(!req.body.interieur) {
+        res.status(400).send({
+            message: "Interieur status cannot be empty"
+        })
+        return;
+    }
+
+    // Create a Scene
+    const scene = {
+        longitude: req.body.longitude,
+        latitude: req.body.latitude,
+        nom: req.body.nom,
+        capacite: 0,
+        interieur: req.body.interieur
+    };
+
+    // Save Scene in the database
+    Scene.create(scene)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while creating the Genre."
+            });
+        });
+};
+ 
+// Retrieve all scene from the database. -> still in progress
+exports.findAll = (req, res) => {
+    const longitude = req.query.longitude;
+    const latitude = req.query.latitude;
+    const nom = req.query.nom;
+    const visites = req.query.visites;
+
+
+    let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
+
+
+    Type_poi.findAll({ where: condition_longitude })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving Genres."
+            });
+        });
+};
+
+// Find a single Scene with an id
+exports.findOne = (req, res) => {
+    const id = req.params.id;
+
+    Scene.findByPk(id)
+        .then(data => {
+            if (data) {
+                res.send(data);
+            } else {
+                res.status(404).send({
+                    message: `Cannot find Genre with id=${id}.`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error retrieving Genre with id=" + id
+            });
+        });
+};
+
+// Update a Scene by the id in the request
+exports.update = (req, res) => {
+    const id = req.params.id;
+
+    Scene.update(req.body, {
+        where: { id: id }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Genre was updated successfully."
+                });
+            } else {
+                res.send({
+                    message: `Cannot update Genre with id=${id}. Maybe Genre was not found or req.body is empty!`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error updating Genre with id=" + id
+            });
+        });
+};
+
+// Delete a Scene with the specified id in the request
+exports.delete = (req, res) => {
+    const id = req.params.id;
+
+    Scene.destroy({
+        where: { id: id }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Genre was deleted successfully!"
+                });
+            } else {
+                res.send({
+                    message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Could not delete Genre with id=" + id
+            });
+        });
+};
+
+// Delete all Scene from the database.
+exports.deleteAll = (req, res) => {
+    Scene.destroy({
+        where: {},
+        truncate: false
+    })
+        .then(nums => {
+            res.send({ message: `${nums} Genres were deleted successfully!` });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while removing all Genres."
+            });
+        });
+};

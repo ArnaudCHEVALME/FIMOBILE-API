@@ -1,33 +1,24 @@
 const db = require("../models");
-const Poi = db.poi;
+const Type_poi = db.type_poi;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Poi type
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.latitude) {
+    if (!req.body.libelle) {
         res.status(400).send({
-            message: "Latitude cannot be empty!"
-        });
-        return;
-    }
-    if (!req.body.longitude) {
-        res.status(400).send({
-            message: "Longitude cannot be empty!"
+            message: "Content can not be empty!"
         });
         return;
     }
 
-    // Create a Poi
-    const poi = {
-        longitude: req.body.longitude,
-        latitude: req.body.latitude,
-        nom: req.body.nom,
-        visites: req.body.visites
+    // Create a Poi type
+    const type_poi = {
+        libelle: req.body.libelle,
     };
 
-    // Save Poi in the database
-    Poi.create(poi)
+    // Save Poi type in the database
+    Type_poi.create(type_poi)
         .then(data => {
             res.send(data);
         })
@@ -38,19 +29,13 @@ exports.create = (req, res) => {
             });
         });
 };
- 
-// Retrieve all Pois from the database.-> still in progress
+
+// Retrieve all Poi types from the database.
 exports.findAll = (req, res) => {
-    const longitude = req.query.longitude;
-    const latitude = req.query.latitude;
-    const nom = req.query.nom;
-    const visites = req.query.visites;
+    const libelle = req.query.libelle;
+    let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-
-    let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
-
-
-    Type_poi.findAll({ where: condition_longitude })
+    Type_poi.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
@@ -62,11 +47,11 @@ exports.findAll = (req, res) => {
         });
 };
 
-// Find a single Poi with an id
+// Find a single Poi type with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Poi.findByPk(id)
+    Type_poi.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
@@ -83,11 +68,11 @@ exports.findOne = (req, res) => {
         });
 };
 
-// Update a Poi by the id in the request
+// Update a Poi type by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    Poi.update(req.body, {
+    Type_poi.update(req.body, {
         where: { id: id }
     })
         .then(num => {
@@ -108,11 +93,11 @@ exports.update = (req, res) => {
         });
 };
 
-// Delete a Poi with the specified id in the request
+// Delete a Poi type with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    Poi.destroy({
+    Type_poi.destroy({
         where: { id: id }
     })
         .then(num => {
@@ -133,9 +118,9 @@ exports.delete = (req, res) => {
         });
 };
 
-// Delete all Poi from the database.
+// Delete all Poi types from the database.
 exports.deleteAll = (req, res) => {
-    Poi.destroy({
+    Type_poi.destroy({
         where: {},
         truncate: false
     })

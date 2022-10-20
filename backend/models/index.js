@@ -21,7 +21,8 @@ db.sequelize = sequelize;
 
 db.artistes = require("./artiste.model")(sequelize, Sequelize);
 db.genres = require("./genre.model.js")(sequelize, Sequelize);
-// db.pois = require("./poi.model.js")(sequelize, Sequelize);
+db.type_poi = require("./type_poi.model.js")(sequelize, Sequelize);
+db.poi = require("./poi.model.js")(sequelize, Sequelize);
 // db.scenes = require("./scene.model.js")(sequelize, Sequelize);
 // db.services = require("./service.model")(sequelize, Sequelize);
 db.sous_genres = require("./sous_genre.model")(sequelize, Sequelize);
