@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: true
         },
-        pseudo: {
+        login: {
             type: Sequelize.STRING,
             allowNull: false
         },
