@@ -1,5 +1,5 @@
 module.exports = app => {
-    const couleurs = require("../controllers/couleurs.controller.js");
+    const couleurs = require("../controllers/couleur.controller.js");
     const router = require("express").Router();
 
     // Create a new couleurs

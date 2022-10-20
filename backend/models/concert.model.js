@@ -22,6 +22,8 @@ module.exports = (sequelize, Sequelize) => {
             type:Sequelize.INTEGER,
             allowNull:true
         }
+    }, {
+        timestamps: false
     });
     return Concert;
 };

@@ -41,15 +41,8 @@ db.genres.hasMany(db.artistes);
 db.artistes.belongsToMany(db.sous_genres, { through: "ArtistesSousGenres" });
 db.sous_genres.belongsToMany(db.artistes, { through: "ArtistesSousGenres" });
 
-// 1 concert est lié à 1 scène
-// 1 scène est liée à n concerts
-db.concert.belongsTo(db.scenes);
-db.scenes.hasMany(db.concert);
-
-// 1 concert est lié à 1 artiste
-// 1 artiste est lié à n concerts
-db.concert.belongsTo(db.artistes);
-db.artistes.hasMany(db.concert);
+db.artistes.belongsToMany(db.scenes, {through: db.concert});
+db.scenes.belongsToMany(db.artistes, {through: db.concert});
 
 
 
