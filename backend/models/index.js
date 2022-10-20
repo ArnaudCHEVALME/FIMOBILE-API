@@ -21,18 +21,35 @@ db.sequelize = sequelize;
 
 db.artistes = require("./artiste.model")(sequelize, Sequelize);
 db.genres = require("./genre.model.js")(sequelize, Sequelize);
+db.pois = require("./poi.model.js")(sequelize, Sequelize);
+db.scenes = require("./scene.model.js")(sequelize, Sequelize);
+db.services = require("./service.model")(sequelize, Sequelize);
 db.type_poi = require("./type_poi.model.js")(sequelize, Sequelize);
 db.poi = require("./poi.model.js")(sequelize, Sequelize);
-// db.scenes = require("./scene.model.js")(sequelize, Sequelize);
-// db.services = require("./service.model")(sequelize, Sequelize);
 db.sous_genres = require("./sous_genre.model")(sequelize, Sequelize);
-// db.users = require("./user.model.js")(sequelize, Sequelize);
+db.users = require("./user.model.js")(sequelize, Sequelize);
+db.concert = require("./concert.model.js")(sequelize, Sequelize);
 
-db.genres.hasMany(db.artistes);
+
+// 1 artiste a 1 genre
+// 1 genre appartient à n artistes
 db.artistes.belongsTo(db.genres);
+db.genres.hasMany(db.artistes);
 
+// 1 artiste peut avoir n sous-genres
+// 1 sous-genre peut être lié à n artistes
 db.artistes.belongsToMany(db.sous_genres, { through: "ArtistesSousGenres" });
 db.sous_genres.belongsToMany(db.artistes, { through: "ArtistesSousGenres" });
+
+// 1 concert est lié à 1 scène
+// 1 scène est liée à n concerts
+db.concert.belongsTo(db.scenes);
+db.scenes.hasMany(db.concert);
+
+// 1 concert est lié à 1 artiste
+// 1 artiste est lié à n concerts
+db.concert.belongsTo(db.artistes);
+db.artistes.hasMany(db.concert);
 
 
 
