@@ -1,136 +1,136 @@
 const db = require("../models");
-const Couleurs = db.Couleurs;
+const Saison = db.Saison;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Couleurs
+// Create and Save a new Saison
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.valeurhexa) {
+    if (!req.body.theme) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
         return;
     }
 
-    // Create a Couleurs
-    const Couleurs = {
-        valeurhexa: req.body.valeurhexa,
+    // Create a Saison
+    const Saison = {
+        theme: req.body.theme,
     };
 
-    // Save Couleurs in the database
-    Couleurs.create(Couleurs)
+    // Save Saison in the database
+    Saison.create(Saison)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the Couleurs."
+                    err.message || "Some error occurred while creating the Saison."
             });
         });
 };
 
-// Retrieve all Couleurs from the database.
+// Retrieve all Saison from the database.
 exports.findAll = (req, res) => {
-    const valeurhexa = req.query.valeurhexa;
-    let condition = valeurhexa ? { valeurhexa: { [Op.iLike]: `%${valeurhexa}%` } } : null;
+    const theme = req.query.theme;
+    let condition = theme ? { theme: { [Op.iLike]: `%${theme}%` } } : null;
 
-    Couleurs.findAll({ where: condition })
+    Saison.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving Couleurs."
+                    err.message || "Some error occurred while retrieving Saison."
             });
         });
 };
 
-// Find a single Couleurs with an id
+// Find a single Saison with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Couleurs.findByPk(id)
+    Saison.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Couleurs with id=${id}.`
+                    message: `Cannot find Saison with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Couleurs with id=" + id
+                message: "Error retrieving Saison with id=" + id
             });
         });
 };
 
-// Update a Couleurs by the id in the request
+// Update a Saison by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    Couleurs.update(req.body, {
+    Saison.update(req.body, {
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Couleurs was updated successfully."
+                    message: "Saison was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update Couleurs with id=${id}. Maybe Couleurs was not found or req.body is empty!`
+                    message: `Cannot update Saison with id=${id}. Maybe Saison was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Couleurs with id=" + id
+                message: "Error updating Saison with id=" + id
             });
         });
 };
 
-// Delete a Couleurs with the specified id in the request
+// Delete a Saison with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    Couleurs.destroy({
+    Saison.destroy({
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Couleurs was deleted successfully!"
+                    message: "Saison was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete Couleurs with id=${id}. Maybe Couleurs was not found!`
+                    message: `Cannot delete Saison with id=${id}. Maybe Saison was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Couleurs with id=" + id
+                message: "Could not delete Saison with id=" + id
             });
         });
 };
 
-// Delete all Couleurs from the database.
+// Delete all Saison from the database.
 exports.deleteAll = (req, res) => {
-    Couleurs.destroy({
+    Saison.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Couleurs were deleted successfully!` });
+            res.send({ message: `${nums} Saison were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all Couleurs."
+                    err.message || "Some error occurred while removing all Saison."
             });
         });
 };

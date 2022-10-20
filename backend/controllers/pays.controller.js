@@ -1,136 +1,136 @@
 const db = require("../models");
-const Couleurs = db.Couleurs;
+const Pays = db.Pays;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Couleurs
+// Create and Save a new Pays
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.valeurhexa) {
+    if (!req.body.nompays) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
         return;
     }
 
-    // Create a Couleurs
-    const Couleurs = {
-        valeurhexa: req.body.valeurhexa,
+    // Create a Pays
+    const Pays = {
+        nompays: req.body.nompays,
     };
 
-    // Save Couleurs in the database
-    Couleurs.create(Couleurs)
+    // Save Pays in the database
+    Pays.create(Pays)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the Couleurs."
+                    err.message || "Some error occurred while creating the Pays."
             });
         });
 };
 
-// Retrieve all Couleurs from the database.
+// Retrieve all Pays from the database.
 exports.findAll = (req, res) => {
-    const valeurhexa = req.query.valeurhexa;
-    let condition = valeurhexa ? { valeurhexa: { [Op.iLike]: `%${valeurhexa}%` } } : null;
+    const nompays = req.query.nompays;
+    let condition = nompays ? { nompays: { [Op.iLike]: `%${nompays}%` } } : null;
 
-    Couleurs.findAll({ where: condition })
+    Pays.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving Couleurs."
+                    err.message || "Some error occurred while retrieving Pays."
             });
         });
 };
 
-// Find a single Couleurs with an id
+// Find a single Pays with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Couleurs.findByPk(id)
+    Pays.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Couleurs with id=${id}.`
+                    message: `Cannot find Pays with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Couleurs with id=" + id
+                message: "Error retrieving Pays with id=" + id
             });
         });
 };
 
-// Update a Couleurs by the id in the request
+// Update a Pays by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    Couleurs.update(req.body, {
+    Pays.update(req.body, {
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Couleurs was updated successfully."
+                    message: "Pays was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update Couleurs with id=${id}. Maybe Couleurs was not found or req.body is empty!`
+                    message: `Cannot update Pays with id=${id}. Maybe Pays was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Couleurs with id=" + id
+                message: "Error updating Pays with id=" + id
             });
         });
 };
 
-// Delete a Couleurs with the specified id in the request
+// Delete a Pays with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    Couleurs.destroy({
+    Pays.destroy({
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Couleurs was deleted successfully!"
+                    message: "Pays was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete Couleurs with id=${id}. Maybe Couleurs was not found!`
+                    message: `Cannot delete Pays with id=${id}. Maybe Pays was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Couleurs with id=" + id
+                message: "Could not delete Pays with id=" + id
             });
         });
 };
 
-// Delete all Couleurs from the database.
+// Delete all Pays from the database.
 exports.deleteAll = (req, res) => {
-    Couleurs.destroy({
+    Pays.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Couleurs were deleted successfully!` });
+            res.send({ message: `${nums} Pays were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all Couleurs."
+                    err.message || "Some error occurred while removing all Pays."
             });
         });
 };
