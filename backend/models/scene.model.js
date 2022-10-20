@@ -21,6 +21,10 @@ module.exports = (sequelize, Sequelize) => {
         interieur: {
             type: Sequelize.BOOLEAN,
             allowNull: false
+        },
+        nom: {
+            type: Sequelize.STRING,
+            allowNull: false
         }
     });
     return Scene;
