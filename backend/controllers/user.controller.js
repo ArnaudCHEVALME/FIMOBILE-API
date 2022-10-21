@@ -65,7 +65,7 @@ exports.findAll = (req, res) => {
 
 // Find a single User with an id
 exports.findOne = (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
 
     User.findByPk(id)
         .then(data => {
@@ -86,10 +86,16 @@ exports.findOne = (req, res) => {
 
 // Update a User by the id in the request
 exports.update = (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
 
-    User.update(req.body, {
-        where: { id: id }
+    const newValues = {
+        login: req.body.login,
+        email: req.body.email,
+        password: req.body.password
+    };
+
+    User.update(newValues, {
+        where: { userId: id }
     })
         .then(num => {
             if (num == 1) {

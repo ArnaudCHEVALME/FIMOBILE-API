@@ -70,7 +70,7 @@ exports.findOne = (req, res) => {
 
 // Update a Genre by the id in the request
 exports.update = (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     console.log(id);
     const newValues = { libelle: req.body.libelle};
 
@@ -97,7 +97,7 @@ exports.update = (req, res) => {
 
 // Delete a Genre with the specified id in the request
 exports.delete = (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
 
     Genre.destroy({
         where: { genreId: id }
