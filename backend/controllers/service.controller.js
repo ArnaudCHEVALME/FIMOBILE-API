@@ -72,7 +72,7 @@ exports.findOne = (req, res) => {
 
 // Update a Service by the id in the request
 exports.update = (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     console.log(id);
     const newValues = { libelle: req.body.libelle};
 
