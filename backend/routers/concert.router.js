@@ -1,4 +1,3 @@
-const concerts = require("../controllers/genre.controller");
 module.exports = app => {
     const concerts = require("../controllers/concert.controller.js");
     const router = require("express").Router();
