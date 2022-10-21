@@ -25,7 +25,7 @@ exports.create = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the Genre."
+                    err.message || "Some error occurred while creating the Categorie_reseau."
             });
         });
 };
@@ -42,7 +42,7 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving Genres."
+                    err.message || "Some error occurred while retrieving Categories_reseaux."
             });
         });
 };
@@ -57,38 +57,40 @@ exports.findOne = (req, res) => {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Genre with id=${id}.`
+                    message: `Cannot find Categorie_reseau with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Genre with id=" + id
+                message: "Error retrieving Categorie_reseau with id=" + id
             });
         });
 };
 
-// Update a Genre by the id in the request
+// Update a Categorie_reseau by the id in the request
 exports.update = (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
+    console.log(id);
+    const newValues = { libelle: req.body.libelle};
 
-    Categorie_reseau.update(req.body, {
-        where: { id: id }
+    Categorie_reseau.update(newValues, {
+        where: { categorie_reseauId: id }
     })
         .then(num => {
             if (num == 1) {
-              res.send({
-                    message: "Genre was updated successfully."
+                res.send({
+                    message: "Categorie_reseau was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update Genre with id=${id}. Maybe Genre was not found or req.body is empty!`
+                    message: `Cannot update Categorie_reseau with id=${id}. Maybe Categorie_reseau was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Genre with id=" + id
+                message: "Error updating Categorie_reseau with id=" + id
             });
         });
 };
@@ -98,22 +100,22 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     Categorie_reseau.destroy({
-        where: { id: id }
+        where: { categorie_reseauId: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Genre was deleted successfully!"
+                    message: "Categorie_reseau was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
+                    message: `Cannot delete Categorie_reseau with id=${id}. Maybe Categorie_reseau was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Genre with id=" + id
+                message: "Could not delete Categorie_reseau with id=" + id
             });
         });
 };
@@ -125,12 +127,12 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Genres were deleted successfully!` });
+            res.send({ message: `${nums} Categories_reseaux were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all Genres."
+                    err.message || "Some error occurred while removing all Categories_reseaux."
             });
         });
 };

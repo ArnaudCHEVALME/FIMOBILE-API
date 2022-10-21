@@ -1,15 +1,15 @@
 module.exports = (sequelize, Sequelize) => {
     const Categorie_reseau = sequelize.define("categorie_reseau", {
-        Categorie_reseauId: {
+        categorie_reseauId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false
         },
         libelle: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
             allowNull: false
         }
-    });
+    }, { timestamps: false });
     return Categorie_reseau;
 };

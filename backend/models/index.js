@@ -29,6 +29,8 @@ db.poi = require("./poi.model.js")(sequelize, Sequelize);
 db.sous_genres = require("./sous_genre.model")(sequelize, Sequelize);
 db.users = require("./user.model.js")(sequelize, Sequelize);
 db.concert = require("./concert.model.js")(sequelize, Sequelize);
+db.categories_reseaux = require("./categorie_reseau.js")(sequelize, Sequelize);
+
 
 
 // 1 artiste a 1 genre
