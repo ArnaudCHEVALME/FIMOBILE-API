@@ -1,4 +1,3 @@
-const reseaux = require("../controllers/reseau.controller");
 module.exports = app => {
     const reseaux = require("../controllers/reseau.controller.js");
     const router = require("express").Router();
