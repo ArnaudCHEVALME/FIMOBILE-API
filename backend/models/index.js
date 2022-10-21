@@ -28,7 +28,7 @@ db.type_poi = require("./type_poi.model.js")(sequelize, Sequelize);
 db.poi = require("./poi.model.js")(sequelize, Sequelize);
 db.sous_genres = require("./sous_genre.model")(sequelize, Sequelize);
 db.users = require("./user.model.js")(sequelize, Sequelize);
-db.concert = require("./concert.model.js")(sequelize, Sequelize);
+db.concerts = require("./concert.model.js")(sequelize, Sequelize);
 
 
 // 1 artiste a 1 genre
@@ -41,8 +41,8 @@ db.genres.hasMany(db.artistes);
 db.artistes.belongsToMany(db.sous_genres, { through: "ArtistesSousGenres" });
 db.sous_genres.belongsToMany(db.artistes, { through: "ArtistesSousGenres" });
 
-db.artistes.belongsToMany(db.scenes, {through: db.concert});
-db.scenes.belongsToMany(db.artistes, {through: db.concert});
+db.artistes.belongsToMany(db.scenes, {through: db.concerts});
+db.scenes.belongsToMany(db.artistes, {through: db.concerts});
 
 
 

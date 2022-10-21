@@ -51,10 +51,6 @@ require("./backend/routers/user.router")(app);
 // require("./backend/routers/sous_genre.router")(app);
 
 
-
-
-
-
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
     console.log(`http://${HOST}:${PORT}.`);
