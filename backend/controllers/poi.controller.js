@@ -94,7 +94,7 @@ exports.update = (req, res) => {
     const id = req.params.id;
 
     Poi.update(req.body, {
-        where: { id: id }
+        where: { poiId: id }
     })
         .then(num => {
             if (num == 1) {
