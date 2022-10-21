@@ -13,12 +13,12 @@ exports.create = (req, res) => {
     }
 
     // Create a Pays
-    const Pays = {
+    const pays = {
         nompays: req.body.nompays,
     };
 
     // Save Pays in the database
-    Pays.create(Pays)
+    Pays.create(pays)
         .then(data => {
             res.send(data);
         })
