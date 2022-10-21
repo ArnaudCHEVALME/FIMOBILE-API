@@ -49,7 +49,7 @@ exports.findAll = (req, res) => {
 
 // Find a single Service with an id
 exports.findOne = (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
 
     Service.findByPk(id)
         .then(data => {
