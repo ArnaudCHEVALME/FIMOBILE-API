@@ -7,7 +7,7 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         },
         libelle: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
             allowNull: false
         }
     }, {
