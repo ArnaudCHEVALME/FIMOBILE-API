@@ -46,7 +46,7 @@ exports.findAll = (req, res) => {
             });
         });
 };
-
+   
 // Find a single Service with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
