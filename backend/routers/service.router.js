@@ -1,5 +1,5 @@
 module.exports = app => {
-    const service = require("../controllers/service.controller.js");
+    const service = require("../controllers/saison.controllers.js");
     const router = require("express").Router();
 
     // Create a new service
