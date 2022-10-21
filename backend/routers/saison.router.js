@@ -1,5 +1,5 @@
 module.exports = app => {
-    const saison = require("../controllers/saison.controller.js");
+    const saison = require("../controllers/saison.controllers.js");
     const router = require("express").Router();
 
     // Create a new saison
