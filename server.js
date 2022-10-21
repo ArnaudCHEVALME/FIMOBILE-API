@@ -31,6 +31,9 @@ db.sequelize.sync({ force: true }) // For developpement, drop every table
 
 // Use routes defined in backend/routers
 require("./backend/routers/genre.router")(app);
+require("./backend/routers/type_poi.router")(app);
+require("./backend/routers/service.router")(app);
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

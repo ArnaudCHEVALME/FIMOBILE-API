@@ -7,7 +7,7 @@ exports.create = (req, res) => {
     // Validate request
     if (!req.body.libelle) {
         res.status(400).send({
-            message: "Content can not be empty!"
+            message: "Libelle can not be empty!"
         });
         return;
     }
@@ -25,7 +25,7 @@ exports.create = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the Genre."
+                    err.message || "Some error occurred while creating the poi type."
             });
         });
 };
@@ -42,14 +42,15 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving Genres."
+                    err.message || "Some error occurred while retrieving poi types."
             });
         });
 };
 
 // Find a single Poi type with an id
 exports.findOne = (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
+
 
     Type_poi.findByPk(id)
         .then(data => {
@@ -57,7 +58,7 @@ exports.findOne = (req, res) => {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Genre with id=${id}.`
+                    message: `Cannot find poi types with id=${id}.`
                 });
             }
         })
@@ -70,10 +71,12 @@ exports.findOne = (req, res) => {
 
 // Update a Poi type by the id in the request
 exports.update = (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
+    const newValues = { libelle: req.body.libelle};
 
-    Type_poi.update(req.body, {
-        where: { id: id }
+
+    Type_poi.update(newValues, {
+        where: { type_poiId: id }
     })
         .then(num => {
             if (num == 1) {
@@ -95,10 +98,10 @@ exports.update = (req, res) => {
 
 // Delete a Poi type with the specified id in the request
 exports.delete = (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
 
     Type_poi.destroy({
-        where: { id: id }
+        where: { type_poiId: id }
     })
         .then(num => {
             if (num == 1) {
