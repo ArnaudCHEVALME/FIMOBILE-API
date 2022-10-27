@@ -11,11 +11,7 @@ exports.create = (req, res) => {
         });
         return;
     }
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> b9ed585eab37b1587968c666b849a4843901596d
     // Create a Service
     const service = {
         libelle: req.body.libelle
@@ -50,7 +46,7 @@ exports.findAll = (req, res) => {
             });
         });
 };
-   
+
 // Find a single Service with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
@@ -75,7 +71,7 @@ exports.findOne = (req, res) => {
 // Update a Service by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
-    const newValues = { libelle: req.body.libelle};
+    const newValues = { libelle: req.body.libelle };
 
     Service.update(newValues, {
         where: { serviceId: id }
