@@ -11,19 +11,19 @@ exports.create = (req, res) => {
         });
         return;
     }
-    if(!req.body.latitude) {
+    if (!req.body.latitude) {
         res.status(400).send({
             message: "Latitude cannot be empty"
         })
         return;
     }
-    if(!req.body.longitude) {
+    if (!req.body.longitude) {
         res.status(400).send({
             message: "Longitude cannot be empty"
         })
         return;
     }
-    if(!req.body.interieur) {
+    if (!req.body.interieur) {
         res.status(400).send({
             message: "Interieur status cannot be empty"
         })
@@ -54,7 +54,7 @@ exports.create = (req, res) => {
             });
         });
 };
- 
+
 // Retrieve all scene from the database. -> still in progress
 exports.findAll = (req, res) => {
     const longitude = req.query.longitude;

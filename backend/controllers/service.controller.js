@@ -11,10 +11,14 @@ exports.create = (req, res) => {
         });
         return;
     }
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> b9ed585eab37b1587968c666b849a4843901596d
     // Create a Service
     const service = {
-        libelle: req.body.libelle,
+        libelle: req.body.libelle
     };
 
     // Save Service in the database
