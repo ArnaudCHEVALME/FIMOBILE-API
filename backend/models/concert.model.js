@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
     const Concert = sequelize.define("concert", {
-        concertID:{
-            type:Sequelize.INTEGER,
+        concertID: {
+            type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false
@@ -14,16 +14,14 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false
         },
-        nbPersonne:{
-            type:Sequelize.INTEGER,
-            allowNull:true
+        nbPersonne: {
+            type: Sequelize.INTEGER,
+            allowNull: true
         },
-        visites:{
-            type:Sequelize.INTEGER,
-            allowNull:true
+        visites: {
+            type: Sequelize.INTEGER,
+            allowNull: true
         }
-    }, {
-        timestamps: false
     });
     return Concert;
 };

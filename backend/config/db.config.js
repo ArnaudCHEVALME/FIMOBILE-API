@@ -6,6 +6,9 @@ module.exports = {
     PASSWORD: process.env._FIMU_MDP,
     DB: process.env._FIMU_DB,
     dialect: "postgres",
+    define: {
+        timestamps: false
+    },
     pool: {
         max: 20,
         min: 0,
