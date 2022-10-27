@@ -1,5 +1,4 @@
 const db = require("../models");
-const genreModel = require("../models/genre.model");
 const Artistes = db.artistes;
 const Op = db.Sequelize.Op;
 
@@ -40,7 +39,7 @@ exports.findAll = (req, res) => {
     const name = req.query.name;
     let condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 
-    Artiste.findAll({ where: condition })
+    Artistes.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
@@ -52,11 +51,11 @@ exports.findAll = (req, res) => {
         });
 };
 
-// Find a single Artistes with an id
+// Find a single Artiste with an id
 exports.findOne = (req, res) => {
     const id = req.params.artisteId;
 
-    Artiste.findByPk(id)
+    Artistes.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
@@ -68,13 +67,13 @@ exports.findOne = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Artistes with id=" + id
+                message: "Error retrieving Artiste with id=" + id
             });
         });
 };
 
 
-// Update a Artiste by the id in the request
+// Update an Artiste by the id in the request
 exports.update = (req, res) => {
     const id = parseInt(req.params.artisteId);
     console.log(id);
@@ -84,7 +83,7 @@ exports.update = (req, res) => {
         link_clip: req.body.link_clip,
     };
 
-    Artiste.update(newValues, {
+    Artistes.update(newValues, {
         where: { artiste: id }
     })
         .then(num => {
@@ -100,17 +99,17 @@ exports.update = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Genre with id=" + id
+                message: "Error updating Artiste with id=" + id
             });
         });
 };
 
 
-// Delete a Artiste with the specified id in the request
+// Delete an Artiste with the specified id in the request
 exports.delete = (req, res) => {
     const id = parseInt(req.params.artisteId);
 
-    Artiste.destroy({
+    Artistes.destroy({
         where: { artisteId : id }
     })
         .then(num => {
@@ -131,9 +130,9 @@ exports.delete = (req, res) => {
         });
 };
 
-// Delete all Genres from the database.
+// Delete all Artistes from the database.
 exports.deleteAll = (req, res) => {
-    Artis.destroy({
+    Artistes.destroy({
         where: {},
         truncate: false
     })
