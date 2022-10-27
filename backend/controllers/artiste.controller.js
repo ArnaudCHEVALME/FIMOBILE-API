@@ -6,7 +6,7 @@ const Op = db.Sequelize.Op;
 // Create and Save new Artistes
 exports.create = (req,res) => {
     // Validate request
-    if (!req.body.nom){
+    if (!req.body.name){
         res.status(400).send({
             message: "Content can not be empty!"
         });
@@ -15,11 +15,11 @@ exports.create = (req,res) => {
 
     // Create a new Artistes
     const artiste = {
-        nom: req.body.nom,
-        baniere_path: req.body.baniere_path,
+        name: req.body.name,
         bio: req.body.bio,
-        video_link: req.body.video_link,
-        visites: req.body.vistes,
+        banierre_path: req.body.baniere_path,
+        link_clip: req.body.link_clip,
+        visites_page: req.body.visites_page,
     };
 
     // Save Artiste in the database
@@ -37,10 +37,10 @@ exports.create = (req,res) => {
 
 // Retrieve all Artistes from the database.
 exports.findAll = (req, res) => {
-    const nom = req.query.nom;
-    let condition = nom ? { nom: { [Op.iLike]: `%${nom}%` } } : null;
+    const name = req.query.name;
+    let condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 
-    Genre.findAll({ where: condition })
+    Artiste.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
@@ -48,6 +48,102 @@ exports.findAll = (req, res) => {
             res.status(500).send({
                 message:
                     err.message || "Some error occurred while retrieving Artistes."
+            });
+        });
+};
+
+// Find a single Artistes with an id
+exports.findOne = (req, res) => {
+    const id = req.params.artisteId;
+
+    Artiste.findByPk(id)
+        .then(data => {
+            if (data) {
+                res.send(data);
+            } else {
+                res.status(404).send({
+                    message: `Cannot find Artiste with id=${id}.`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error retrieving Artistes with id=" + id
+            });
+        });
+};
+
+
+// Update a Artiste by the id in the request
+exports.update = (req, res) => {
+    const id = parseInt(req.params.artisteId);
+    console.log(id);
+    const newValues = { name: req.body.name,
+        bio: req.body.bio,
+        baniere_path: req.body.baniere_path,
+        link_clip: req.body.link_clip,
+    };
+
+    Artiste.update(newValues, {
+        where: { artiste: id }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Artiste was updated successfully."
+                });
+            } else {
+                res.send({
+                    message: `Cannot update Artiste with id=${id}. Maybe Artiste was not found or req.body is empty!`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error updating Genre with id=" + id
+            });
+        });
+};
+
+
+// Delete a Artiste with the specified id in the request
+exports.delete = (req, res) => {
+    const id = parseInt(req.params.artisteId);
+
+    Artiste.destroy({
+        where: { artisteId : id }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Artiste was deleted successfully!"
+                });
+            } else {
+                res.send({
+                    message: `Cannot delete Artiste with id=${id}. Maybe Artiste was not found!`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Could not delete Artiste with id=" + id
+            });
+        });
+};
+
+// Delete all Genres from the database.
+exports.deleteAll = (req, res) => {
+    Artis.destroy({
+        where: {},
+        truncate: false
+    })
+        .then(nums => {
+            res.send({ message: `${nums} Artiste were deleted successfully!` });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while removing all Artiste."
             });
         });
 };
