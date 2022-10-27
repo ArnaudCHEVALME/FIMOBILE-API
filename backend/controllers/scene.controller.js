@@ -66,11 +66,7 @@ exports.findAll = (req, res) => {
     let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
 
 
-<<<<<<< HEAD
-    Type_stand.findAll({ where: condition_longitude })
-=======
     Scene.findAll()
->>>>>>> b9ed585eab37b1587968c666b849a4843901596d
         .then(data => {
             res.send(data);
         })
