@@ -29,7 +29,7 @@ db.stand = require("./stand.model.js")(sequelize, Sequelize);
 db.sous_genres = require("./sous_genre.model")(sequelize, Sequelize);
 db.users = require("./user.model.js")(sequelize, Sequelize);
 db.concerts = require("./concert.model.js")(sequelize, Sequelize);
-db.categories_reseaux = require("./categorie_reseau.model")(sequelize, Sequelize);
+db.categories_reseaux = require("./categorie_reseau.model.js")(sequelize, Sequelize);
 db.reseaux = require("./reseau.model.js")(sequelize, Sequelize);
 
 
@@ -46,6 +46,10 @@ db.sous_genres.belongsToMany(db.artistes, { through: "ArtistesSousGenres" });
 db.artistes.belongsToMany(db.scenes, { through: db.concerts });
 db.scenes.belongsToMany(db.artistes, { through: db.concerts });
 
+// 1 Reseau a 1 Categorie_reseau
+// 1 Categorie_reseau appartient à n Reseaux
+db.reseaux.belongsTo(db.categories_reseaux);
+db.categories_reseaux.hasMany(db.reseaux);
 
 module.exports = db;
 

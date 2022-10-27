@@ -2,7 +2,7 @@ const db = require("../models");
 const Categorie_reseau = db.categories_reseaux;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Genre
+// Create and Save a new Categorie_reseau
 exports.create = (req, res) => {
     // Validate request
     if (!req.body.libelle) {
@@ -12,12 +12,12 @@ exports.create = (req, res) => {
         return;
     }
 
-    // Create a Genre
+    // Create a Categorie_reseau
     const categorie_reseau = {
         libelle: req.body.libelle,
     };
 
-    // Save Genre in the database
+    // Save Categorie_reseau in the database
     Categorie_reseau.create(categorie_reseau)
         .then(data => {
             res.send(data);
@@ -30,7 +30,7 @@ exports.create = (req, res) => {
         });
 };
 
-// Retrieve all Genres from the database.
+// Retrieve all Categories_reseaux from the database.
 exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
@@ -47,7 +47,7 @@ exports.findAll = (req, res) => {
         });
 };
 
-// Find a single Genre with an id
+// Find a single Categorie_reseau with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
@@ -95,7 +95,7 @@ exports.update = (req, res) => {
         });
 };
 
-// Delete a Genre with the specified id in the request
+// Delete a Categorie_reseau with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
 
@@ -120,7 +120,7 @@ exports.delete = (req, res) => {
         });
 };
 
-// Delete all Genres from the database.
+// Delete all Categories_reseaux from the database.
 exports.deleteAll = (req, res) => {
     Categorie_reseau.destroy({
         where: {},

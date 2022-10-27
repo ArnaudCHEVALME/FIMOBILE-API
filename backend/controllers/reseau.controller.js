@@ -71,8 +71,10 @@ exports.findOne = (req, res) => {
 // Update a Reseau by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
+    console.log(id);
+    const newValues = { lien: req.body.lien };
 
-    Reseau.update(req.body, {
+    Reseau.update(newValues, {
         where: { id: id }
     })
         .then(num => {
