@@ -2,25 +2,25 @@ const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, Sequelize) => {
     const User = sequelize.define("user", {
-        id_user: {
-            autoIncrement: true,
-            primaryKey: true,
-            type: Sequelize.INTEGER
+            userId: {
+                autoIncrement: true,
+                primaryKey: true,
+                type: Sequelize.INTEGER
+            },
+            password: {
+                type: Sequelize.STRING,
+                allowNull: true
+            },
+            login: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            email: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                validate: {isEmail: true}
+            },
         },
-        password: {
-            type: Sequelize.STRING,
-            allowNull: true
-        },
-        login: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        email: {
-            type: Sequelize.STRING,
-            allowNull: false,
-            validate: { isEmail: true }
-        },
-    },
         {
             hooks: {
                 beforeCreate: async (user) => {
@@ -35,8 +35,7 @@ module.exports = (sequelize, Sequelize) => {
                         user.password = bcrypt.hashSync(user.password, salt);
                     }
                 }
-            }
-        }, {
+            },
             timestamps: false
         }
     );

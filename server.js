@@ -32,9 +32,12 @@ db.sequelize.sync({ force: true }) // For developpement, drop every table
 // Use routes defined in backend/routers
 // require("./backend/routers/artiste.router")(app);
 require("./backend/routers/categorie_reseau.router")(app);
-require("./backend/routers/concert.router")(app);
+// require("./backend/routers/concert.router")(app);
 require("./backend/routers/couleur.router")(app);
 require("./backend/routers/genre.router")(app);
+require("./backend/routers/user.router")(app);
+require("./backend/routers/type_poi.router")(app);
+require("./backend/routers/service.router")(app);
 require("./backend/routers/pays.router")(app);
 require("./backend/routers/poi.router")(app);
 require("./backend/routers/reseau.router")(app);
@@ -46,10 +49,6 @@ require("./backend/routers/type_poi.router")(app);
 require("./backend/routers/user.router")(app);
 
 // require("./backend/routers/sous_genre.router")(app);
-
-
-
-
 
 
 app.listen(PORT, () => {
