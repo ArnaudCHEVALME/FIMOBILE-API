@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize, Sequelize) => {
     const User = sequelize.define("user", {
@@ -25,14 +25,12 @@ module.exports = (sequelize, Sequelize) => {
             hooks: {
                 beforeCreate: async (user) => {
                     if (user.password) {
-                        const salt = await bcrypt.genSaltSync(10, 'a');
-                        user.password = bcrypt.hashSync(user.password, salt);
+                        user.password = await bcrypt.hash(user.password, 10);
                     }
                 },
                 beforeUpdate: async (user) => {
                     if (user.password) {
-                        const salt = await bcrypt.genSaltSync(10, 'a');
-                        user.password = bcrypt.hashSync(user.password, salt);
+                        user.password = await bcrypt.hash(user.password, 10);
                     }
                 }
             },

@@ -35,7 +35,7 @@ exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    Genre.findAll({ where: condition })
+    Genre.findAll({ where: condition})
         .then(data => {
             res.send(data);
         })
@@ -103,7 +103,7 @@ exports.delete = (req, res) => {
         where: { genreId: id }
     })
         .then(num => {
-            if (num == 1) {
+            if (num === 1) {
                 res.send({
                     message: "Genre was deleted successfully!"
                 });

@@ -2,6 +2,10 @@ const db = require("../models");
 const User = db.users;
 const Op = db.Sequelize.Op;
 
+exports.login = (req, res) => {
+
+}
+
 // Create and Save a new User
 exports.create = (req, res) => {
     // Validate request
@@ -120,10 +124,10 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     User.destroy({
-        where: { id: id }
+        where: { userId: id }
     })
         .then(num => {
-            if (num == 1) {
+            if (num === 1) {
                 res.send({
                     message: "User was deleted successfully!"
                 });

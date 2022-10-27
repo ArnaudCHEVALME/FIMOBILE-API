@@ -1,8 +1,8 @@
 const db = require("../models");
-const Poi = db.poi;
+const Stand = db.stand;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Poi type
+// Create and Save a new Stand type
 exports.create = (req, res) => {
     // Validate request
     if (!req.body.latitude) {
@@ -18,16 +18,16 @@ exports.create = (req, res) => {
         return;
     }
 
-    // Create a Poi
-    const poi = {
+    // Create a Stand
+    const stand = {
         longitude: req.body.longitude,
         latitude: req.body.latitude,
         nom: req.body.nom,
         visites: req.body.visites
     };
 
-    // Save Poi in the database
-    Poi.create(poi)
+    // Save Stand in the database
+    Stand.create(stand)
         .then(data => {
             res.send(data);
         })
@@ -38,8 +38,8 @@ exports.create = (req, res) => {
             });
         });
 };
- 
-// Retrieve all Pois from the database.-> still in progress
+
+// Retrieve all Stands from the database.-> still in progress
 exports.findAll = (req, res) => {
     const longitude = req.query.longitude;
     const latitude = req.query.latitude;
@@ -50,7 +50,7 @@ exports.findAll = (req, res) => {
     let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
 
 
-    Type_poi.findAll({ where: condition_longitude })
+    Type_stand.findAll({ where: condition_longitude })
         .then(data => {
             res.send(data);
         })
@@ -62,11 +62,11 @@ exports.findAll = (req, res) => {
         });
 };
 
-// Find a single Poi with an id
+// Find a single Stand with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Poi.findByPk(id)
+    Stand.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
@@ -83,11 +83,11 @@ exports.findOne = (req, res) => {
         });
 };
 
-// Update a Poi by the id in the request
+// Update a Stand by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    Poi.update(req.body, {
+    Stand.update(req.body, {
         where: { id: id }
     })
         .then(num => {
@@ -108,11 +108,11 @@ exports.update = (req, res) => {
         });
 };
 
-// Delete a Poi with the specified id in the request
+// Delete a Stand with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    Poi.destroy({
+    Stand.destroy({
         where: { id: id }
     })
         .then(num => {
@@ -133,9 +133,9 @@ exports.delete = (req, res) => {
         });
 };
 
-// Delete all Poi from the database.
+// Delete all Stand from the database.
 exports.deleteAll = (req, res) => {
-    Poi.destroy({
+    Stand.destroy({
         where: {},
         truncate: false
     })
