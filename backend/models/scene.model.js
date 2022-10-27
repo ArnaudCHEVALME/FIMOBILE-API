@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.REAL,
             allowNull: false
         },
-        logitude: {
+        longitude: {
             type: Sequelize.REAL,
             allowNull: false
         },

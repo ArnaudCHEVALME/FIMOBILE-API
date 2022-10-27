@@ -1,5 +1,5 @@
 const db = require("../models");
-const Scene = db.scene;
+const Scene = db.scenes;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new scene type
@@ -29,13 +29,16 @@ exports.create = (req, res) => {
         })
         return;
     }
+    if (!req.body.capacite) {
+        req.body.capacite = 0;
+    }
 
     // Create a Scene
     const scene = {
         longitude: req.body.longitude,
         latitude: req.body.latitude,
         nom: req.body.nom,
-        capacite: 0,
+        capacite: req.body.capacite,
         interieur: req.body.interieur
     };
 
@@ -63,7 +66,11 @@ exports.findAll = (req, res) => {
     let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
 
 
+<<<<<<< HEAD
     Type_stand.findAll({ where: condition_longitude })
+=======
+    Scene.findAll()
+>>>>>>> b9ed585eab37b1587968c666b849a4843901596d
         .then(data => {
             res.send(data);
         })
@@ -101,7 +108,7 @@ exports.update = (req, res) => {
     const id = req.params.id;
 
     Scene.update(req.body, {
-        where: { id: id }
+        where: { sceneId: id }
     })
         .then(num => {
             if (num == 1) {
@@ -126,7 +133,7 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     Scene.destroy({
-        where: { id: id }
+        where: { sceneId: id }
     })
         .then(num => {
             if (num == 1) {

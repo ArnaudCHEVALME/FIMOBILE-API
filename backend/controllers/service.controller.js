@@ -11,7 +11,11 @@ exports.create = (req, res) => {
         });
         return;
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> b9ed585eab37b1587968c666b849a4843901596d
     // Create a Service
     const service = {
         libelle: req.body.libelle
@@ -71,7 +75,6 @@ exports.findOne = (req, res) => {
 // Update a Service by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
-    console.log(id);
     const newValues = { libelle: req.body.libelle};
 
     Service.update(newValues, {

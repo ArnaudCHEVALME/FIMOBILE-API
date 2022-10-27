@@ -17,6 +17,12 @@ exports.create = (req, res) => {
         });
         return;
     }
+    if (!req.body.nom) {
+        req.body.nom = "";
+    }
+    if (!req.body.visites) {
+        req.body.visites = 0;
+    }
 
     // Create a Stand
     const stand = {
@@ -34,7 +40,7 @@ exports.create = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the Genre."
+                    err.message || "Some error occurred while creating the Poi."
             });
         });
 };
@@ -50,14 +56,18 @@ exports.findAll = (req, res) => {
     let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
 
 
+<<<<<<< HEAD:backend/controllers/stand.controller.js
     Type_stand.findAll({ where: condition_longitude })
+=======
+    Poi.findAll({ where: condition_longitude })
+>>>>>>> b9ed585eab37b1587968c666b849a4843901596d:backend/controllers/poi.controller.js
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving Genres."
+                    err.message || "Some error occurred while retrieving Pois."
             });
         });
 };
@@ -72,13 +82,13 @@ exports.findOne = (req, res) => {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Genre with id=${id}.`
+                    message: `Cannot find Poi with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Genre with id=" + id
+                message: "Error retrieving Poi with id=" + id
             });
         });
 };
@@ -87,23 +97,28 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
 
+<<<<<<< HEAD:backend/controllers/stand.controller.js
     Stand.update(req.body, {
         where: { id: id }
+=======
+    Poi.update(req.body, {
+        where: { poiId: id }
+>>>>>>> b9ed585eab37b1587968c666b849a4843901596d:backend/controllers/poi.controller.js
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Genre was updated successfully."
+                    message: "Poi was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update Genre with id=${id}. Maybe Genre was not found or req.body is empty!`
+                    message: `Cannot update Poi with id=${id}. Maybe Poi was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Genre with id=" + id
+                message: "Error updating Poi with id=" + id
             });
         });
 };
@@ -112,23 +127,28 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
 
+<<<<<<< HEAD:backend/controllers/stand.controller.js
     Stand.destroy({
         where: { id: id }
+=======
+    Poi.destroy({
+        where: { poiId: id }
+>>>>>>> b9ed585eab37b1587968c666b849a4843901596d:backend/controllers/poi.controller.js
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Genre was deleted successfully!"
+                    message: "Poi was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
+                    message: `Cannot delete Poi with id=${id}. Maybe Poi was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Genre with id=" + id
+                message: "Could not delete Poi with id=" + id
             });
         });
 };
@@ -140,12 +160,12 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Genres were deleted successfully!` });
+            res.send({ message: `${nums} Pois were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all Genres."
+                    err.message || "Some error occurred while removing all Pois."
             });
         });
 };
