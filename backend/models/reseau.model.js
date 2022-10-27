@@ -7,9 +7,12 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         },
         lien: {
-            type: Sequelize.INTEGER,
-            allowNull: false
+            type: Sequelize.STRING,
+            allowNull: true,
+            validate: {isUrl: true}
         }
+    }, {
+        timestamps: false
     });
     return Reseau;
 };

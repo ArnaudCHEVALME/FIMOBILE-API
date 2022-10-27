@@ -29,7 +29,8 @@ db.stand = require("./stand.model.js")(sequelize, Sequelize);
 db.sous_genres = require("./sous_genre.model")(sequelize, Sequelize);
 db.users = require("./user.model.js")(sequelize, Sequelize);
 db.concerts = require("./concert.model.js")(sequelize, Sequelize);
-db.categories_reseaux = require("./categorie_reseau.js")(sequelize, Sequelize);
+db.categories_reseaux = require("./categorie_reseau.model")(sequelize, Sequelize);
+db.reseaux = require("./reseau.model.js")(sequelize, Sequelize);
 
 
 // 1 artiste a 1 genre

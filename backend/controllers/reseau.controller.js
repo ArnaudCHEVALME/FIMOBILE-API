@@ -2,7 +2,7 @@ const db = require("../models");
 const Reseau = db.reseaux;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Genre
+// Create and Save a new Reseau
 exports.create = (req, res) => {
     // Validate request
     if (!req.body.lien) {
@@ -12,12 +12,12 @@ exports.create = (req, res) => {
         return;
     }
 
-    // Create a Genre
+    // Create a Reseau
     const reseau = {
         lien: req.body.lien,
     };
 
-    // Save Genre in the database
+    // Save Reseau in the database
     Reseau.create(reseau)
         .then(data => {
             res.send(data);
@@ -25,12 +25,12 @@ exports.create = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the Genre."
+                    err.message || "Some error occurred while creating the Reseau."
             });
         });
 };
 
-// Retrieve all Genres from the database.
+// Retrieve all Reseaux from the database.
 exports.findAll = (req, res) => {
     const lien = req.query.lien;
     let condition = lien ? { lien: { [Op.iLike]: `%${lien}%` } } : null;
@@ -42,12 +42,12 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving Genres."
+                    err.message || "Some error occurred while retrieving Reseaux."
             });
         });
 };
 
-// Find a single Genre with an id
+// Find a single Reseau with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
@@ -57,18 +57,18 @@ exports.findOne = (req, res) => {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Genre with id=${id}.`
+                    message: `Cannot find Reseau with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Genre with id=" + id
+                message: "Error retrieving Reseau with id=" + id
             });
         });
 };
 
-// Update a Genre by the id in the request
+// Update a Reseau by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
 
@@ -78,22 +78,22 @@ exports.update = (req, res) => {
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Genre was updated successfully."
+                    message: "Reseau was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update Genre with id=${id}. Maybe Genre was not found or req.body is empty!`
+                    message: `Cannot update Reseau with id=${id}. Maybe Reseau was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Genre with id=" + id
+                message: "Error updating Reseau with id=" + id
             });
         });
 };
 
-// Delete a Genre with the specified id in the request
+// Delete a Reseau with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
 
@@ -103,34 +103,34 @@ exports.delete = (req, res) => {
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Genre was deleted successfully!"
+                    message: "Reseau was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
+                    message: `Cannot delete Reseau with id=${id}. Maybe Reseau was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Genre with id=" + id
+                message: "Could not delete Reseau with id=" + id
             });
         });
 };
 
-// Delete all Genres from the database.
+// Delete all Reseaux from the database.
 exports.deleteAll = (req, res) => {
     Reseau.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Genres were deleted successfully!` });
+            res.send({ message: `${nums} Reseaux were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all Genres."
+                    err.message || "Some error occurred while removing all Reseaux."
             });
         });
 };
