@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const Type_poi = sequelize.define("type_poi", {
-        type_poiId: {
+    const Type_stand = sequelize.define("type_stand", {
+        type_standId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
@@ -13,5 +13,5 @@ module.exports = (sequelize, Sequelize) => {
     }, {
         timestamps: false
     });
-    return Type_poi;
+    return Type_stand;
 };

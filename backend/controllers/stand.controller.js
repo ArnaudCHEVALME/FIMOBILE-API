@@ -1,8 +1,8 @@
 const db = require("../models");
-const Poi = db.poi;
+const Stand = db.stand;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Poi type
+// Create and Save a new Stand type
 exports.create = (req, res) => {
     // Validate request
     if (!req.body.latitude) {
@@ -17,29 +17,35 @@ exports.create = (req, res) => {
         });
         return;
     }
+    if (!req.body.nom) {
+        req.body.nom = "";
+    }
+    if (!req.body.visites) {
+        req.body.visites = 0;
+    }
 
-    // Create a Poi
-    const poi = {
+    // Create a Stand
+    const stand = {
         longitude: req.body.longitude,
         latitude: req.body.latitude,
         nom: req.body.nom,
         visites: req.body.visites
     };
 
-    // Save Poi in the database
-    Poi.create(poi)
+    // Save Stand in the database
+    Stand.create(stand)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the Genre."
+                    err.message || "Some error occurred while creating the Poi."
             });
         });
 };
- 
-// Retrieve all Pois from the database.-> still in progress
+
+// Retrieve all Stands from the database.-> still in progress
 exports.findAll = (req, res) => {
     const longitude = req.query.longitude;
     const latitude = req.query.latitude;
@@ -50,102 +56,116 @@ exports.findAll = (req, res) => {
     let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
 
 
-    Type_poi.findAll({ where: condition_longitude })
+<<<<<<< HEAD:backend/controllers/stand.controller.js
+    Type_stand.findAll({ where: condition_longitude })
+=======
+    Poi.findAll({ where: condition_longitude })
+>>>>>>> b9ed585eab37b1587968c666b849a4843901596d:backend/controllers/poi.controller.js
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving Genres."
+                    err.message || "Some error occurred while retrieving Pois."
             });
         });
 };
 
-// Find a single Poi with an id
+// Find a single Stand with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Poi.findByPk(id)
+    Stand.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Genre with id=${id}.`
+                    message: `Cannot find Poi with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Genre with id=" + id
+                message: "Error retrieving Poi with id=" + id
             });
         });
 };
 
-// Update a Poi by the id in the request
+// Update a Stand by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    Poi.update(req.body, {
+<<<<<<< HEAD:backend/controllers/stand.controller.js
+    Stand.update(req.body, {
         where: { id: id }
+=======
+    Poi.update(req.body, {
+        where: { poiId: id }
+>>>>>>> b9ed585eab37b1587968c666b849a4843901596d:backend/controllers/poi.controller.js
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Genre was updated successfully."
+                    message: "Poi was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update Genre with id=${id}. Maybe Genre was not found or req.body is empty!`
+                    message: `Cannot update Poi with id=${id}. Maybe Poi was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Genre with id=" + id
+                message: "Error updating Poi with id=" + id
             });
         });
 };
 
-// Delete a Poi with the specified id in the request
+// Delete a Stand with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    Poi.destroy({
+<<<<<<< HEAD:backend/controllers/stand.controller.js
+    Stand.destroy({
         where: { id: id }
+=======
+    Poi.destroy({
+        where: { poiId: id }
+>>>>>>> b9ed585eab37b1587968c666b849a4843901596d:backend/controllers/poi.controller.js
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Genre was deleted successfully!"
+                    message: "Poi was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
+                    message: `Cannot delete Poi with id=${id}. Maybe Poi was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Genre with id=" + id
+                message: "Could not delete Poi with id=" + id
             });
         });
 };
 
-// Delete all Poi from the database.
+// Delete all Stand from the database.
 exports.deleteAll = (req, res) => {
-    Poi.destroy({
+    Stand.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Genres were deleted successfully!` });
+            res.send({ message: `${nums} Pois were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all Genres."
+                    err.message || "Some error occurred while removing all Pois."
             });
         });
 };

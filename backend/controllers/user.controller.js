@@ -1,6 +1,10 @@
 const db = require("../models");
-const User = db.user;
+const User = db.users;
 const Op = db.Sequelize.Op;
+
+exports.login = (req, res) => {
+
+}
 
 // Create and Save a new User
 exports.create = (req, res) => {
@@ -86,10 +90,16 @@ exports.findOne = (req, res) => {
 
 // Update a User by the id in the request
 exports.update = (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
 
-    User.update(req.body, {
-        where: { id: id }
+    const newValues = {
+        login: req.body.login,
+        email: req.body.email,
+        password: req.body.password
+    };
+
+    User.update(newValues, {
+        where: { userId: id }
     })
         .then(num => {
             if (num == 1) {
@@ -114,10 +124,10 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     User.destroy({
-        where: { id: id }
+        where: { userId: id }
     })
         .then(num => {
-            if (num == 1) {
+            if (num === 1) {
                 res.send({
                     message: "User was deleted successfully!"
                 });

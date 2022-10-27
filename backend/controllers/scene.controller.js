@@ -1,5 +1,5 @@
 const db = require("../models");
-const Scene = db.scene;
+const Scene = db.scenes;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new scene type
@@ -11,23 +11,26 @@ exports.create = (req, res) => {
         });
         return;
     }
-    if(!req.body.latitude) {
+    if (!req.body.latitude) {
         res.status(400).send({
             message: "Latitude cannot be empty"
         })
         return;
     }
-    if(!req.body.longitude) {
+    if (!req.body.longitude) {
         res.status(400).send({
             message: "Longitude cannot be empty"
         })
         return;
     }
-    if(!req.body.interieur) {
+    if (!req.body.interieur) {
         res.status(400).send({
             message: "Interieur status cannot be empty"
         })
         return;
+    }
+    if (!req.body.capacite) {
+        req.body.capacite = 0;
     }
 
     // Create a Scene
@@ -35,7 +38,7 @@ exports.create = (req, res) => {
         longitude: req.body.longitude,
         latitude: req.body.latitude,
         nom: req.body.nom,
-        capacite: 0,
+        capacite: req.body.capacite,
         interieur: req.body.interieur
     };
 
@@ -51,7 +54,7 @@ exports.create = (req, res) => {
             });
         });
 };
- 
+
 // Retrieve all scene from the database. -> still in progress
 exports.findAll = (req, res) => {
     const longitude = req.query.longitude;
@@ -63,7 +66,7 @@ exports.findAll = (req, res) => {
     let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
 
 
-    Type_poi.findAll({ where: condition_longitude })
+    Scene.findAll()
         .then(data => {
             res.send(data);
         })
@@ -101,7 +104,7 @@ exports.update = (req, res) => {
     const id = req.params.id;
 
     Scene.update(req.body, {
-        where: { id: id }
+        where: { sceneId: id }
     })
         .then(num => {
             if (num == 1) {
@@ -126,7 +129,7 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     Scene.destroy({
-        where: { id: id }
+        where: { sceneId: id }
     })
         .then(num => {
             if (num == 1) {

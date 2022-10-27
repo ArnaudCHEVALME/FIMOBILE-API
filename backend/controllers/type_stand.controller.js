@@ -1,8 +1,8 @@
 const db = require("../models");
-const Type_poi = db.type_poi;
+const Type_stand = db.type_stand;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Poi type
+// Create and Save a new Stand type
 exports.create = (req, res) => {
     // Validate request
     if (!req.body.libelle) {
@@ -12,53 +12,53 @@ exports.create = (req, res) => {
         return;
     }
 
-    // Create a Poi type
-    const type_poi = {
+    // Create a Stand type
+    const type_stand = {
         libelle: req.body.libelle,
     };
 
-    // Save Poi type in the database
-    Type_poi.create(type_poi)
+    // Save Stand type in the database
+    Type_stand.create(type_stand)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the poi type."
+                    err.message || "Some error occurred while creating the stand type."
             });
         });
 };
 
-// Retrieve all Poi types from the database.
+// Retrieve all Stand types from the database.
 exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    Type_poi.findAll({ where: condition })
+    Type_stand.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving poi types."
+                    err.message || "Some error occurred while retrieving stand types."
             });
         });
 };
 
-// Find a single Poi type with an id
+// Find a single Stand type with an id
 exports.findOne = (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
 
 
-    Type_poi.findByPk(id)
+    Type_stand.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find poi types with id=${id}.`
+                    message: `Cannot find stand types with id=${id}.`
                 });
             }
         })
@@ -69,14 +69,14 @@ exports.findOne = (req, res) => {
         });
 };
 
-// Update a Poi type by the id in the request
+// Update a Stand type by the id in the request
 exports.update = (req, res) => {
     const id = parseInt(req.params.id);
-    const newValues = { libelle: req.body.libelle};
+    const newValues = { libelle: req.body.libelle };
 
 
-    Type_poi.update(newValues, {
-        where: { type_poiId: id }
+    Type_stand.update(newValues, {
+        where: { type_standId: id }
     })
         .then(num => {
             if (num == 1) {
@@ -96,12 +96,12 @@ exports.update = (req, res) => {
         });
 };
 
-// Delete a Poi type with the specified id in the request
+// Delete a Stand type with the specified id in the request
 exports.delete = (req, res) => {
     const id = parseInt(req.params.id);
 
-    Type_poi.destroy({
-        where: { type_poiId: id }
+    Type_stand.destroy({
+        where: { type_standId: id }
     })
         .then(num => {
             if (num == 1) {
@@ -121,9 +121,9 @@ exports.delete = (req, res) => {
         });
 };
 
-// Delete all Poi types from the database.
+// Delete all Stand types from the database.
 exports.deleteAll = (req, res) => {
-    Type_poi.destroy({
+    Type_stand.destroy({
         where: {},
         truncate: false
     })
