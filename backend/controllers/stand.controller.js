@@ -56,11 +56,7 @@ exports.findAll = (req, res) => {
     let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
 
 
-<<<<<<< HEAD:backend/controllers/stand.controller.js
     Type_stand.findAll({ where: condition_longitude })
-=======
-    Poi.findAll({ where: condition_longitude })
->>>>>>> b9ed585eab37b1587968c666b849a4843901596d:backend/controllers/poi.controller.js
         .then(data => {
             res.send(data);
         })
@@ -97,13 +93,8 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
 
-<<<<<<< HEAD:backend/controllers/stand.controller.js
     Stand.update(req.body, {
         where: { id: id }
-=======
-    Poi.update(req.body, {
-        where: { poiId: id }
->>>>>>> b9ed585eab37b1587968c666b849a4843901596d:backend/controllers/poi.controller.js
     })
         .then(num => {
             if (num == 1) {
@@ -127,13 +118,8 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-<<<<<<< HEAD:backend/controllers/stand.controller.js
     Stand.destroy({
         where: { id: id }
-=======
-    Poi.destroy({
-        where: { poiId: id }
->>>>>>> b9ed585eab37b1587968c666b849a4843901596d:backend/controllers/poi.controller.js
     })
         .then(num => {
             if (num == 1) {
