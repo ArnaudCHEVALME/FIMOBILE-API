@@ -51,6 +51,11 @@ db.scenes.belongsToMany(db.artistes, { through: db.concerts });
 db.reseaux.belongsTo(db.categories_reseaux);
 db.categories_reseaux.hasMany(db.reseaux);
 
+// 1 artiste a 1 genre
+// 1 genre appartient à n artistes
+db.stand.belongsTo(db.type_stand, {foreignKey: "typeStandId"});
+db.type_stand.hasMany(db.stand, {foreignKey: "standId"});
+
 module.exports = db;
 
 
