@@ -5,7 +5,9 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     host: dbConfig.HOST,
     dialect: dbConfig.dialect,
     operatorsAliases: false,
-
+    define: {
+        timestamps: false
+    },
     pool: {
         max: dbConfig.pool.max,
         min: dbConfig.pool.min,
@@ -58,8 +60,8 @@ db.categories_reseaux.hasMany(db.reseaux);
 
 // 1 artiste a 1 genre
 // 1 genre appartient à n artistes
-db.stand.belongsTo(db.type_stand, {foreignKey: "typeStandId"});
-db.type_stand.hasMany(db.stand, {foreignKey: "standId"});
+db.stand.belongsTo(db.type_stand, { foreignKey: "typeStandId" });
+db.type_stand.hasMany(db.stand, { foreignKey: "standId" });
 
 module.exports = db;
 
