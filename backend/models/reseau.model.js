@@ -9,10 +9,8 @@ module.exports = (sequelize, Sequelize) => {
         lien: {
             type: Sequelize.STRING,
             allowNull: true,
-            validate: {isUrl: true}
+            validate: { isUrl: true }
         }
-    }, {
-        timestamps: false
     });
     return Reseau;
 };

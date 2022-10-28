@@ -26,8 +26,6 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             defaultValue: 0
         }
-    }, {
-        timestamps: false
     });
     return Artiste;
 }
