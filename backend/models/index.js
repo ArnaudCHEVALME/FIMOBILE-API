@@ -48,8 +48,8 @@ db.scenes.belongsToMany(db.artistes, { through: db.concerts });
 
 // 1 Reseau a 1 Categorie_reseau
 // 1 Categorie_reseau appartient à n Reseaux
-db.reseaux.belongsTo(db.categories_reseaux);
-db.categories_reseaux.hasMany(db.reseaux);
+db.reseaux.belongsTo(db.categories_reseaux, { foreignKey: "categorie_reseauId" });
+db.categories_reseaux.hasMany(db.reseaux, { foreignKey: "reseauId" });
 
 // 1 artiste a 1 genre
 // 1 genre appartient à n artistes

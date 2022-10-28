@@ -1,20 +1,51 @@
 const db = require("../models");
 const Concert = db.concerts;
 const Op = db.Sequelize.Op;
+const Scene = db.scenes;
+const Artiste = db.artistes;
 
 // Create and Save a new Concert
 exports.create = (req, res) => {
     // Validate request data with validator
-    if (!req.body.libelle) {
+    if (!req.body.debut) {
         res.status(400).send({
-            message: "Content can not be empty!"
+            message: "Debut can not be empty!"
+        });
+        return;
+    }
+    if (!req.body.duree) {
+        res.status(400).send({
+            message: "Duree can not be empty!"
+        });
+        return;
+    }
+    if (!req.body.nbPersonne) {
+        req.body.nbPersonne = 0;
+    }
+    if (!req.body.visites) {
+        req.body.visites = 0;
+    }
+    if (!req.body.sceneId) {
+        res.status(400).send({
+            message: "Scene can not be empty!"
+        });
+        return;
+    }
+    if (!req.body.artisteId) {
+        res.status(400).send({
+            message: "Artiste can not be empty!"
         });
         return;
     }
 
     // Create a Concert
     const concert = {
-        libelle: req.body.debut,
+        debut: req.body.debut,
+        duree: req.body.duree,
+        nbPersonne: req.body.nbPersonne,
+        visites: req.body.visites,
+        sceneId: req.body.sceneId,
+        artisteId: req.body.artisteId
     };
 
     // Save Concert in the database
@@ -30,12 +61,24 @@ exports.create = (req, res) => {
         });
 };
 
-// Retrieve all Concerts from the database.
+// Retrieve all Concerts from the database. => WIP maybe middleware
+exports.findAllPublished = (req, res) => {
+    Concert.findAll({ where: { published: true } })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving Concerts."
+            });
+        });
+}
 exports.findAll = (req, res) => {
-    const jour = req.query.jour;
-    let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
+    const debut = req.query.debut;
+    let condition = debut ? { debut: { [Op.iLike]: `%${debut}%` } } : null;
 
-    Concert.findAll({ where: condition })
+    Concert.findAll({ include: Scene, Artiste ,where: condition })
         .then(data => {
             res.send(data);
         })
@@ -49,7 +92,7 @@ exports.findAll = (req, res) => {
 
 // Find a single Concert with an id
 exports.findOne = (req, res) => {
-    const id = req.params.id;
+    const id = req.params.concertID;
 
     Concert.findByPk(id)
         .then(data => {
@@ -95,7 +138,7 @@ exports.update = (req, res) => {
 
 // Delete a Concert with the specified id in the request
 exports.delete = (req, res) => {
-    const id = req.params.id;
+    const id = req.params.concertID;
 
     Concert.destroy({
         where: { id: id }
