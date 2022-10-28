@@ -33,7 +33,12 @@ db.users = require("./user.model.js")(sequelize, Sequelize);
 db.concerts = require("./concert.model.js")(sequelize, Sequelize);
 db.categories_reseaux = require("./categorie_reseau.model.js")(sequelize, Sequelize);
 db.reseaux = require("./reseau.model.js")(sequelize, Sequelize);
+db.saison = require("./saison.model.js")(sequelize, Sequelize);//FIXME
 
+//1 stand appartient 1 saison
+//1 saison a n stands
+db.stands.belongsTo(db.saison, {foreignKey: "saisonId"});
+db.saison.hasMany(db.stands, {foreignKey: "standId"});
 
 // 1 artiste a 1 genre
 // 1 genre appartient à n artistes

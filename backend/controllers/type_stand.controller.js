@@ -1,5 +1,5 @@
 const db = require("../models");
-const Type_stand = db.type_stand;
+const TypeStand = db.type_stand;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Stand type
@@ -18,7 +18,7 @@ exports.create = (req, res) => {
     };
 
     // Save Stand type in the database
-    Type_stand.create(type_stand)
+    TypeStand.create(type_stand)
         .then(data => {
             res.send(data);
         })
@@ -35,7 +35,7 @@ exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    Type_stand.findAll({ where: condition })
+    TypeStand.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
@@ -52,7 +52,7 @@ exports.findOne = (req, res) => {
     const id = req.params.id;
 
 
-    Type_stand.findByPk(id)
+    TypeStand.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
@@ -64,7 +64,7 @@ exports.findOne = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Genre with id=" + id
+                message: "Error retrieving TypeStand with id=" + id
             });
         });
 };
@@ -75,23 +75,23 @@ exports.update = (req, res) => {
     const newValues = { libelle: req.body.libelle };
 
 
-    Type_stand.update(newValues, {
+    TypeStand.update(newValues, {
         where: { type_standId: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Genre was updated successfully."
+                    message: "Type stand was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update Genre with id=${id}. Maybe Genre was not found or req.body is empty!`
+                    message: `Cannot update type stand with id=${id}. Maybe Genre was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Genre with id=" + id
+                message: "Error updating type stand with id=" + id
             });
         });
 };
@@ -100,40 +100,40 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = parseInt(req.params.id);
 
-    Type_stand.destroy({
+    TypeStand.destroy({
         where: { type_standId: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Genre was deleted successfully!"
+                    message: "Type stand was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
+                    message: `Cannot delete type stand with id=${id}. Maybe Genre was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Genre with id=" + id
+                message: "Could not delete type stand with id=" + id
             });
         });
 };
 
 // Delete all Stand types from the database.
 exports.deleteAll = (req, res) => {
-    Type_stand.destroy({
+    TypeStand.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Genres were deleted successfully!` });
+            res.send({ message: `${nums} Type stand were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all Genres."
+                    err.message || "Some error occurred while removing all Type stand."
             });
         });
 };
