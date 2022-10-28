@@ -1,5 +1,5 @@
 const db = require("../models");
-const Saison = db.Saison;
+const Saison = db.saison;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Saison
@@ -13,12 +13,12 @@ exports.create = (req, res) => {
     }
 
     // Create a Saison
-    const Saison = {
+    const saison = {
         theme: req.body.theme,
     };
-
+    
     // Save Saison in the database
-    Saison.create(Saison)
+    Saison.create(saison)
         .then(data => {
             res.send(data);
         })
