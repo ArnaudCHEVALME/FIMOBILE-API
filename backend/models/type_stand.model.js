@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Type_stand = sequelize.define("type_stand", {
+    const TypeStand = sequelize.define("type_stand", {
         type_standId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -11,5 +11,5 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         }
     });
-    return Type_stand;
+    return TypeStand;
 };
