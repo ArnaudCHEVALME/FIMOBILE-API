@@ -30,6 +30,12 @@ exports.create = (req, res) => {
         });
         return;
     }
+    if (!req.body.saisonId){
+        res.status(400).send({
+            message: "Saison cannot be empty!"
+        });
+        return;
+    }
 
     // Create a Stand
     const stand = {
@@ -37,7 +43,8 @@ exports.create = (req, res) => {
         latitude: req.body.latitude,
         nom: req.body.nom,
         visites: req.body.visites,
-        typeStandId: req.body.typeStandId
+        typeStandId: req.body.typeStandId,
+        saisonId: req.body.saisonId
     };
 
     // Save Stand in the database
