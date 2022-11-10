@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const TypeStand = sequelize.define("type_stand", {
-        type_standId: {
+    const SousGenre = sequelize.define("sousGenre", {
+        sousGenreId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
@@ -11,5 +11,5 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         }
     });
-    return TypeStand;
+    return SousGenre;
 };

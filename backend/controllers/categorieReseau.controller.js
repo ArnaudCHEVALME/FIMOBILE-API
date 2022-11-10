@@ -1,8 +1,8 @@
 const db = require("../models");
-const SousGenre = db.sous_genres;
+const CategorieReseau = db.categoriesReseaux;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Subgenre
+// Create and Save a new CategorieReseau
 exports.create = (req, res) => {
     // Validate request
     if (!req.body.libelle) {
@@ -12,127 +12,127 @@ exports.create = (req, res) => {
         return;
     }
 
-    // Create a SubGenre
-    const sous_genre = {
+    // Create a CategorieReseau
+    const categorieReseau = {
         libelle: req.body.libelle,
     };
 
-    // Save Subgenre in the database
-    SousGenre.create(sous_genre)
+    // Save CategorieReseau in the database
+    CategorieReseau.create(categorieReseau)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the subgenre."
+                    err.message || "Some error occurred while creating the CategorieReseau."
             });
         });
 };
 
-// Retrieve all subgenres from the database.
+// Retrieve all CategoriesReseaux from the database.
 exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    SousGenre.findAll({ where: condition})
+    CategorieReseau.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving Subgenres."
+                    err.message || "Some error occurred while retrieving CategoriesReseaux."
             });
         });
 };
 
-// Find a single subgenre with an id
+// Find a single CategorieReseau with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    SousGenre.findByPk(id)
+    CategorieReseau.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find subgenre with id=${id}.`
+                    message: `Cannot find CategorieReseau with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving subgenre with id=" + id
+                message: "Error retrieving CategorieReseau with id=" + id
             });
         });
 };
 
-// Update a subgenre by the id in the request
+// Update a CategorieReseau by the id in the request
 exports.update = (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
     console.log(id);
-    const newValues = { libelle: req.body.libelle};
+    const newValues = { libelle: req.body.libelle };
 
-    SousGenre.update(newValues, {
-        where: { sous_genreId: id }
+    CategorieReseau.update(newValues, {
+        where: { categorieReseauId: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Subgenre was updated successfully."
+                    message: "CategorieReseau was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update subgenre with id=${id}. Maybe Genre was not found or req.body is empty!`
+                    message: `Cannot update CategorieReseau with id=${id}. Maybe CategorieReseau was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Subgenre with id=" + id
+                message: "Error updating CategorieReseau with id=" + id
             });
         });
 };
 
-// Delete a Genre with the specified id in the request
+// Delete a CategorieReseau with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    SousGenre.destroy({
-        where: { sous_genreId: id }
+    CategorieReseau.destroy({
+        where: { categorieReseauId: id }
     })
         .then(num => {
-            if (num === 1) {
+            if (num == 1) {
                 res.send({
-                    message: "Subgenre was deleted successfully!"
+                    message: "CategorieReseau was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete Subgenre with id=${id}. Maybe SubGenre was not found!`
+                    message: `Cannot delete CategorieReseau with id=${id}. Maybe CategorieReseau was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Subgenre with id=" + id
+                message: "Could not delete CategorieReseau with id=" + id
             });
         });
 };
 
-// Delete all Subgenres from the database.
+// Delete all CategoriesReseaux from the database.
 exports.deleteAll = (req, res) => {
-    SousGenre.destroy({
+    CategorieReseau.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Subgenre were deleted successfully!` });
+            res.send({ message: `${nums} CategoriesReseaux were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all Subgenres."
+                    err.message || "Some error occurred while removing all CategoriesReseaux."
             });
         });
 };

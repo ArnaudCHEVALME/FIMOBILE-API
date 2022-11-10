@@ -1,139 +1,138 @@
 const db = require("../models");
-const TypeStand = db.type_stand;
+const SousGenre = db.sousGenres;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Stand type
+// Create and Save a new Subgenre
 exports.create = (req, res) => {
     // Validate request
     if (!req.body.libelle) {
         res.status(400).send({
-            message: "Libelle can not be empty!"
+            message: "Content can not be empty!"
         });
         return;
     }
 
-    // Create a Stand type
-    const type_stand = {
+    // Create a SubGenre
+    const sousGenre = {
         libelle: req.body.libelle,
     };
 
-    // Save Stand type in the database
-    TypeStand.create(type_stand)
+    // Save Subgenre in the database
+    SousGenre.create(sousGenre)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the stand type."
+                    err.message || "Some error occurred while creating the subgenre."
             });
         });
 };
 
-// Retrieve all Stand types from the database.
+// Retrieve all subgenres from the database.
 exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    TypeStand.findAll({ where: condition })
+    SousGenre.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving stand types."
+                    err.message || "Some error occurred while retrieving Subgenres."
             });
         });
 };
 
-// Find a single Stand type with an id
+// Find a single subgenre with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-
-    TypeStand.findByPk(id)
+    SousGenre.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find stand types with id=${id}.`
+                    message: `Cannot find subgenre with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving TypeStand with id=" + id
+                message: "Error retrieving subgenre with id=" + id
             });
         });
 };
 
-// Update a Stand type by the id in the request
+// Update a subgenre by the id in the request
 exports.update = (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
+    console.log(id);
     const newValues = { libelle: req.body.libelle };
 
-
-    TypeStand.update(newValues, {
-        where: { type_standId: id }
+    SousGenre.update(newValues, {
+        where: { sousGenreId: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Type stand was updated successfully."
+                    message: "Subgenre was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update type stand with id=${id}. Maybe Genre was not found or req.body is empty!`
+                    message: `Cannot update subgenre with id=${id}. Maybe Genre was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating type stand with id=" + id
+                message: "Error updating Subgenre with id=" + id
             });
         });
 };
 
-// Delete a Stand type with the specified id in the request
+// Delete a Genre with the specified id in the request
 exports.delete = (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
 
-    TypeStand.destroy({
-        where: { type_standId: id }
+    SousGenre.destroy({
+        where: { sousGenreId: id }
     })
         .then(num => {
-            if (num == 1) {
+            if (num === 1) {
                 res.send({
-                    message: "Type stand was deleted successfully!"
+                    message: "Subgenre was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete type stand with id=${id}. Maybe Genre was not found!`
+                    message: `Cannot delete Subgenre with id=${id}. Maybe SubGenre was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete type stand with id=" + id
+                message: "Could not delete Subgenre with id=" + id
             });
         });
 };
 
-// Delete all Stand types from the database.
+// Delete all Subgenres from the database.
 exports.deleteAll = (req, res) => {
-    TypeStand.destroy({
+    SousGenre.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Type stand were deleted successfully!` });
+            res.send({ message: `${nums} Subgenre were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all Type stand."
+                    err.message || "Some error occurred while removing all Subgenres."
             });
         });
 };

@@ -1,7 +1,7 @@
 const db = require("../models");
 const Stand = db.stand;
 const Op = db.Sequelize.Op;
-const TypeStand = db.type_stand;
+const TypeStand = db.typeStand;
 
 // Create and Save a new Stand type
 exports.create = (req, res) => {
@@ -24,7 +24,7 @@ exports.create = (req, res) => {
     if (!req.body.visites) {
         req.body.visites = 0;
     }
-    if (!req.body.typeStandId){
+    if (!req.body.typeStandId) {
         res.status(400).send({
             message: "Type stand cannot be empty!"
         });
@@ -64,7 +64,7 @@ exports.findAll = (req, res) => {
     let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
 
 
-    Stand.findAll({include: TypeStand,where: condition_longitude })
+    Stand.findAll({ include: TypeStand, where: condition_longitude })
         .then(data => {
             res.send(data);
         })
