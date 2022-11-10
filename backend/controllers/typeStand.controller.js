@@ -1,138 +1,139 @@
 const db = require("../models");
-const Categorie_reseau = db.categories_reseaux;
+const TypeStand = db.typeStand;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Categorie_reseau
+// Create and Save a new Stand type
 exports.create = (req, res) => {
     // Validate request
     if (!req.body.libelle) {
         res.status(400).send({
-            message: "Content can not be empty!"
+            message: "Libelle can not be empty!"
         });
         return;
     }
 
-    // Create a Categorie_reseau
-    const categorie_reseau = {
+    // Create a Stand type
+    const typeStand = {
         libelle: req.body.libelle,
     };
 
-    // Save Categorie_reseau in the database
-    Categorie_reseau.create(categorie_reseau)
+    // Save Stand type in the database
+    TypeStand.create(typeStand)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the Categorie_reseau."
+                    err.message || "Some error occurred while creating the stand type."
             });
         });
 };
 
-// Retrieve all Categories_reseaux from the database.
+// Retrieve all Stand types from the database.
 exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    Categorie_reseau.findAll({ where: condition })
+    TypeStand.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving Categories_reseaux."
+                    err.message || "Some error occurred while retrieving stand types."
             });
         });
 };
 
-// Find a single Categorie_reseau with an id
+// Find a single Stand type with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Categorie_reseau.findByPk(id)
+
+    TypeStand.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Categorie_reseau with id=${id}.`
+                    message: `Cannot find stand types with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Categorie_reseau with id=" + id
+                message: "Error retrieving TypeStand with id=" + id
             });
         });
 };
 
-// Update a Categorie_reseau by the id in the request
+// Update a Stand type by the id in the request
 exports.update = (req, res) => {
     const id = parseInt(req.params.id);
-    console.log(id);
-    const newValues = { libelle: req.body.libelle};
+    const newValues = { libelle: req.body.libelle };
 
-    Categorie_reseau.update(newValues, {
-        where: { categorie_reseauId: id }
+
+    TypeStand.update(newValues, {
+        where: { typeStandId: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Categorie_reseau was updated successfully."
+                    message: "Type stand was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update Categorie_reseau with id=${id}. Maybe Categorie_reseau was not found or req.body is empty!`
+                    message: `Cannot update type stand with id=${id}. Maybe Genre was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Categorie_reseau with id=" + id
+                message: "Error updating type stand with id=" + id
             });
         });
 };
 
-// Delete a Categorie_reseau with the specified id in the request
+// Delete a Stand type with the specified id in the request
 exports.delete = (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
 
-    Categorie_reseau.destroy({
-        where: { categorie_reseauId: id }
+    TypeStand.destroy({
+        where: { typeStandId: id }
     })
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Categorie_reseau was deleted successfully!"
+                    message: "Type stand was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete Categorie_reseau with id=${id}. Maybe Categorie_reseau was not found!`
+                    message: `Cannot delete type stand with id=${id}. Maybe Genre was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Categorie_reseau with id=" + id
+                message: "Could not delete type stand with id=" + id
             });
         });
 };
 
-// Delete all Categories_reseaux from the database.
+// Delete all Stand types from the database.
 exports.deleteAll = (req, res) => {
-    Categorie_reseau.destroy({
+    TypeStand.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Categories_reseaux were deleted successfully!` });
+            res.send({ message: `${nums} Type stand were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all Categories_reseaux."
+                    err.message || "Some error occurred while removing all Type stand."
             });
         });
 };

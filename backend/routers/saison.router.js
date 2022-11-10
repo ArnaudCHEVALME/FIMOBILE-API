@@ -20,5 +20,5 @@ module.exports = app => {
     // Create a new saison
     router.delete("/", saison.deleteAll);
 
-    app.use('/saison', router);
+    app.use('/saisons', router);
 };

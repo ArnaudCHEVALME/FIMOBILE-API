@@ -26,19 +26,19 @@ db.genres = require("./genre.model.js")(sequelize, Sequelize);
 db.stands = require("./stand.model.js")(sequelize, Sequelize);
 db.scenes = require("./scene.model.js")(sequelize, Sequelize);
 db.services = require("./service.model")(sequelize, Sequelize);
-db.type_stand = require("./type_stand.model.js")(sequelize, Sequelize);
+db.typeStand = require("./typeStand.model.js")(sequelize, Sequelize);
 db.stand = require("./stand.model.js")(sequelize, Sequelize);
-db.sous_genres = require("./sous_genre.model")(sequelize, Sequelize);
+db.sousGenres = require("./sousGenre.model")(sequelize, Sequelize);
 db.users = require("./user.model.js")(sequelize, Sequelize);
 db.concerts = require("./concert.model.js")(sequelize, Sequelize);
-db.categories_reseaux = require("./categorie_reseau.model.js")(sequelize, Sequelize);
+db.categoriesReseaux = require("./categorieReseau.model.js")(sequelize, Sequelize);
 db.reseaux = require("./reseau.model.js")(sequelize, Sequelize);
 db.saison = require("./saison.model.js")(sequelize, Sequelize);//FIXME
 
 //1 stand appartient 1 saison
 //1 saison a n stands
-db.stands.belongsTo(db.saison, {foreignKey: "saisonId"});
-db.saison.hasMany(db.stands, {foreignKey: "standId"});
+db.stands.belongsTo(db.saison, { foreignKey: "saisonId" });
+db.saison.hasMany(db.stands, { foreignKey: "standId" });
 
 // 1 artiste a 1 genre
 // 1 genre appartient à n artistes
@@ -47,21 +47,21 @@ db.genres.hasMany(db.artistes);
 
 // 1 artiste peut avoir n sous-genres
 // 1 sous-genre peut être lié à n artistes
-db.artistes.belongsToMany(db.sous_genres, { through: "ArtistesSousGenres" });
-db.sous_genres.belongsToMany(db.artistes, { through: "ArtistesSousGenres" });
+db.artistes.belongsToMany(db.sousGenres, { through: "ArtistesSousGenres" });
+db.sousGenres.belongsToMany(db.artistes, { through: "ArtistesSousGenres" });
 
 db.artistes.belongsToMany(db.scenes, { through: db.concerts });
 db.scenes.belongsToMany(db.artistes, { through: db.concerts });
 
-// 1 Reseau a 1 Categorie_reseau
-// 1 Categorie_reseau appartient à n Reseaux
-db.reseaux.belongsTo(db.categories_reseaux, { foreignKey: "categorie_reseauId" });
-db.categories_reseaux.hasMany(db.reseaux, { foreignKey: "reseauId" });
+// 1 Reseau a 1 CategorieReseau
+// 1 CategorieReseau appartient à n Reseaux
+db.reseaux.belongsTo(db.categoriesReseaux, { foreignKey: "categorie_reseauId" });
+db.categoriesReseaux.hasMany(db.reseaux, { foreignKey: "reseauId" });
 
 // 1 artiste a 1 genre
 // 1 genre appartient à n artistes
-db.stand.belongsTo(db.type_stand, { foreignKey: "typeStandId" });
-db.type_stand.hasMany(db.stand, { foreignKey: "standId" });
+db.stand.belongsTo(db.typeStand, { foreignKey: "typeStandId" });
+db.typeStand.hasMany(db.stand, { foreignKey: "standId" });
 
 module.exports = db;
 

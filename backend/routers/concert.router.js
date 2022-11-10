@@ -20,5 +20,5 @@ module.exports = app => {
     // Create a new Genre
     router.delete("/", concerts.deleteAll);
 
-    app.use('/genres', router);
+    app.use('/concerts', router);
 };
