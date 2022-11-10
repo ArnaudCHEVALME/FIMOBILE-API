@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
     const Saison = sequelize.define("saison", {
-        datesaison: {
+        dateSaison: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,

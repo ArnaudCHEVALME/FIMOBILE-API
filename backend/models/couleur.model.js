@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
     const Couleurs = sequelize.define("couleurs", {
-        couleurID: {
+        couleurId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,

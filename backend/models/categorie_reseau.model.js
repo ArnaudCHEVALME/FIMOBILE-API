@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
     const Categorie_reseau = sequelize.define("categorie_reseau", {
-        categorie_reseauId: {
+        categorieReseauId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,

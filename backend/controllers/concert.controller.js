@@ -42,8 +42,6 @@ exports.create = (req, res) => {
     const concert = {
         debut: req.body.debut,
         duree: req.body.duree,
-        nbPersonne: req.body.nbPersonne,
-        visites: req.body.visites,
         sceneId: req.body.sceneId,
         artisteId: req.body.artisteId
     };
