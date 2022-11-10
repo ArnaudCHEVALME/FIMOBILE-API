@@ -1,10 +1,11 @@
 const db = require("../models");
-const Pays = db.Pays;
+const Pays = db.pays;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Pays
 exports.create = (req, res) => {
     // Validate request
+
     if (!req.body.nompays) {
         res.status(400).send({
             message: "Content can not be empty!"
@@ -17,7 +18,7 @@ exports.create = (req, res) => {
         nompays: req.body.nompays,
     };
 
-    // Save Pays in the database
+    // Save Pays in the database //FIXME
     Pays.create(pays)
         .then(data => {
             res.send(data);
@@ -28,6 +29,7 @@ exports.create = (req, res) => {
                     err.message || "Some error occurred while creating the Pays."
             });
         });
+        console.log("HELLO THERE3");
 };
 
 // Retrieve all Pays from the database.
@@ -72,8 +74,12 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    Pays.update(req.body, {
-        where: { id: id }
+    const newNomPays = {nompays: req.body.nompays};
+
+    console.log(newNomPays);
+
+    Pays.update(newNomPays, {
+        where: { paysId: id }
     })
         .then(num => {
             if (num == 1) {
@@ -98,7 +104,7 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     Pays.destroy({
-        where: { id: id }
+        where: { paysId: id }
     })
         .then(num => {
             if (num == 1) {
