@@ -50,7 +50,7 @@ exports.create = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the Genre."
+                    err.message || "Some error occurred while creating the Scene."
             });
         });
 };
@@ -73,7 +73,7 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving Genres."
+                    err.message || "Some error occurred while retrieving Scenes."
             });
         });
 };
@@ -88,13 +88,13 @@ exports.findOne = (req, res) => {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Genre with id=${id}.`
+                    message: `Cannot find Scene with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Genre with id=" + id
+                message: "Error retrieving Scene with id=" + id
             });
         });
 };
@@ -109,17 +109,17 @@ exports.update = (req, res) => {
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Genre was updated successfully."
+                    message: "Scene was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update Genre with id=${id}. Maybe Genre was not found or req.body is empty!`
+                    message: `Cannot update Scene with id=${id}. Maybe Scene was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Genre with id=" + id
+                message: "Error updating Scene with id=" + id
             });
         });
 };
@@ -134,17 +134,17 @@ exports.delete = (req, res) => {
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Genre was deleted successfully!"
+                    message: "Scene was deleted successfully!"
                 });
             } else {
                 res.send({
-                    message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
+                    message: `Cannot delete Scene with id=${id}. Maybe Scene was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Genre with id=" + id
+                message: "Could not delete Scene with id=" + id
             });
         });
 };
@@ -156,12 +156,12 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Genres were deleted successfully!` });
+            res.send({ message: `${nums} Scenes were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all Genres."
+                    err.message || "Some error occurred while removing all Scenes."
             });
         });
 };
