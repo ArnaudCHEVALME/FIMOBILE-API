@@ -18,7 +18,7 @@ exports.create = (req, res) => {
         nompays: req.body.nompays,
     };
 
-    // Save Pays in the database //FIXME
+    // Save Pays in the database
     Pays.create(pays)
         .then(data => {
             res.send(data);
@@ -29,7 +29,6 @@ exports.create = (req, res) => {
                     err.message || "Some error occurred while creating the Pays."
             });
         });
-        console.log("HELLO THERE3");
 };
 
 // Retrieve all Pays from the database.
@@ -75,8 +74,6 @@ exports.update = (req, res) => {
     const id = req.params.id;
 
     const newNomPays = {nompays: req.body.nompays};
-
-    console.log(newNomPays);
 
     Pays.update(newNomPays, {
         where: { paysId: id }

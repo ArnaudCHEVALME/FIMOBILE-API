@@ -1,11 +1,11 @@
 const db = require("../models");
-const Couleurs = db.Couleurs;
+const Couleurs = db.couleurs;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Couleurs
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.valeurhexa) {
+    if (!req.body.valeurhexa1 || !req.body.valeurhexa2) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
@@ -13,12 +13,13 @@ exports.create = (req, res) => {
     }
 
     // Create a Couleurs
-    const Couleurs = {
-        valeurhexa: req.body.valeurhexa,
+    const couleurs = {
+        valeurhexa1: req.body.valeurhexa1,
+        valeurhexa2: req.body.valeurhexa2
     };
 
     // Save Couleurs in the database
-    Couleurs.create(Couleurs)
+    Couleurs.create(couleurs)
         .then(data => {
             res.send(data);
         })
@@ -32,10 +33,11 @@ exports.create = (req, res) => {
 
 // Retrieve all Couleurs from the database.
 exports.findAll = (req, res) => {
-    const valeurhexa = req.query.valeurhexa;
-    let condition = valeurhexa ? { valeurhexa: { [Op.iLike]: `%${valeurhexa}%` } } : null;
+    const valeurhexa1 = req.query.valeurhexa1;
 
-    Couleurs.findAll({ where: condition })
+    let condition = valeurhexa1 ? { valeurhexa1: { [Op.iLike]: `%${valeurhexa1}%` } } : null;
+
+    Couleurs.findAll({ where: condition})
         .then(data => {
             res.send(data);
         })
@@ -72,8 +74,13 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    Couleurs.update(req.body, {
-        where: { id: id }
+    const newCouleurs = {
+        valeurhexa1: req.body.valeurhexa1,
+        valeurhexa2: req.body.valeurhexa2
+    };
+
+    Couleurs.update(newCouleurs, {
+        where: { couleurId: id }
     })
         .then(num => {
             if (num == 1) {
@@ -98,7 +105,7 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     Couleurs.destroy({
-        where: { id: id }
+        where: { couleurId: id }
     })
         .then(num => {
             if (num == 1) {

@@ -6,7 +6,11 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             allowNull: false
         },
-        valeurhexa: {
+        valeurhexa1: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        valeurhexa2: {
             type: Sequelize.STRING,
             allowNull: false
         }

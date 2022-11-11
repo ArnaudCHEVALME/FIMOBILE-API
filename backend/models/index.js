@@ -35,6 +35,7 @@ db.categoriesReseaux = require("./categorieReseau.model.js")(sequelize, Sequeliz
 db.reseaux = require("./reseau.model.js")(sequelize, Sequelize);
 db.saison = require("./saison.model.js")(sequelize, Sequelize);//FIXME
 db.pays = require("./pays.model.js")(sequelize, Sequelize);
+db.couleurs = require("./couleur.model.js")(sequelize, Sequelize);
 
 //1 stand appartient 1 saison
 //1 saison a n stands
