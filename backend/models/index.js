@@ -33,7 +33,7 @@ db.users = require("./user.model.js")(sequelize, Sequelize);
 db.concerts = require("./concert.model.js")(sequelize, Sequelize);
 db.categoriesReseaux = require("./categorieReseau.model.js")(sequelize, Sequelize);
 db.reseaux = require("./reseau.model.js")(sequelize, Sequelize);
-db.saison = require("./saison.model.js")(sequelize, Sequelize);//FIXME
+db.saison = require("./saison.model.js")(sequelize, Sequelize);
 db.pays = require("./pays.model.js")(sequelize, Sequelize);
 db.couleurs = require("./couleur.model.js")(sequelize, Sequelize);
 

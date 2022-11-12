@@ -15,6 +15,7 @@ exports.create = (req, res) => {
     // Create a Saison
     const saison = {
         theme: req.body.theme,
+        dateSaison: req.body.dateSaison,
     };
     
     // Save Saison in the database
@@ -72,8 +73,13 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    Saison.update(req.body, {
-        where: { id: id }
+    const saison = {
+        theme: req.body.theme,
+        dateSaison: req.body.dateSaison,
+    };
+
+    Saison.update(saison, {
+        where: { IdSaison: id }
     })
         .then(num => {
             if (num == 1) {
@@ -98,7 +104,7 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     Saison.destroy({
-        where: { id: id }
+        where: { IdSaison: id }
     })
         .then(num => {
             if (num == 1) {

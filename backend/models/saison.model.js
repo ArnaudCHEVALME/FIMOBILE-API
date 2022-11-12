@@ -1,9 +1,13 @@
 module.exports = (sequelize, Sequelize) => {
     const Saison = sequelize.define("saison", {
-        dateSaison: {
+        IdSaison: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
+            allowNull: false
+        },
+        dateSaison: {
+            type: Sequelize.DATE,
             allowNull: false
         },
         theme: {
