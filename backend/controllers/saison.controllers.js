@@ -1,5 +1,5 @@
 const db = require("../models");
-const Saison = db.saison;
+const Saison = db.saisons;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Saison

@@ -27,20 +27,19 @@ db.stands = require("./stand.model.js")(sequelize, Sequelize);
 db.scenes = require("./scene.model.js")(sequelize, Sequelize);
 db.services = require("./service.model")(sequelize, Sequelize);
 db.typeStand = require("./typeStand.model.js")(sequelize, Sequelize);
-db.stand = require("./stand.model.js")(sequelize, Sequelize);
 db.sousGenres = require("./sousGenre.model")(sequelize, Sequelize);
 db.users = require("./user.model.js")(sequelize, Sequelize);
 db.concerts = require("./concert.model.js")(sequelize, Sequelize);
 db.categoriesReseaux = require("./categorieReseau.model.js")(sequelize, Sequelize);
 db.reseaux = require("./reseau.model.js")(sequelize, Sequelize);
-db.saison = require("./saison.model.js")(sequelize, Sequelize);
+db.saisons = require("./saison.model.js")(sequelize, Sequelize);
 db.pays = require("./pays.model.js")(sequelize, Sequelize);
 db.couleurs = require("./couleur.model.js")(sequelize, Sequelize);
 
 //1 stand appartient 1 saison
 //1 saison a n stands
-db.stands.belongsTo(db.saison, { foreignKey: "saisonId" });
-db.saison.hasMany(db.stands, { foreignKey: "standId" });
+db.stands.belongsTo(db.saisons, { foreignKey: "saisonId" });
+db.saisons.hasMany(db.stands, { foreignKey: "standId" });
 
 // 1 artiste a 1 genre
 // 1 genre appartient à n artistes
@@ -60,11 +59,11 @@ db.scenes.belongsToMany(db.artistes, { through: db.concerts });
 db.reseaux.belongsTo(db.categoriesReseaux, { foreignKey: "categorieReseauId" });
 db.categoriesReseaux.hasMany(db.reseaux, { foreignKey: "reseauId" });
 
-// 1 artiste a 1 genre
-// 1 genre appartient à n artistes
-db.stand.belongsTo(db.typeStand, { foreignKey: "typeStandId" });
-db.typeStand.hasMany(db.stand, { foreignKey: "standId" });
+
+db.stands.belongsTo(db.typeStand, { foreignKey: "typeStandId" });
+db.typeStand.hasMany(db.stands, { foreignKey: "standId" });
+
+db.stands.belongsToMany(db.services, {through : "StandsServices", foreignKey:"StandId"});
+db.services.belongsToMany(db.stands, {through : "StandsServices", foreignKey:"ServiceId"});
 
 module.exports = db;
-
-

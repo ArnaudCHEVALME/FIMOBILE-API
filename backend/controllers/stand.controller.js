@@ -1,7 +1,8 @@
 const db = require("../models");
-const Stand = db.stand;
+const Stand = db.stands;
 const Op = db.Sequelize.Op;
 const TypeStand = db.typeStand;
+const Service = db.services;
 
 // Create and Save a new Stand type
 exports.create = (req, res) => {
@@ -44,11 +45,12 @@ exports.create = (req, res) => {
         nom: req.body.nom,
         visites: req.body.visites,
         typeStandId: req.body.typeStandId,
-        saisonId: req.body.saisonId
+        // saisonId: req.body.saisonId,
+        services : [1]
     };
 
     // Save Stand in the database
-    Stand.create(stand)
+    Stand.create(stand, {include : Service})
         .then(data => {
             res.send(data);
         })
