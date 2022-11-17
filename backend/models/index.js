@@ -22,47 +22,89 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.artistes = require("./artiste.model")(sequelize, Sequelize);
-db.genres = require("./genre.model.js")(sequelize, Sequelize);
-db.stands = require("./stand.model.js")(sequelize, Sequelize);
-db.scenes = require("./scene.model.js")(sequelize, Sequelize);
-db.services = require("./service.model")(sequelize, Sequelize);
-db.typeStand = require("./typeStand.model.js")(sequelize, Sequelize);
-db.sousGenres = require("./sousGenre.model")(sequelize, Sequelize);
-db.users = require("./user.model.js")(sequelize, Sequelize);
-db.concerts = require("./concert.model.js")(sequelize, Sequelize);
 db.categoriesReseaux = require("./categorieReseau.model.js")(sequelize, Sequelize);
-db.reseaux = require("./reseau.model.js")(sequelize, Sequelize);
+db.concerts = require("./concert.model.js")(sequelize, Sequelize);
 db.saisons = require("./saison.model.js")(sequelize, Sequelize);
-db.pays = require("./pays.model.js")(sequelize, Sequelize);
+db.ordreCouleurSaison = require("./ordreCouleurSaison.model")(sequelize, Sequelize);
 db.couleurs = require("./couleur.model.js")(sequelize, Sequelize);
+db.genres = require("./genre.model.js")(sequelize, Sequelize);
+db.liensReseaux = require("./lienReseau.model.js")(sequelize, Sequelize);
+db.pays = require("./pays.model.js")(sequelize, Sequelize);
+db.permissions = require("./permission.model.js")(sequelize, Sequelize);
+db.roles = require("./role.model.js")(sequelize, Sequelize);
+db.services = require("./service.model")(sequelize, Sequelize);
+db.scenes = require("./scene.model.js")(sequelize, Sequelize);
+db.stands = require("./stand.model.js")(sequelize, Sequelize);
+db.sousGenres = require("./sousGenre.model")(sequelize, Sequelize);
+db.typeStand = require("./typeStand.model.js")(sequelize, Sequelize);
+db.users = require("./user.model.js")(sequelize, Sequelize);
+
+// 1 saison a plusieurs couleurs
+// 1 couleur peut appartenir à plusieurs saisons
+db.saisons.belongsToMany(db.couleurs, {through: db.ordreCouleurSaison, foreignKey:"saisonId"});
+db.couleurs.belongsToMany(db.saisons, {through: db.ordreCouleurSaison, foreignKey:"couleurId"});
+
+// 1 saison a 1 seul pays à l'honneur
+// 1 pays est à l'honneur dans plusieurs saisons
+db.saisons.belongsTo(db.pays, {foreignKey: "paysHonneurId"});
+db.pays.hasMany(db.saisons, {foreignKey: "saisonId"});
+
+db.artistes.belongsToMany(db.pays, {through: "OriginesArtistes", foreignKey: "artisteId"});
+db.pays.belongsToMany(db.artistes, {through: "OriginesArtistes", foreignKey:"paysId"});
+
+// 1 user a 1 seul role
+// 1 role est partagé par plusieurs users
+db.users.belongsTo(db.roles, {foreignKey:"roleId"});
+db.roles.hasMany(db.users, {foreignKey:"userId"});
+
+// 1 role a plusieurs permissions
+// 1 permission est utilisée par plusieurs rôles
+db.roles.belongsToMany(db.permissions, { through: "RolesPermissions", foreignKey:"roleId" });
+db.permissions.belongsToMany(db.roles, { through: "RolesPermissions", foreignKey:"permissionId" });
 
 //1 stand appartient 1 saison
-//1 saison a n stands
+//1 saison a plusieurs stands
 db.stands.belongsTo(db.saisons, { foreignKey: "saisonId" });
 db.saisons.hasMany(db.stands, { foreignKey: "standId" });
 
-// 1 artiste a 1 genre
-// 1 genre appartient à n artistes
-db.artistes.belongsTo(db.genres);
-db.genres.hasMany(db.artistes);
-
 // 1 artiste peut avoir n sous-genres
 // 1 sous-genre peut être lié à n artistes
-db.artistes.belongsToMany(db.sousGenres, { through: "ArtistesSousGenres" });
-db.sousGenres.belongsToMany(db.artistes, { through: "ArtistesSousGenres" });
+db.artistes.belongsToMany(db.sousGenres, { through: "ArtistesSousGenres", foreignKey:"artisteId" });
+db.sousGenres.belongsToMany(db.artistes, { through: "ArtistesSousGenres", foreignKey:"sousGenreId" });
 
-db.artistes.belongsToMany(db.scenes, { through: db.concerts });
-db.scenes.belongsToMany(db.artistes, { through: db.concerts });
+// 1 sousGenre a 1 seul genre
+// 1 genre a plusieurs sousGenres
+db.sousGenres.belongsTo(db.genres, { foreignKey: "genreId" });
+db.genres.hasMany(db.sousGenres, { foreignKey: "sousGenreId" });
 
-// 1 Reseau a 1 CategorieReseau
-// 1 CategorieReseau appartient à n Reseaux
-db.reseaux.belongsTo(db.categoriesReseaux, { foreignKey: "categorieReseauId" });
-db.categoriesReseaux.hasMany(db.reseaux, { foreignKey: "reseauId" });
+// 3 prochains couples == gros bloc pour concerts et donc la programmation
+// 1 concert a un seul artiste
+// 1 artiste participe à plusieurs concerts
+db.concerts.belongsTo(db.artistes, { foreignKey: "artisteId" });
+db.artistes.hasMany(db.concerts, { foreignKey: "concertId" });
 
+// 1 concert a une seule scène
+// 1 scène appartient à plusieurs concerts
+db.concerts.belongsTo(db.scenes, { foreignKey: "sceneId" });
+db.scenes.hasMany(db.concerts, {foreignKey: "concertId"});
 
+// 1 concert appartient à une seule saison
+// 1 saison a plusieurs concerts
+db.concerts.belongsTo(db.saisons, { foreignKey: "saisonId" });
+db.saisons.hasMany(db.concerts, {foreignKey: "concertId"});
+
+// 1 lien a 1 seule catégorie
+// 1 catégorie de lien est utilisée par n liens
+db.liensReseaux.belongsTo(db.categoriesReseaux, { foreignKey: "categorieReseauId" });
+db.categoriesReseaux.hasMany(db.liensReseaux, { foreignKey: "reseauId" });
+
+// 1 stand a un seul type de stand
+// 1 type de stand appartient à plusieurs stands
 db.stands.belongsTo(db.typeStand, { foreignKey: "typeStandId" });
 db.typeStand.hasMany(db.stands, { foreignKey: "standId" });
 
+// 1 stand a plusieurs services
+// 1 service est proposé par plusieurs stands
 db.stands.belongsToMany(db.services, {through : "StandsServices", foreignKey:"StandId"});
 db.services.belongsToMany(db.stands, {through : "StandsServices", foreignKey:"ServiceId"});
 

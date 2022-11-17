@@ -1,5 +1,5 @@
 module.exports = app => {
-    const reseaux = require("../controllers/reseau.controller.js");
+    const reseaux = require("../controllers/lienReseau.controller.js");
     const router = require("express").Router();
 
     // Create a new Genre
@@ -20,5 +20,5 @@ module.exports = app => {
     // Create a new Genre
     router.delete("/", reseaux.deleteAll);
 
-    app.use('/reseaux', router);
+    app.use('/liensReseaux', router);
 };

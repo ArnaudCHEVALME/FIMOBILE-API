@@ -40,7 +40,7 @@ require("./backend/routers/typeStand.router")(app);
 require("./backend/routers/service.router")(app);
 require("./backend/routers/pays.router")(app);
 require("./backend/routers/stand.router")(app);
-require("./backend/routers/reseau.router")(app);
+require("./backend/routers/lienReseau.router")(app);
 require("./backend/routers/saison.router")(app);
 require("./backend/routers/scene.router")(app);
 require("./backend/routers/service.router")(app);

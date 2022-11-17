@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const Reseau = sequelize.define("reseau", {
-        reseauId: {
+    const LienReseau = sequelize.define("lienReseau", {
+        lienReseauId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
@@ -12,5 +12,5 @@ module.exports = (sequelize, Sequelize) => {
             validate: { isUrl: true }
         }
     });
-    return Reseau;
+    return LienReseau;
 };

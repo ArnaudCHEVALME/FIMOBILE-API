@@ -1,5 +1,5 @@
 const db = require("../models");
-const Reseau = db.reseaux;
+const Reseau = db.liensReseaux;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Reseau
