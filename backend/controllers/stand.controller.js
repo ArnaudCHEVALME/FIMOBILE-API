@@ -95,7 +95,7 @@ exports.update = (req, res) => {
 	};
 
 	// Update Stand in the database
-	Stand.update(stand, {where: {id: id}})
+	Stand.update(stand, {where: {standId: id}})
 		.then(result => {
 			result.setService(eval(req.body.serviceIds))
 				.then(() => {

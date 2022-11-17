@@ -23,16 +23,18 @@ module.exports = (sequelize, Sequelize) => {
     },
         {
             hooks: {
-                beforeCreate: encryptPasswd(user),
-                beforeUpdate: encryptPasswd(user)
+                beforeCreate: async (user) => {
+                    if (user.password) {
+                        user.password = await bcrypt.hash(user.password, 10);
+                    }
+                },
+                beforeUpdate: async (user) => {
+                    if (user.password) {
+                        user.password = await bcrypt.hash(user.password, 10);
+                    }
                 }
             }
+        }
     );
     return User;
-}
-
-let encryptPasswd = async (user) => {
-    if (user.password) {
-        user.password = await bcrypt.hash(user.password, 10);
-    }
 }

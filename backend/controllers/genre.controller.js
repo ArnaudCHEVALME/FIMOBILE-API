@@ -1,4 +1,5 @@
 const db = require("../models");
+const {options} = require("pg/lib/defaults");
 const Genre = db.genres;
 const Op = db.Sequelize.Op;
 
@@ -75,22 +76,24 @@ exports.update = (req, res) => {
     const newValues = { libelle: req.body.libelle};
 
     Genre.update(newValues, {
-        where: { genreId: id }
+        where: {
+            genreId: id
+        }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Genre was updated successfully."
+        .then(data => {
+            if (data[0] > 0) {
+                res.status(200).send({
+                    message: "Genre mis à jour.", data:data[1]
                 });
             } else {
-                res.send({
-                    message: `Cannot update Genre with id=${id}. Maybe Genre was not found or req.body is empty!`
+                res.send.status(404)({
+                    message: `Pas de genre avec id=${id}`, data:null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Genre with id=" + id
+                message: `le serveur a rencontré une erreur pour l'id=${id}\n`+err.message, data:null
             });
         });
 };
@@ -104,11 +107,11 @@ exports.delete = (req, res) => {
     })
         .then(num => {
             if (num === 1) {
-                res.send({
+                res.status(200).send({
                     message: "Genre was deleted successfully!"
                 });
             } else {
-                res.send({
+                res.send.status(404)({
                     message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
                 });
             }
