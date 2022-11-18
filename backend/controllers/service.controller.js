@@ -4,14 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Service
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.libelle) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-
     // Create a Service
     const service = {
         libelle: req.body.libelle
@@ -76,13 +68,14 @@ exports.update = (req, res) => {
     Service.update(newValues, {
         where: { serviceId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Service was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Service was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Service with id=${id}. Maybe Service was not found or req.body is empty!`
                 });
             }
@@ -102,13 +95,15 @@ exports.delete = (req, res) => {
         where: { serviceId: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Service was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Service was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Service with id=${id}. Maybe Service was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Service with id=${id}. Maybe Service was not found!`,
+                    data: null
                 });
             }
         })

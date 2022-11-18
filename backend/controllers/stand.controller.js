@@ -3,35 +3,41 @@ const Stand = db.stands;
 const Op = db.Sequelize.Op;
 const TypeStand = db.typeStand;
 const Service = db.services;
+const Saison = db.saisons;
 
 // Create and Save a new Stand type
 exports.create = (req, res) => {
-
-	// TODO - Plutôt que vérifier chaque paramètre, autant partir du principe que la vue n'envoie pas la requête sans
-	//  les paramètres correctes. Surtout qu'on va catch les erreur dans le bloc plus bas
-
 	// Create a Stand
 	const stand = {
 		longitude: req.body.longitude,
 		latitude: req.body.latitude,
 		nom: req.body.nom,
-		visites: 0, // tout les champs visites sont pour les stats et donc à initier à 0
+		visites: 0, // tous les champs visites sont pour les stats et donc à initier à 0
 		typeStandId: req.body.typeStandId,
 		saisonId: req.body.saisonId,
 	};
 
 	// Save Stand in the database
-	Stand.create(stand, {include: Service})
+	Stand.create(stand, { include: Service })
 		.then(result => {
 			result.addService(eval(req.body.serviceIds))
 				.then(() => {
-					res.status(200).send({message: "Stand created", data: result.include});
+					res.status(200).send({
+						message: "Stand created",
+						data: result.include
+					});
 				}).catch(err => {
-				res.status(500).send({ message: "Stand créé mais erreur dans la liaison des services\n" + err.message, data: null });
-			})
+					res.status(500).send({
+						message: "Stand created error linking with services\n" + err.message,
+						data: null
+					});
+				})
 		})
 		.catch(err => {
-			res.status(500).send({message:err.message || "Some error occurred while creating the Poi."});
+			res.status(500).send({
+				message: err.message || "Some error occurred while creating the Poi.",
+				data: null
+			});
 		});
 };
 
@@ -45,14 +51,17 @@ exports.findAll = (req, res) => {
 	const nom = req.query.nom;
 	const visites = req.query.visites;
 
-	Stand.findAll({include: [TypeStand, Service]}) // pas toujours besoin de tout inclure ?
+	Stand.findAll({ include: [TypeStand, Service, Saison] }) // pas toujours besoin de tout inclure ?
 		.then(data => {
-			res.send(data);
+			res.send({
+				message: null,
+				data: data
+			});
 		})
 		.catch(err => {
 			res.status(500).send({
-				message:
-					err.message || "Some error occurred while retrieving Pois."
+				message: err.message || "Some error occurred while retrieving Pois.",
+				data: null
 			});
 		});
 };
@@ -64,19 +73,23 @@ exports.findOne = (req, res) => {
 
 	const id = req.params.id;
 
-	Stand.findByPk(id)
+	Stand.findByPk(id, { include: [TypeStand, Service, Saison] })
 		.then(data => {
 			if (data) {
-				res.send(data);
+				res.send({
+					message: null, data: data
+				});
 			} else {
 				res.status(404).send({
-					message: `Cannot find Stand with id=${id}.`
+					message: `Cannot find Stand!`,
+					data: null
 				});
 			}
 		})
 		.catch(err => {
 			res.status(500).send({
-				message: "Error retrieving Stand with id=" + id
+				message: "Error retrieving Stand!",
+				data: null
 			});
 		});
 };
@@ -95,43 +108,48 @@ exports.update = (req, res) => {
 	};
 
 	// Update Stand in the database
-	Stand.update(stand, {where: {standId: id}})
-		.then(result => {
-			result.setService(eval(req.body.serviceIds))
-				.then(() => {
-					res.status(200).send({message: "Stand mis à jour", data: result.include});
-				}).catch(err => {
-				res.status(500).send({
-					message: "Stand mis à jour mais problème dans la liaison des services\n" + err.message,
-					data: null });
-			})
+	Stand.update(stand, { where: { standId: id } })
+
+		.then(results => {
+			if (results[0] > 0) {
+
+				res.status(200).send({
+					message: "Stand mis à jour", data: results[1]
+				});
+			} else {
+				res.status(404).send({
+					message: "Stand mis à jour mais problème dans la liaison des services\n" + err.message
+				});
+			}
 		})
 		.catch(err => {
-			res.status(500).send({message:err.message || "Erreur pendant la mise à jour du Stand"});
+			res.status(500).send({ message: err.message || "Erreur pendant la mise à jour du Stand" });
 		});
 };
 
 // Delete a Stand with the specified id in the request
 exports.delete = (req, res) => {
-	const id = req.params.id;
 
 	Stand.destroy({
-		where: {id: id}
+		where: { standId: req.params.id }
 	})
 		.then(num => {
-			if (num == 1) {
-				res.send({
-					message: "Poi was deleted successfully!"
+			if (num > 0) {
+				res.status(200).send({
+					message: "Poi was deleted successfully!",
+					data: null
 				});
 			} else {
-				res.send({
-					message: `Cannot delete Poi with id=${id}. Maybe Poi was not found!`
+				res.status(404).send({
+					message: `Cannot delete Poi with id=${id}. Maybe Poi was not found!`,
+					data: null
 				});
 			}
 		})
 		.catch(err => {
 			res.status(500).send({
-				message: "Could not delete Poi with id=" + id
+				message: `Cannot find Stand: ${err.message}`,
+				data: null
 			});
 		});
 };
@@ -143,12 +161,15 @@ exports.deleteAll = (req, res) => {
 		truncate: false
 	})
 		.then(nums => {
-			res.send({message: `${nums} Pois were deleted successfully!`});
+			res.send({
+				message: `Stands were deleted successfully!`,
+				data: nums
+			});
 		})
 		.catch(err => {
 			res.status(500).send({
-				message:
-					err.message || "Some error occurred while removing all Pois."
+				message: err.message || "Some error occurred while removing Stands.",
+				data: null
 			});
 		});
 };

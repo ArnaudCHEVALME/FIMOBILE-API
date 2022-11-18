@@ -4,14 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Reseau
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.lien) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-
     // Create a Reseau
     const reseau = {
         lien: req.body.lien,
@@ -77,13 +69,14 @@ exports.update = (req, res) => {
     Reseau.update(newValues, {
         where: { id: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Reseau was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Reseau was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Reseau with id=${id}. Maybe Reseau was not found or req.body is empty!`
                 });
             }
@@ -103,13 +96,15 @@ exports.delete = (req, res) => {
         where: { id: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Reseau was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Reseau was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Reseau with id=${id}. Maybe Reseau was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Reseau with id=${id}. Maybe Reseau was not found!`,
+                    data: null
                 });
             }
         })

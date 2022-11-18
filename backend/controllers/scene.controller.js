@@ -4,41 +4,12 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new scene type
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.nom) {
-        res.status(400).send({
-            message: "Name cannot be empty!"
-        });
-        return;
-    }
-    if (!req.body.latitude) {
-        res.status(400).send({
-            message: "Latitude cannot be empty"
-        })
-        return;
-    }
-    if (!req.body.longitude) {
-        res.status(400).send({
-            message: "Longitude cannot be empty"
-        })
-        return;
-    }
-    if (!req.body.interieur) {
-        res.status(400).send({
-            message: "Interieur status cannot be empty"
-        })
-        return;
-    }
-    if (!req.body.capacite) {
-        req.body.capacite = 0;
-    }
-
     // Create a Scene
     const scene = {
         longitude: req.body.longitude,
         latitude: req.body.latitude,
         nom: req.body.nom,
-        capacite: req.body.capacite,
+        capacite: 0,
         interieur: req.body.interieur
     };
 
@@ -106,13 +77,14 @@ exports.update = (req, res) => {
     Scene.update(req.body, {
         where: { sceneId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Scene was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Scene was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Scene with id=${id}. Maybe Scene was not found or req.body is empty!`
                 });
             }
@@ -132,13 +104,15 @@ exports.delete = (req, res) => {
         where: { sceneId: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Scene was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Scene was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Scene with id=${id}. Maybe Scene was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Scene with id=${id}. Maybe Scene was not found!`,
+                    data: null
                 });
             }
         })

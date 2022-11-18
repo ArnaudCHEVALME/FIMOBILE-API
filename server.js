@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 // Connects to the database
 const db = require("./backend/models");
 
-// db.sequelize.sync()
+//db.sequelize.sync()
 db.sequelize.sync({ force: true }) // For developpement, drop every table
     .then(() => {
         console.log("Synced db.");
@@ -30,9 +30,9 @@ db.sequelize.sync({ force: true }) // For developpement, drop every table
 
 
 // Use routes defined in backend/routers
-// require("./backend/routers/artiste.router")(app);
+require("./backend/routers/artiste.router")(app);
 require("./backend/routers/categorieReseau.router")(app);
-// require("./backend/routers/concert.router")(app);
+require("./backend/routers/concert.router")(app);
 require("./backend/routers/couleur.router")(app);
 require("./backend/routers/genre.router")(app);
 require("./backend/routers/user.router")(app);
@@ -47,6 +47,7 @@ require("./backend/routers/service.router")(app);
 // require("./backend/routers/sousGenre.router")(app);
 require("./backend/routers/typeStand.router")(app);
 require("./backend/routers/user.router")(app);
+require("./backend/routers/news.router")(app);
 
 // require("./backend/routers/sousGenre.router")(app);
 

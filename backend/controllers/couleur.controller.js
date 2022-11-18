@@ -4,9 +4,8 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Couleur
 exports.create = (req, res) => {
-    // Create a Couleur
     const couleur = {
-        valeurHexa: req.body.valeurhexa
+        valeurHexa: req.body.valeurHexa
     };
 
     // Save Couleur in the database
@@ -66,11 +65,11 @@ exports.update = (req, res) => {
         valeurHexa: req.body.valeurhexa
     };
 
-    Couleur.update(newCouleur, {where : {couleurId:id}})
+    Couleur.update(newCouleur, { where: { couleurId: id } })
         .then(results => {
             if (results[0] > 0) {
                 res.status(200).send({
-                    message: "Couleur was updated successfully.", data:results[1]
+                    message: "Couleur was updated successfully.", data: results[1]
                 });
             } else {
                 res.status(404).send({
@@ -92,11 +91,12 @@ exports.delete = (req, res) => {
     Couleur.destroy({
         where: { couleurId: id }
     })
+
         .then(num => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Couleur supprimée",
-                    data:null
+                    data: null
                 });
             } else {
                 res.status(404).send({
@@ -108,7 +108,7 @@ exports.delete = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: "Could not delete Couleur with id=" + id,
-                data:null
+                data: null
             });
         });
 };
@@ -122,13 +122,13 @@ exports.deleteAll = (req, res) => {
         .then(nums => {
             res.send({
                 message: `${nums} Couleurs were deleted successfully!`,
-                data:null
+                data: null
             });
         })
         .catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while removing all Couleur.",
-                data:null
+                data: null
             });
         });
 };

@@ -1,73 +1,71 @@
 const db = require("../models");
-const Artistes = db.artistes;
+const Artiste = db.artistes;
 const Op = db.Sequelize.Op;
 
-// Create and Save new Artistes
+// Create and Save new Artiste
 exports.create = (req,res) => {
     // Validate request
     if (!req.body.name){
         res.status(400).send({
-            message: "Content can not be empty!"
+            message: "Le contenu ne peut pas être vide!"
         });
         return 
     }
 
-    // Create a new Artistes
+    // Create a new Artiste
     const artiste = {
         name: req.body.name,
         bio: req.body.bio,
-        banierre_path: req.body.baniere_path,
-        link_clip: req.body.link_clip,
-        visites_page: req.body.visites_page,
+        bannerPath: req.body.bannerPath,
+        linkClip: req.body.linkClip,
+        visitesPage: req.body.visitesPage,
     };
 
     // Save Artiste in the database
-    Artistes.create(artiste)
+    Artiste.create(artiste)
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Artiste."
+                message: `Le serveur a rencontré une erreur.\n`+err.message, data:null
             });
         });
 };
 
-// Retrieve all Artistes from the database.
+// Retrieve all Artiste from the database.
 exports.findAll = (req, res) => {
     const name = req.query.name;
     let condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 
-    Artistes.findAll({ where: condition })
+    Artiste.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Artistes."
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
             });
         });
 };
 
 // Find a single Artiste with an id
 exports.findOne = (req, res) => {
-    const id = req.params.artisteId;
+    const id = req.params.id;
 
-    Artistes.findByPk(id)
+    Artiste.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Artiste with id=${id}.`
+                    message: `Pas de genre avec id=${id}.`, data:null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Artiste with id=" + id
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
             });
         });
 };
@@ -75,31 +73,34 @@ exports.findOne = (req, res) => {
 
 // Update an Artiste by the id in the request
 exports.update = (req, res) => {
-    const id = parseInt(req.params.artisteId);
+    const id = parseInt(req.params.id);
     console.log(id);
-    const newValues = { name: req.body.name,
+    const newValues = {
+        name: req.body.name,
         bio: req.body.bio,
-        baniere_path: req.body.baniere_path,
-        link_clip: req.body.link_clip,
+        banierePath: req.body.banierePath,
+        linkClip: req.body.linkClip,
     };
 
-    Artistes.update(newValues, {
-        where: { artiste: id }
+    Artiste.update(newValues, {
+        where: {
+            artiste: id
+        }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Artiste was updated successfully."
+        .then(data => {
+            if (data[0] > 0) {
+                res.status(200).send({
+                    message: "Artiste mis à jour.", data:data[1]
                 });
             } else {
-                res.send({
-                    message: `Cannot update Artiste with id=${id}. Maybe Artiste was not found or req.body is empty!`
+                res.send.status(404)({
+                    message: `Pas de genre avec id=${id}.`, data:null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Artiste with id=" + id
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
             });
         });
 };
@@ -107,42 +108,42 @@ exports.update = (req, res) => {
 
 // Delete an Artiste with the specified id in the request
 exports.delete = (req, res) => {
-    const id = parseInt(req.params.artisteId);
+    const id = parseInt(req.params.id);
 
-    Artistes.destroy({
+    Artiste.destroy({
         where: { artisteId : id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Artiste was deleted successfully!"
+            if (num === 1) {
+                res.status(200).send({
+                    message: "Artiste a bien été supprimé."
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Artiste with id=${id}. Maybe Artiste was not found!`
+                res.send.status(404)({
+                    message: `Pas d'artiste avec id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Artiste with id=" + id
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
 
-// Delete all Artistes from the database.
+// Delete all Artiste from the database.
 exports.deleteAll = (req, res) => {
-    Artistes.destroy({
+    Artiste.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Artiste were deleted successfully!` });
+            res.status(200).send({
+                message: `${nums} Artistes ont bien été supprimé.` });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all Artiste."
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
