@@ -72,7 +72,10 @@ exports.findOne = (req, res) => {
 // Update a CategorieReseau by the id in the request
 exports.update = (req, res) => {
     const id = parseInt(req.params.id);
-    const newValues = { libelle: req.body.libelle };
+    const newValues = {
+        libelle: req.body.libelle,
+        iconPath: req.body.iconPath
+    };
 
     CategorieReseau.update(newValues, {
         where: { categorieReseauId: id }
