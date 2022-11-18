@@ -4,14 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Saison
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.theme) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-
     // Create a Saison
     const saison = {
         theme: req.body.theme,

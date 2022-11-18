@@ -7,16 +7,12 @@ const Saison = db.saisons;
 
 // Create and Save a new Stand type
 exports.create = (req, res) => {
-
-	// TODO - Plutôt que vérifier chaque paramètre, autant partir du principe que la vue n'envoie pas la requête sans
-	//  les paramètres correctes. Surtout qu'on va catch les erreur dans le bloc plus bas
-
 	// Create a Stand
 	const stand = {
 		longitude: req.body.longitude,
 		latitude: req.body.latitude,
 		nom: req.body.nom,
-		visites: 0, // tout les champs visites sont pour les stats et donc à initier à 0
+		visites: 0, // tous les champs visites sont pour les stats et donc à initier à 0
 		typeStandId: req.body.typeStandId,
 		saisonId: req.body.saisonId,
 	};

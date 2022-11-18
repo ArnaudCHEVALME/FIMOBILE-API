@@ -21,7 +21,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.artistes = require("./artiste.model")(sequelize, Sequelize);
+db.artistes = require("./artiste.model.js")(sequelize, Sequelize);
 db.categoriesReseaux = require("./categorieReseau.model.js")(sequelize, Sequelize);
 db.concerts = require("./concert.model.js")(sequelize, Sequelize);
 db.saisons = require("./saison.model.js")(sequelize, Sequelize);
@@ -108,5 +108,6 @@ db.typeStand.hasMany(db.stands, { foreignKey: "standId" });
 // 1 service est proposé par plusieurs stands
 db.stands.belongsToMany(db.services, { through: "StandsServices", foreignKey: "StandId" });
 db.services.belongsToMany(db.stands, { through: "StandsServices", foreignKey: "ServiceId" });
+
 
 module.exports = db;

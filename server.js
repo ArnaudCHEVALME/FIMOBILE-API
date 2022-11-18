@@ -30,9 +30,9 @@ db.sequelize.sync({ force: true }) // For developpement, drop every table
 
 
 // Use routes defined in backend/routers
-// require("./backend/routers/artiste.router")(app);
+require("./backend/routers/artiste.router")(app);
 require("./backend/routers/categorieReseau.router")(app);
-// require("./backend/routers/concert.router")(app);
+require("./backend/routers/concert.router")(app);
 require("./backend/routers/couleur.router")(app);
 require("./backend/routers/genre.router")(app);
 require("./backend/routers/user.router")(app);

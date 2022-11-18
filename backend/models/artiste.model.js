@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.TEXT,
             allowNull: false
         },
-        banierePath: {
+        bannerPath: {
             type: Sequelize.STRING,
             allowNull: false
         },

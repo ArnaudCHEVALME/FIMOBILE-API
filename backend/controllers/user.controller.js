@@ -8,28 +8,6 @@ exports.login = (req, res) => {
 
 // Create and Save a new User
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.login) {
-        res.status(400).send({
-            message: "Login can not be empty!"
-        });
-        return;
-    }
-
-    if (!req.body.email) {
-        res.status(400).send({
-            message: "email can not be empty!"
-        });
-        return;
-    }
-
-    if (!req.body.password) {
-        res.status(400).send({
-            message: "Password can not be empty!"
-        });
-        return;
-    }
-
     // Create a User
     const user = {
         login: req.body.login,
