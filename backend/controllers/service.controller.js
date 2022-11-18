@@ -12,12 +12,15 @@ exports.create = (req, res) => {
     // Save Service in the database
     Service.create(service)
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Service créé`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Service."
+                message: err.message || "Some error occurred while creating the Service.",
+                
             });
         });
 };
@@ -33,8 +36,7 @@ exports.findAll = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Services."
+                message: err.message || "Some error occurred while retrieving Services.",
             });
         });
 };
@@ -98,12 +100,12 @@ exports.delete = (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Service was deleted successfully!",
-                    data: null
+                    
                 });
             } else {
                 res.status(404).send({
                     message: `Cannot delete Service with id=${id}. Maybe Service was not found!`,
-                    data: null
+                    
                 });
             }
         })

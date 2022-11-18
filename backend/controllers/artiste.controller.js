@@ -16,12 +16,14 @@ exports.create = (req, res) => {
     // Save Artiste in the database
     Artistes.create(artiste)
         .then(data => {
-            res.send(data);
+            res.send({messages: `Artiste created`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Artiste."
+                message: err.message || "Some error occurred while creating the Artiste.",
+                
             });
         });
 };
@@ -33,12 +35,14 @@ exports.findAll = (req, res) => {
 
     Artistes.findAll({ where: condition })
         .then(data => {
-            res.send(data);
+            res.send({message: `Artistes found`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Artistes."
+                message: err.message || "Some error occurred while retrieving Artistes.",
+                
             });
         });
 };
@@ -53,13 +57,15 @@ exports.findOne = (req, res) => {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Artiste with id=${id}.`
+                    message: `Cannot find Artiste with id=${id}.`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Artiste with id=" + id
+                message: err.message,
+                
             });
         });
 };
@@ -82,17 +88,20 @@ exports.update = (req, res) => {
             if (results[0] > 0) {
 
                 res.status(200).send({
-                    message: "Artiste was updated successfully.", data: results[1]
+                    message: "Artiste was updated successfully.",
+                    data: results[1]
                 });
             } else {
                 res.status(404).send({
-                    message: `Cannot update Artiste with id=${id}. Maybe Artiste was not found or req.body is empty!`
+                    message: `Cannot update Artiste with id=${id}. Maybe Artiste was not found or req.body is empty!`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Artiste with id=" + id
+                message: "Error updating Artiste with id=" + id,
+                
             });
         });
 };
@@ -108,18 +117,19 @@ exports.delete = (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Artiste was deleted successfully!",
-                    data: null
+                    
                 });
             } else {
                 res.status(404).send({
                     message: `Cannot delete Artiste with id=${id}. Maybe Artiste was not found!`,
-                    data: null
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Artiste with id=" + id
+                message: "Could not delete Artiste with id=" + id,
+                
             });
         });
 };
@@ -131,12 +141,15 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Artiste were deleted successfully!` });
+            res.send({
+                message: `${nums} Artiste were deleted successfully!`,
+                data: nums
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all Artiste."
+                message: err.message || "Some error occurred while removing all Artiste.",
+                null: null
             });
         });
 };

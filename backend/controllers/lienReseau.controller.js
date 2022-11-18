@@ -12,12 +12,15 @@ exports.create = (req, res) => {
     // Save Reseau in the database
     Reseau.create(reseau)
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Reseau créé`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Reseau."
+                message: err.message || "Some error occurred while creating the Reseau.",
+                
             });
         });
 };
@@ -29,12 +32,15 @@ exports.findAll = (req, res) => {
 
     Reseau.findAll({ where: condition })
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Réseaux trouvés`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Reseaux."
+                message: err.message || "Some error occurred while retrieving Reseaux.",
+                
             });
         });
 };
@@ -49,13 +55,15 @@ exports.findOne = (req, res) => {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Reseau with id=${id}.`
+                    message: `Cannot find Reseau with id=${id}.`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Reseau with id=" + id
+                message: "Error retrieving Reseau with id=" + id,
+                
             });
         });
 };
@@ -73,17 +81,20 @@ exports.update = (req, res) => {
             if (results[0] > 0) {
 
                 res.status(200).send({
-                    message: "Reseau was updated successfully.", data: results[1]
+                    message: "Reseau was updated successfully.",
+                    data: results[1]
                 });
             } else {
                 res.status(404).send({
-                    message: `Cannot update Reseau with id=${id}. Maybe Reseau was not found or req.body is empty!`
+                    message: `Cannot update Reseau with id=${id}. Maybe Reseau was not found or req.body is empty!`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Reseau with id=" + id
+                message: "Error updating Reseau with id=" + id,
+                
             });
         });
 };
@@ -99,18 +110,19 @@ exports.delete = (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Reseau was deleted successfully!",
-                    data: null
+                    
                 });
             } else {
                 res.status(404).send({
                     message: `Cannot delete Reseau with id=${id}. Maybe Reseau was not found!`,
-                    data: null
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Reseau with id=" + id
+                message: "Could not delete Reseau with id=" + id,
+                
             });
         });
 };
@@ -122,12 +134,15 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Reseaux were deleted successfully!` });
+            res.send({
+                message: `${nums} Reseaux were deleted successfully!`,
+                
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all Reseaux."
+                message: err.message || "Some error occurred while removing all Reseaux.",
+                
             });
         });
 };

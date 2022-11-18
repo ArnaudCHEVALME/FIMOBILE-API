@@ -14,12 +14,15 @@ exports.create = (req, res) => {
     // Save Saison in the database
     Saison.create(saison)
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Saison créée`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Saison."
+                message: err.message || "Some error occurred while creating the Saison.",
+                
             });
         });
 };
@@ -31,12 +34,15 @@ exports.findAll = (req, res) => {
 
     Saison.findAll({ where: condition })
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Saisons trouvés`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Saison."
+                message: err.message || "Some error occurred while retrieving Saison.",
+                
             });
         });
 };
@@ -48,16 +54,21 @@ exports.findOne = (req, res) => {
     Saison.findByPk(id)
         .then(data => {
             if (data) {
-                res.send(data);
+                res.send({
+                    message: `Saison trouvé`,
+                    data: data
+                });
             } else {
                 res.status(404).send({
-                    message: `Cannot find Saison with id=${id}.`
+                    message: `Cannot find Saison with id=${id}.`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Saison with id=" + id
+                message: "Error retrieving Saison with id=" + id,
+                
             });
         });
 };
@@ -76,19 +87,21 @@ exports.update = (req, res) => {
     })
         .then(results => {
             if (results[0] > 0) {
-
                 res.status(200).send({
-                    message: "Saison was updated successfully.", data: results[1]
+                    message: "Saison was updated successfully.",
+                    data: results[1]
                 });
             } else {
                 res.status(404).send({
-                    message: `Cannot update Saison with id=${id}. Maybe Saison was not found or req.body is empty!`
+                    message: `Cannot update Saison with id=${id}. Maybe Saison was not found or req.body is empty!`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Saison with id=" + id
+                message: "Error updating Saison with id=" + id,
+                
             });
         });
 };
@@ -105,18 +118,19 @@ exports.delete = (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Saison was deleted successfully!",
-                    data: null
+                    
                 });
             } else {
                 res.status(404).send({
                     message: `Cannot delete Saison with id=${id}. Maybe Saison was not found!`,
-                    data: null
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Saison with id=" + id
+                message: "Could not delete Saison with id=" + id,
+                
             });
         });
 };
@@ -128,12 +142,15 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Saison were deleted successfully!` });
+            res.send({
+                message: `${nums} Saison were deleted successfully!`,
+                data: nums
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all Saison."
+                message: err.message || "Some error occurred while removing all Saison.",
+                
             });
         });
 };

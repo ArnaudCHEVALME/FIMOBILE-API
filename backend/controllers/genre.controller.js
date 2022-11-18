@@ -12,12 +12,15 @@ exports.create = (req, res) => {
     // Save Genre in the database
     Genre.create(genre)
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Genre créé`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Genre."
+                message: err.message || "Some error occurred while creating the Genre.",
+                
             });
         });
 };
@@ -29,12 +32,15 @@ exports.findAll = (req, res) => {
 
     Genre.findAll({ where: condition })
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Genres trouvés`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Genres."
+                message: err.message || "Some error occurred while retrieving Genres.",
+                
             });
         });
 };
@@ -46,16 +52,21 @@ exports.findOne = (req, res) => {
     Genre.findByPk(id)
         .then(data => {
             if (data) {
-                res.send(data);
+                res.send({
+                    message: `Genre trouvé`,
+                    data: data
+                });
             } else {
                 res.status(404).send({
-                    message: `Cannot find Genre with id=${id}.`
+                    message: `Cannot find Genre with id=${id}.`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Genre with id=" + id
+                message: "Error retrieving Genre with id=" + id,
+                
             });
         });
 };
@@ -73,19 +84,21 @@ exports.update = (req, res) => {
     })
         .then(results => {
             if (results[0] > 0) {
-
                 res.status(200).send({
-                    message: "Genre mis à jour.", data: results[1]
+                    message: "Genre mis à jour.",
+                    data: results[1]
                 });
             } else {
                 res.status(404).send({
-                    message: `Pas de genre avec id=${id}`
+                    message: `Pas de genre avec id=${id}`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: `le serveur a rencontré une erreur pour l'id=${id}\n` + err.message, data: null
+                message: `le serveur a rencontré une erreur pour l'id=${id}\n` + err.message,
+                
             });
         });
 };
@@ -101,18 +114,19 @@ exports.delete = (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Genre was deleted successfully!",
-                    data: null
+                    
                 });
             } else {
                 res.status(404).send({
                     message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`,
-                    data: null
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Genre with id=" + id
+                message: "Could not delete Genre with id=" + id,
+                
             });
         });
 };
@@ -124,12 +138,15 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Genres were deleted successfully!` });
+            res.send({
+                message: `${nums} Genres were deleted successfully!`,
+                data: nums
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all Genres."
+                message: err.message || "Some error occurred while removing all Genres.",
+                
             });
         });
 };

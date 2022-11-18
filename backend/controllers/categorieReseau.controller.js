@@ -12,12 +12,15 @@ exports.create = (req, res) => {
     // Save CategorieReseau in the database
     CategorieReseau.create(categorieReseau)
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Categorie reseau créée`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the CategorieReseau."
+                message: err.message || "Some error occurred while creating the CategorieReseau.",
+                
             });
         });
 };
@@ -29,12 +32,15 @@ exports.findAll = (req, res) => {
 
     CategorieReseau.findAll({ where: condition })
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Cattegories reseaux trouvées`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving CategoriesReseaux."
+                message: err.message || "Some error occurred while retrieving CategoriesReseaux.",
+                
             });
         });
 };
@@ -49,13 +55,15 @@ exports.findOne = (req, res) => {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find CategorieReseau with id=${id}.`
+                    message: `Cannot find CategorieReseau with id=${id}.`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving CategorieReseau with id=" + id
+                message: "Error retrieving CategorieReseau with id=" + id,
+                data : null
             });
         });
 };
@@ -63,7 +71,6 @@ exports.findOne = (req, res) => {
 // Update a CategorieReseau by the id in the request
 exports.update = (req, res) => {
     const id = parseInt(req.params.id);
-    console.log(id);
     const newValues = { libelle: req.body.libelle };
 
     CategorieReseau.update(newValues, {
@@ -71,19 +78,21 @@ exports.update = (req, res) => {
     })
         .then(results => {
             if (results[0] > 0) {
-
                 res.status(200).send({
-                    message: "CategorieReseau was updated successfully.", data: results[1]
+                    message: "CategorieReseau was updated successfully.",
+                    data: results[1]
                 });
             } else {
                 res.status(404).send({
-                    message: `Cannot update CategorieReseau with id=${id}. Maybe CategorieReseau was not found or req.body is empty!`
+                    message: `Cannot update CategorieReseau with id=${id}. Maybe CategorieReseau was not found or req.body is empty!`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating CategorieReseau with id=" + id
+                message: "Error updating CategorieReseau with id=" + id,
+                
             });
         });
 };
@@ -99,18 +108,19 @@ exports.delete = (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "CategorieReseau was deleted successfully!",
-                    data: null
+                    data: num
                 });
             } else {
                 res.status(404).send({
                     message: `Cannot delete CategorieReseau with id=${id}. Maybe CategorieReseau was not found!`,
-                    data: null
+                    data: num
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete CategorieReseau with id=" + id
+                message: "Could not delete CategorieReseau with id=" + id,
+                
             });
         });
 };
@@ -122,12 +132,15 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} CategoriesReseaux were deleted successfully!` });
+            res.send({
+                message: `${nums} CategoriesReseaux were deleted successfully!`,
+                
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all CategoriesReseaux."
+                message: err.message || "Some error occurred while removing all CategoriesReseaux.",
+                
             });
         });
 };

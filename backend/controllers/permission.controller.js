@@ -12,12 +12,15 @@ exports.create = (req, res) => {
     // Save Permission in the database
     Permission.create(permission)
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Permission créé`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Permission."
+                message: err.message || "Some error occurred while creating the Permission.",
+                
             });
         });
 };
@@ -29,12 +32,15 @@ exports.findAll = (req, res) => {
 
     Permission.findAll({ where: condition })
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Permissions trouvés`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Permissions."
+                message: err.message || "Some error occurred while retrieving Permissions.",
+                
             });
         });
 };
@@ -46,16 +52,21 @@ exports.findOne = (req, res) => {
     Permission.findByPk(id)
         .then(data => {
             if (data) {
-                res.send(data);
+                res.send({
+                    message: `Permission trouvé`,
+                    data: data
+                });
             } else {
                 res.status(404).send({
-                    message: `Cannot find Permission with id=${id}.`
+                    message: `Cannot find Permission with id=${id}.`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Permission with id=" + id
+                message: "Error retrieving Permission with id=" + id,
+                
             });
         });
 };
@@ -69,19 +80,21 @@ exports.update = (req, res) => {
     })
         .then(results => {
             if (results[0] > 0) {
-
                 res.status(200).send({
-                    message: "Permission was updated successfully.", data: results[1]
+                    message: "Permission was updated successfully.",
+                    data: results[1]
                 });
             } else {
                 res.status(404).send({
-                    message: `Cannot update Permission with id=${id}. Maybe Permission was not found or req.body is empty!`
+                    message: `Cannot update Permission with id=${id}. Maybe Permission was not found or req.body is empty!`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Permission with id=" + id
+                message: "Error updating Permission with id=" + id,
+                
             });
         });
 };
@@ -97,18 +110,19 @@ exports.delete = (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Permission was deleted successfully!",
-                    data: null
+                    
                 });
             } else {
                 res.status(404).send({
                     message: `Cannot delete Permission with id=${id}. Maybe Permission was not found!`,
-                    data: null
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Permission with id=" + id
+                message: "Could not delete Permission with id=" + id,
+                
             });
         });
 };
@@ -120,12 +134,15 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Permissions were deleted successfully!` });
+            res.send({
+                message: `${nums} Permissions were deleted successfully!`,
+                data: nums
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all Permissions."
+                message: err.message || "Some error occurred while removing all Permissions.",
+                
             });
         });
 };
