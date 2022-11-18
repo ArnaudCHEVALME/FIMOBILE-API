@@ -1,5 +1,6 @@
 const db = require("../models");
 const { options } = require("pg/lib/defaults");
+const Saison = db.saisons;
 const News = db.news;
 const Op = db.Sequelize.Op;
 
@@ -11,6 +12,7 @@ exports.create = (req, res) => {
         titre: req.body.titre,
         description: req.body.description,
         publishAt: req.body.publishAt,
+        saisonId: req.body.saisonId,
     };
 
     // Save Genre in the database
@@ -28,10 +30,10 @@ exports.create = (req, res) => {
 
 // Retrieve all Genres from the database.
 exports.findAll = (req, res) => {
-    const libelle = req.query.libelle;
-    let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
+    const saisonId = req.query.saisonId;
+    let condition = saisonId ? { saisonId: { [Op.eq]: saisonId } } : null;
 
-    News.findAll({ where: condition })
+    News.findAll({ where: condition, include: Saison })
         .then(data => {
             res.send(data);
         })
