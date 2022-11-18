@@ -28,7 +28,7 @@ exports.create = (req,res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
+                message: `Le serveur a rencontré une erreur.\n`+err.message, data:null
             });
         });
 };
