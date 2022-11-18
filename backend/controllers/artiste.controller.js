@@ -16,9 +16,9 @@ exports.create = (req, res) => {
     const artiste = {
         name: req.body.name,
         bio: req.body.bio,
-        banierre_path: req.body.baniere_path,
-        link_clip: req.body.link_clip,
-        visites_page: req.body.visites_page,
+        banierrePath: req.body.banierePath,
+        linkClip: req.body.linkClip,
+        visitesPage: req.body.visitesPage,
     };
 
     // Save Artiste in the database
@@ -79,8 +79,8 @@ exports.update = (req, res) => {
     const newValues = {
         name: req.body.name,
         bio: req.body.bio,
-        baniere_path: req.body.baniere_path,
-        link_clip: req.body.link_clip,
+        banierePath: req.body.banierePath,
+        linkClip: req.body.linkClip,
     };
 
     Artistes.update(newValues, {
@@ -106,7 +106,6 @@ exports.update = (req, res) => {
 };
 
 
-// Delete an Artiste with the specified id in the request
 exports.delete = (req, res) => {
     const id = parseInt(req.params.artisteId);
 
