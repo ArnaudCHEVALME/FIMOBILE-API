@@ -7,6 +7,7 @@ exports.create = (req, res) => {
     // Create a CategorieReseau
     const categorieReseau = {
         libelle: req.body.libelle,
+        iconPath: req.body.iconPath
     };
 
     // Save CategorieReseau in the database
