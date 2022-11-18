@@ -7,10 +7,6 @@ const Saison = db.saisons;
 
 // Create and Save a new Stand type
 exports.create = (req, res) => {
-
-	// TODO - Plutôt que vérifier chaque paramètre, autant partir du principe que la vue n'envoie pas la requête sans
-	//  les paramètres correctes. Surtout qu'on va catch les erreur dans le bloc plus bas
-
 	// Create a Stand
 	const stand = {
 		longitude: req.body.longitude,

@@ -4,14 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Reseau
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.lien) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-
     // Create a Reseau
     const reseau = {
         lien: req.body.lien,

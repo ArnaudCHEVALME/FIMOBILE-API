@@ -6,44 +6,14 @@ const Artiste = db.artistes;
 
 // Create and Save a new Concert
 exports.create = (req, res) => {
-    // Validate request data with validator
-    if (!req.body.debut) {
-        res.status(400).send({
-            message: "Debut can not be empty!"
-        });
-        return;
-    }
-    if (!req.body.duree) {
-        res.status(400).send({
-            message: "Duree can not be empty!"
-        });
-        return;
-    }
-    if (!req.body.nbPersonne) {
-        req.body.nbPersonne = 0;
-    }
-    if (!req.body.visites) {
-        req.body.visites = 0;
-    }
-    if (!req.body.sceneId) {
-        res.status(400).send({
-            message: "Scene can not be empty!"
-        });
-        return;
-    }
-    if (!req.body.artisteId) {
-        res.status(400).send({
-            message: "Artiste can not be empty!"
-        });
-        return;
-    }
-
     // Create a Concert
     const concert = {
         debut: req.body.debut,
         duree: req.body.duree,
         sceneId: req.body.sceneId,
-        artisteId: req.body.artisteId
+        artisteId: req.body.artisteId,
+        visites: 0,
+        nbPersonne: 0
     };
 
     // Save Concert in the database

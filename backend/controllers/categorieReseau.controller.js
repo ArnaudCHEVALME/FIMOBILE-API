@@ -4,14 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new CategorieReseau
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.libelle) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-
     // Create a CategorieReseau
     const categorieReseau = {
         libelle: req.body.libelle,

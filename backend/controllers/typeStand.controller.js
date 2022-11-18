@@ -4,14 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Stand type
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.libelle) {
-        res.status(400).send({
-            message: "Libelle can not be empty!"
-        });
-        return;
-    }
-
     // Create a Stand type
     const typeStand = {
         libelle: req.body.libelle,

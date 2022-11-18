@@ -4,7 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Couleur
 exports.create = (req, res) => {
-    // Create a Couleur
     const couleur = {
         valeurHexa: req.body.valeurHexa
     };

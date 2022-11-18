@@ -4,41 +4,12 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new scene type
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.nom) {
-        res.status(400).send({
-            message: "Name cannot be empty!"
-        });
-        return;
-    }
-    if (!req.body.latitude) {
-        res.status(400).send({
-            message: "Latitude cannot be empty"
-        })
-        return;
-    }
-    if (!req.body.longitude) {
-        res.status(400).send({
-            message: "Longitude cannot be empty"
-        })
-        return;
-    }
-    if (!req.body.interieur) {
-        res.status(400).send({
-            message: "Interieur status cannot be empty"
-        })
-        return;
-    }
-    if (!req.body.capacite) {
-        req.body.capacite = 0;
-    }
-
     // Create a Scene
     const scene = {
         longitude: req.body.longitude,
         latitude: req.body.latitude,
         nom: req.body.nom,
-        capacite: req.body.capacite,
+        capacite: 0,
         interieur: req.body.interieur
     };
 
