@@ -76,7 +76,7 @@ exports.findAll = (req, res) => {
     const debut = req.query.debut;
     let condition = debut ? { debut: { [Op.iLike]: `%${debut}%` } } : null;
 
-    Concert.findAll({ include: Scene, Artiste ,where: condition })
+    Concert.findAll({ include: Scene, Artiste, where: condition })
         .then(data => {
             res.send(data);
         })
@@ -116,13 +116,14 @@ exports.update = (req, res) => {
     Concert.update(req.body, {
         where: { id: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Concert was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Concert was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Concert with id=${id}. Maybe Concert was not found or req.body is empty!`
                 });
             }

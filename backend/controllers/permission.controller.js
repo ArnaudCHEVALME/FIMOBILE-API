@@ -75,13 +75,14 @@ exports.update = (req, res) => {
     Permission.update(req.body, {
         where: { id: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Permission was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Permission was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Permission with id=${id}. Maybe Permission was not found or req.body is empty!`
                 });
             }

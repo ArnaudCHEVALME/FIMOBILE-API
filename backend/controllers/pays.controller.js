@@ -73,18 +73,19 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    const newNomPays = {nompays: req.body.nompays};
+    const newNomPays = { nompays: req.body.nompays };
 
     Pays.update(newNomPays, {
         where: { paysId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Pays was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Pays was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Pays with id=${id}. Maybe Pays was not found or req.body is empty!`
                 });
             }

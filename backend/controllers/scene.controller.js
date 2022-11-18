@@ -106,13 +106,14 @@ exports.update = (req, res) => {
     Scene.update(req.body, {
         where: { sceneId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Scene was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Scene was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Scene with id=${id}. Maybe Scene was not found or req.body is empty!`
                 });
             }

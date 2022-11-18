@@ -77,13 +77,14 @@ exports.update = (req, res) => {
     CategorieReseau.update(newValues, {
         where: { categorieReseauId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "CategorieReseau was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "CategorieReseau was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update CategorieReseau with id=${id}. Maybe CategorieReseau was not found or req.body is empty!`
                 });
             }

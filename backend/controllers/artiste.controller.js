@@ -3,13 +3,13 @@ const Artistes = db.artistes;
 const Op = db.Sequelize.Op;
 
 // Create and Save new Artistes
-exports.create = (req,res) => {
+exports.create = (req, res) => {
     // Validate request
-    if (!req.body.name){
+    if (!req.body.name) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
-        return 
+        return
     }
 
     // Create a new Artistes
@@ -76,8 +76,8 @@ exports.findOne = (req, res) => {
 // Update an Artiste by the id in the request
 exports.update = (req, res) => {
     const id = parseInt(req.params.artisteId);
-    console.log(id);
-    const newValues = { name: req.body.name,
+    const newValues = {
+        name: req.body.name,
         bio: req.body.bio,
         banierePath: req.body.banierePath,
         linkClip: req.body.linkClip,
@@ -86,13 +86,14 @@ exports.update = (req, res) => {
     Artistes.update(newValues, {
         where: { artiste: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Artiste was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Artiste was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Artiste with id=${id}. Maybe Artiste was not found or req.body is empty!`
                 });
             }
@@ -109,7 +110,7 @@ exports.delete = (req, res) => {
     const id = parseInt(req.params.artisteId);
 
     Artistes.destroy({
-        where: { artisteId : id }
+        where: { artisteId: id }
     })
         .then(num => {
             if (num == 1) {

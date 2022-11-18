@@ -1,5 +1,5 @@
 const db = require("../models");
-const {options} = require("pg/lib/defaults");
+const { options } = require("pg/lib/defaults");
 const Genre = db.genres;
 const Op = db.Sequelize.Op;
 
@@ -36,7 +36,7 @@ exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    Genre.findAll({ where: condition})
+    Genre.findAll({ where: condition })
         .then(data => {
             res.send(data);
         })
@@ -73,27 +73,28 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
     console.log(id);
-    const newValues = { libelle: req.body.libelle};
+    const newValues = { libelle: req.body.libelle };
 
     Genre.update(newValues, {
         where: {
             genreId: id
         }
     })
-        .then(data => {
-            if (data[0] > 0) {
+        .then(results => {
+            if (results[0] > 0) {
+
                 res.status(200).send({
-                    message: "Genre mis à jour.", data:data[1]
+                    message: "Genre mis à jour.", data: results[1]
                 });
             } else {
-                res.send.status(404)({
-                    message: `Pas de genre avec id=${id}`, data:null
+                res.status(404).send({
+                    message: `Pas de genre avec id=${id}`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: `le serveur a rencontré une erreur pour l'id=${id}\n`+err.message, data:null
+                message: `le serveur a rencontré une erreur pour l'id=${id}\n` + err.message, data: null
             });
         });
 };
