@@ -14,15 +14,15 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.TEXT,
             allowNull: false
         },
-        baniere_path: {
+        banierePath: {
             type: Sequelize.STRING,
             allowNull: false
         },
-        link_clip: {
+        linkClip: {
             type: Sequelize.STRING,
             allowNull: false
         },
-        visites_page: {
+        visitesPage: {
             type: Sequelize.INTEGER,
             defaultValue: 0
         }
