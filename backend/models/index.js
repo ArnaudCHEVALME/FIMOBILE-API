@@ -40,6 +40,13 @@ db.typeStand = require("./typeStand.model.js")(sequelize, Sequelize);
 db.users = require("./user.model.js")(sequelize, Sequelize);
 db.news = require("./news.model.js")(sequelize, Sequelize);
 
+
+// 1 saison a plusieurs News
+// 1 News peut appartenir à plusieurs saisons
+db.news.belongsTo(db.saisons, { foreignKey: "saisonId" });
+db.saisons.hasMany(db.news, { foreignKey: "newsId" });
+
+
 // 1 saison a plusieurs couleurs
 // 1 couleur peut appartenir à plusieurs saisons
 db.saisons.belongsToMany(db.couleurs, { through: db.ordreCouleurSaison, foreignKey: "saisonId" });
