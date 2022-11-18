@@ -3,17 +3,19 @@ const Concert = db.concerts;
 const Op = db.Sequelize.Op;
 const Scene = db.scenes;
 const Artiste = db.artistes;
+const Saison = db.saisons;
+
 
 // Create and Save a new Concert
 exports.create = (req, res) => {
     // Create a Concert
     const concert = {
-        debut: req.body.debut,
+        debut: new Date(req.body.debut),
         duree: req.body.duree,
-        sceneId: req.body.sceneId,
-        artisteId: req.body.artisteId,
         visites: 0,
-        nbPersonne: 0
+        nbPersonne: 0,
+        sceneId: req.body.sceneId,
+        artisteId: req.body.artisteId
     };
 
     // Save Concert in the database
@@ -26,8 +28,8 @@ exports.create = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "Some error occurred while creating the Concert.",
-                
+                message:
+                    err.message || "Some error occurred while creating the Concert."
             });
         });
 };
@@ -44,15 +46,30 @@ exports.findAllPublished = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving Concerts.",
-                
+
             });
         });
 }
 exports.findAll = (req, res) => {
     const debut = req.query.debut;
-    let condition = debut ? { debut: { [Op.iLike]: `%${debut}%` } } : null;
+    const duree = req.query.duree;
+    const sceneId = req.query.sceneId;
+    const artisteId = req.query.artisteId;
 
-    Concert.findAll({ include: Scene, Artiste, where: condition })
+    let conditionDebut = debut ? { debut: { [Op.iLike]: `%${debut}%` } } : null;
+    let conditionDuree = duree ? { duree: { [Op.iLike]: `%${duree}%` } } : null;
+    let conditionSceneId = sceneId ? { sceneId: { [Op.eq]: `%${sceneId}%` } } : null;
+    let conditionArtisteId = artisteId ? { artisteId: { [Op.eq]: `%${artisteId}%` } } : null;
+
+
+    Concert.findAll({
+        where: {
+            debut: conditionDebut,
+            duree: conditionDuree,
+            sceneId: conditionSceneId,
+            artisteId: conditionArtisteId
+        }
+    })
         .then(data => {
             res.send({
                 message: `Concerts trouvés`,
@@ -62,14 +79,14 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving Concerts.",
-                
+
             });
         });
 };
 
 // Find a single Concert with an id
 exports.findOne = (req, res) => {
-    const id = req.params.concertID;
+    const id = req.params.concertId;
 
     Concert.findByPk(id)
         .then(data => {
@@ -81,14 +98,14 @@ exports.findOne = (req, res) => {
             } else {
                 res.status(404).send({
                     message: `Cannot find Concert with id=${id}.`,
-                    
+
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
                 message: "Error retrieving Concert with id=" + id,
-                
+
             });
         });
 };
@@ -110,42 +127,40 @@ exports.update = (req, res) => {
             } else {
                 res.status(404).send({
                     message: `Cannot update Concert with id=${id}. Maybe Concert was not found or req.body is empty!`,
-                    
+
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
                 message: "Error updating Concert with id=" + id,
-                
+
             });
         });
 };
 
 // Delete a Concert with the specified id in the request
 exports.delete = (req, res) => {
-    const id = req.params.concertID;
+    const id = req.params.concertId;
 
     Concert.destroy({
         where: { id: id }
     })
         .then(num => {
-            if (num > 0) {
-                res.status(200).send({
-                    message: "Concert was deleted successfully!",
-                    
+            if (num == 1) {
+                res.send({
+                    message: "Concert was deleted successfully!"
                 });
             } else {
-                res.status(404).send({
-                    message: `Cannot delete Concert with id=${id}. Maybe Concert was not found!`,
-                    
+                res.send({
+                    message: `Cannot delete Concert with id=${id}. Maybe Concert was not found!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
                 message: "Could not delete Concert with id=" + id,
-                
+
             });
         });
 };
@@ -165,7 +180,7 @@ exports.deleteAll = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while removing all Concerts.",
-                
+
             });
         });
 };

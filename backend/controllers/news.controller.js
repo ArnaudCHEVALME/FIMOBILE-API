@@ -1,25 +1,27 @@
 const db = require("../models");
 const { options } = require("pg/lib/defaults");
-const Genre = db.genres;
+const News = db.news;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Genre
 exports.create = (req, res) => {
-    const genre = {
-        libelle: req.body.libelle,
+
+    // Create a Genre
+    const news = {
+        titre: req.body.titre,
+        description: req.body.description,
+        publishAt: req.body.publishAt,
     };
 
     // Save Genre in the database
-    Genre.create(genre)
+    News.create(news)
         .then(data => {
-            res.send({
-                message: `Genre créé`,
-                data: data
-            });
+            res.send(data);
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur.\n` + err.message, data: null
+                message:
+                    err.message || "Some error occurred while creating the Genre."
             });
         });
 };
@@ -29,16 +31,14 @@ exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    Genre.findAll({ where: condition })
+    News.findAll({ where: condition })
         .then(data => {
-            res.send({
-                message: `Genres trouvés`,
-                data: data
-            });
+            res.send(data);
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
+                message:
+                    err.message || "Some error occurred while retrieving News."
             });
         });
 };
@@ -47,23 +47,19 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Genre.findByPk(id)
+    News.findByPk(id)
         .then(data => {
             if (data) {
-                res.send({
-                    message: `Genre trouvé`,
-                    data: data
-                });
+                res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Genre with id=${id}.`,
-
+                    message: `Cannot find News with id=${id}.`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
+                message: "Error retrieving News with id=" + id
             });
         });
 };
@@ -71,27 +67,34 @@ exports.findOne = (req, res) => {
 // Update a Genre by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
-    const newValues = { libelle: req.body.libelle };
+    console.log(id);
+    const newValues =
+    {
+        titre: req.body.titre,
+        description: req.body.description,
+        publishAt: req.body.publishAt,
+    };
 
-    Genre.update(newValues, {
+    News.update(newValues, {
         where: {
-            genreId: id
+            newsId: id
         }
     })
-        .then(data => {
-            if (data[0] > 0) {
+        .then(results => {
+            if (results[0] > 0) {
+
                 res.status(200).send({
-                    message: "Genre mis à jour.", data: data[1]
+                    message: "News mis à jour.", data: results[1]
                 });
             } else {
-                res.send.status(404)({
-                    message: `Pas de genre avec id=${id}.`, data: null
+                res.status(404).send({
+                    message: `Pas de news avec id=${id}`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
+                message: `le serveur a rencontré une erreur pour l'id=${id}\n` + err.message, data: null
             });
         });
 };
@@ -100,41 +103,42 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    Genre.destroy({
-        where: { genreId: id }
+    News.destroy({
+        where: { newsId: id }
     })
         .then(num => {
-            if (num === 1) {
+            if (num > 0) {
                 res.status(200).send({
-                    message: "Genre a bien été supprimé."
+                    message: "News was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send.status(404)({
-                    message: `Pas de genre avec id=${id}.`, data: null
+                res.status(404).send({
+                    message: `Cannot delete News with id=${id}. Maybe News was not found!`,
+                    data: null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
+                message: "Could not delete News with id=" + id
             });
         });
 };
 
 // Delete all Genres from the database.
 exports.deleteAll = (req, res) => {
-    Genre.destroy({
+    News.destroy({
         where: {},
         truncate: false
     })
         .then(nums => {
-            res.send.status(200)({
-                message: `${nums} Genres ont bien été supprimés.`
-            });
+            res.send({ message: `${nums} News were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
+                message:
+                    err.message || "Some error occurred while removing all News."
             });
         });
 };

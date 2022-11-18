@@ -2,22 +2,22 @@ module.exports = app => {
     const concerts = require("../controllers/concert.controller.js");
     const router = require("express").Router();
 
-    // Create a new Genre
+    // Create a new Concert
     router.post("/", concerts.create);
 
-    // Retrieve all Genres
+    // Retrieve all Concerts
     router.get("/", concerts.findAll);
 
-    // Retrieve a single Genre with id
+    // Retrieve a single Concert with id
     router.get("/:id", concerts.findOne);
 
-    // Update a Genre with id
+    // Update a Concert with id
     router.put("/:id", concerts.update);
 
-    // Delete a Genre with id
+    // Delete a Concert with id
     router.delete("/:id", concerts.delete);
 
-    // Create a new Genre
+    // Create a new Concert
     router.delete("/", concerts.deleteAll);
 
     app.use('/concerts', router);

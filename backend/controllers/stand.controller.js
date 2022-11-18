@@ -12,7 +12,7 @@ exports.create = (req, res) => {
 		longitude: req.body.longitude,
 		latitude: req.body.latitude,
 		nom: req.body.nom,
-		visites: 0, // tout les champs visites sont pour les stats et donc à initier à 0
+		visites: 0, // tous les champs visites sont pour les stats et donc à initier à 0
 		typeStandId: req.body.typeStandId,
 		saisonId: req.body.saisonId,
 	};
