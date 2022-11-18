@@ -47,6 +47,7 @@ require("./backend/routers/service.router")(app);
 // require("./backend/routers/sousGenre.router")(app);
 require("./backend/routers/typeStand.router")(app);
 require("./backend/routers/user.router")(app);
+require("./backend/routers/news.router")(app);
 
 // require("./backend/routers/sousGenre.router")(app);
 
