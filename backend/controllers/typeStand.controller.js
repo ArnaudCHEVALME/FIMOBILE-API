@@ -4,14 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Stand type
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.libelle) {
-        res.status(400).send({
-            message: "Libelle can not be empty!"
-        });
-        return;
-    }
-
     // Create a Stand type
     const typeStand = {
         libelle: req.body.libelle,
@@ -78,13 +70,14 @@ exports.update = (req, res) => {
     TypeStand.update(newValues, {
         where: { typeStandId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Type stand was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Type stand was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update type stand with id=${id}. Maybe Genre was not found or req.body is empty!`
                 });
             }
@@ -104,13 +97,15 @@ exports.delete = (req, res) => {
         where: { typeStandId: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Type stand was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Type stand was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete type stand with id=${id}. Maybe Genre was not found!`
+                res.status(404).send({
+                    message: `Cannot delete type stand with id=${id}. Maybe Genre was not found!`,
+                    data: null
                 });
             }
         })

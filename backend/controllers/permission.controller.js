@@ -4,14 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Permission
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.libelle) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-
     // Create a Permission
     const permission = {
         libelle: req.body.libelle,
@@ -75,13 +67,14 @@ exports.update = (req, res) => {
     Permission.update(req.body, {
         where: { id: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Permission was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Permission was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Permission with id=${id}. Maybe Permission was not found or req.body is empty!`
                 });
             }
@@ -101,13 +94,15 @@ exports.delete = (req, res) => {
         where: { id: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Permission was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Permission was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Permission with id=${id}. Maybe Permission was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Permission with id=${id}. Maybe Permission was not found!`,
+                    data: null
                 });
             }
         })

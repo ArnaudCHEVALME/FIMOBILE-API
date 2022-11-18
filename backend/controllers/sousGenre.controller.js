@@ -4,14 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Subgenre
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.libelle) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-
     // Create a SubGenre
     const sousGenre = {
         libelle: req.body.libelle,
@@ -77,13 +69,14 @@ exports.update = (req, res) => {
     SousGenre.update(newValues, {
         where: { sousGenreId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Subgenre was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Subgenre was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update subgenre with id=${id}. Maybe Genre was not found or req.body is empty!`
                 });
             }
@@ -103,13 +96,15 @@ exports.delete = (req, res) => {
         where: { sousGenreId: id }
     })
         .then(num => {
-            if (num === 1) {
-                res.send({
-                    message: "Subgenre was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Subgenre was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Subgenre with id=${id}. Maybe SubGenre was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Subgenre with id=${id}. Maybe SubGenre was not found!`,
+                    data: null
                 });
             }
         })

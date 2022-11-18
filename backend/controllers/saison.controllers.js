@@ -4,20 +4,13 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Saison
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.theme) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-
     // Create a Saison
     const saison = {
         theme: req.body.theme,
         dateSaison: req.body.dateSaison,
+        paysHonneurId: req.body.paysHonneurId
     };
-    
+
     // Save Saison in the database
     Saison.create(saison)
         .then(data => {
@@ -81,13 +74,14 @@ exports.update = (req, res) => {
     Saison.update(saison, {
         where: { IdSaison: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Saison was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Saison was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Saison with id=${id}. Maybe Saison was not found or req.body is empty!`
                 });
             }
@@ -106,14 +100,17 @@ exports.delete = (req, res) => {
     Saison.destroy({
         where: { IdSaison: id }
     })
+
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Saison was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Saison was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Saison with id=${id}. Maybe Saison was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Saison with id=${id}. Maybe Saison was not found!`,
+                    data: null
                 });
             }
         })

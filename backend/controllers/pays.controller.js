@@ -4,15 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Pays
 exports.create = (req, res) => {
-    // Validate request
-
-    if (!req.body.nompays) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-
     // Create a Pays
     const pays = {
         nompays: req.body.nompays,
@@ -73,18 +64,19 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    const newNomPays = {nompays: req.body.nompays};
+    const newNomPays = { nompays: req.body.nompays };
 
     Pays.update(newNomPays, {
         where: { paysId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Pays was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Pays was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Pays with id=${id}. Maybe Pays was not found or req.body is empty!`
                 });
             }
@@ -104,13 +96,15 @@ exports.delete = (req, res) => {
         where: { paysId: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Pays was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Pays was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Pays with id=${id}. Maybe Pays was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Pays with id=${id}. Maybe Pays was not found!`,
+                    data: null
                 });
             }
         })

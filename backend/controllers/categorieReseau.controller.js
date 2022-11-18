@@ -4,14 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new CategorieReseau
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.libelle) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-
     // Create a CategorieReseau
     const categorieReseau = {
         libelle: req.body.libelle,
@@ -77,13 +69,14 @@ exports.update = (req, res) => {
     CategorieReseau.update(newValues, {
         where: { categorieReseauId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "CategorieReseau was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "CategorieReseau was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update CategorieReseau with id=${id}. Maybe CategorieReseau was not found or req.body is empty!`
                 });
             }
@@ -103,13 +96,15 @@ exports.delete = (req, res) => {
         where: { categorieReseauId: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "CategorieReseau was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "CategorieReseau was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete CategorieReseau with id=${id}. Maybe CategorieReseau was not found!`
+                res.status(404).send({
+                    message: `Cannot delete CategorieReseau with id=${id}. Maybe CategorieReseau was not found!`,
+                    data: null
                 });
             }
         })

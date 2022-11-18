@@ -8,28 +8,6 @@ exports.login = (req, res) => {
 
 // Create and Save a new User
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.login) {
-        res.status(400).send({
-            message: "Login can not be empty!"
-        });
-        return;
-    }
-
-    if (!req.body.email) {
-        res.status(400).send({
-            message: "email can not be empty!"
-        });
-        return;
-    }
-
-    if (!req.body.password) {
-        res.status(400).send({
-            message: "Password can not be empty!"
-        });
-        return;
-    }
-
     // Create a User
     const user = {
         login: req.body.login,
@@ -101,13 +79,14 @@ exports.update = (req, res) => {
     User.update(newValues, {
         where: { userId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "User was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "User was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
                 });
             }
@@ -127,13 +106,15 @@ exports.delete = (req, res) => {
         where: { userId: id }
     })
         .then(num => {
-            if (num === 1) {
-                res.send({
-                    message: "User was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "User was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete User with id=${id}. Maybe User was not found!`
+                res.status(404).send({
+                    message: `Cannot delete User with id=${id}. Maybe User was not found!`,
+                    data: null
                 });
             }
         })
