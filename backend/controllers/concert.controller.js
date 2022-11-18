@@ -3,6 +3,8 @@ const Concert = db.concerts;
 const Op = db.Sequelize.Op;
 const Scene = db.scenes;
 const Artiste = db.artistes;
+const Saison = db.saisons;
+
 
 // Create and Save a new Concert
 exports.create = (req, res) => {
@@ -40,8 +42,10 @@ exports.create = (req, res) => {
 
     // Create a Concert
     const concert = {
-        debut: req.body.debut,
+        debut: new Date(req.body.debut),
         duree: req.body.duree,
+        nbPersonne: req.body.nbPersonne,
+        visites: req.body.visites,
         sceneId: req.body.sceneId,
         artisteId: req.body.artisteId
     };
@@ -74,9 +78,24 @@ exports.findAllPublished = (req, res) => {
 }
 exports.findAll = (req, res) => {
     const debut = req.query.debut;
-    let condition = debut ? { debut: { [Op.iLike]: `%${debut}%` } } : null;
+    const duree = req.query.duree;
+    const sceneId = req.query.sceneId;
+    const artisteId = req.query.artisteId;
 
-    Concert.findAll({ include: Scene, Artiste ,where: condition })
+    let conditionDebut = debut ? { debut: { [Op.iLike]: `%${debut}%` } } : null;
+    let conditionDuree = duree ? { duree: { [Op.iLike]: `%${duree}%` } } : null;
+    let conditionSceneId = sceneId ? { sceneId: { [Op.eq]: `%${sceneId}%` } } : null;
+    let conditionArtisteId = artisteId ? { artisteId: { [Op.eq]: `%${artisteId}%` } } : null;
+
+
+    Concert.findAll({
+        where: {
+            debut: conditionDebut,
+            duree: conditionDuree,
+            sceneId: conditionSceneId,
+            artisteId: conditionArtisteId
+        }
+    })
         .then(data => {
             res.send(data);
         })
@@ -90,7 +109,7 @@ exports.findAll = (req, res) => {
 
 // Find a single Concert with an id
 exports.findOne = (req, res) => {
-    const id = req.params.concertID;
+    const id = req.params.concertId;
 
     Concert.findByPk(id)
         .then(data => {
@@ -136,7 +155,7 @@ exports.update = (req, res) => {
 
 // Delete a Concert with the specified id in the request
 exports.delete = (req, res) => {
-    const id = req.params.concertID;
+    const id = req.params.concertId;
 
     Concert.destroy({
         where: { id: id }

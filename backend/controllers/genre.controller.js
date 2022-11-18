@@ -8,7 +8,7 @@ exports.create = (req, res) => {
     // Validate request
     if (!req.body.libelle) {
         res.status(400).send({
-            message: "Content can not be empty!"
+            message: "Le contenu ne peut pas être vide!"
         });
         return;
     }
@@ -25,8 +25,7 @@ exports.create = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Genre."
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -42,8 +41,7 @@ exports.findAll = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Genres."
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -64,7 +62,7 @@ exports.findOne = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Genre with id=" + id
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -87,13 +85,13 @@ exports.update = (req, res) => {
                 });
             } else {
                 res.send.status(404)({
-                    message: `Pas de genre avec id=${id}`, data:null
+                    message: `Pas de genre avec id=${id}.`, data:null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: `le serveur a rencontré une erreur pour l'id=${id}\n`+err.message, data:null
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
             });
         });
 };
@@ -108,17 +106,17 @@ exports.delete = (req, res) => {
         .then(num => {
             if (num === 1) {
                 res.status(200).send({
-                    message: "Genre was deleted successfully!"
+                    message: "Genre a bien été supprimé."
                 });
             } else {
                 res.send.status(404)({
-                    message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
+                    message: `Pas de genre avec id=${id}.`, data:null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Genre with id=" + id
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -130,12 +128,12 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Genres were deleted successfully!` });
+            res.send.status(200)({
+                message: `${nums} Genres ont bien été supprimés.` });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all Genres."
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };

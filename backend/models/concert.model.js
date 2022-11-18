@@ -21,7 +21,7 @@ module.exports = (sequelize, Sequelize) => {
         visites: {
             type: Sequelize.INTEGER,
             allowNull: true
-        }
+        },
     });
     return Concert;
 };
