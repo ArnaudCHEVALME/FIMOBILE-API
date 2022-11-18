@@ -17,7 +17,7 @@ exports.create = (req, res) => {
         theme: req.body.theme,
         dateSaison: req.body.dateSaison,
     };
-    
+
     // Save Saison in the database
     Saison.create(saison)
         .then(data => {
@@ -106,13 +106,14 @@ exports.delete = (req, res) => {
     Saison.destroy({
         where: { IdSaison: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Saison was deleted successfully!"
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Saison was deleted successfully!", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot delete Saison with id=${id}. Maybe Saison was not found!`
                 });
             }

@@ -77,13 +77,14 @@ exports.update = (req, res) => {
     SousGenre.update(newValues, {
         where: { sousGenreId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Subgenre was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Subgenre was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update subgenre with id=${id}. Maybe Genre was not found or req.body is empty!`
                 });
             }

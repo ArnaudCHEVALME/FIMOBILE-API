@@ -21,17 +21,17 @@ exports.create = (req, res) => {
 	};
 
 	// Save Stand in the database
-	Stand.create(stand, {include: Service})
+	Stand.create(stand, { include: Service })
 		.then(result => {
 			result.addService(eval(req.body.serviceIds))
 				.then(() => {
-					res.status(200).send({message: "Stand created", data: result.include});
+					res.status(200).send({ message: "Stand created", data: result.include });
 				}).catch(err => {
-				res.status(500).send({ message: "Stand créé mais erreur dans la liaison des services\n" + err.message, data: null });
-			})
+					res.status(500).send({ message: "Stand créé mais erreur dans la liaison des services\n" + err.message, data: null });
+				})
 		})
 		.catch(err => {
-			res.status(500).send({message:err.message || "Some error occurred while creating the Poi."});
+			res.status(500).send({ message: err.message || "Some error occurred while creating the Poi." });
 		});
 };
 
@@ -45,7 +45,7 @@ exports.findAll = (req, res) => {
 	const nom = req.query.nom;
 	const visites = req.query.visites;
 
-	Stand.findAll({include: [TypeStand, Service]}) // pas toujours besoin de tout inclure ?
+	Stand.findAll({ include: [TypeStand, Service] }) // pas toujours besoin de tout inclure ?
 		.then(data => {
 			res.send(data);
 		})
@@ -95,19 +95,22 @@ exports.update = (req, res) => {
 	};
 
 	// Update Stand in the database
-	Stand.update(stand, {where: {standId: id}})
-		.then(result => {
-			result.setService(eval(req.body.serviceIds))
-				.then(() => {
-					res.status(200).send({message: "Stand mis à jour", data: result.include});
-				}).catch(err => {
-				res.status(500).send({
-					message: "Stand mis à jour mais problème dans la liaison des services\n" + err.message,
-					data: null });
-			})
+	Stand.update(stand, { where: { standId: id } })
+
+		.then(results => {
+			if (results[0] > 0) {
+
+				res.status(200).send({
+					message: "Stand mis à jour", data: results[1]
+				});
+			} else {
+				res.status(404).send({
+					message: "Stand mis à jour mais problème dans la liaison des services\n" + err.message
+				});
+			}
 		})
 		.catch(err => {
-			res.status(500).send({message:err.message || "Erreur pendant la mise à jour du Stand"});
+			res.status(500).send({ message: err.message || "Erreur pendant la mise à jour du Stand" });
 		});
 };
 
@@ -116,7 +119,7 @@ exports.delete = (req, res) => {
 	const id = req.params.id;
 
 	Stand.destroy({
-		where: {id: id}
+		where: { id: id }
 	})
 		.then(num => {
 			if (num == 1) {
@@ -143,7 +146,7 @@ exports.deleteAll = (req, res) => {
 		truncate: false
 	})
 		.then(nums => {
-			res.send({message: `${nums} Pois were deleted successfully!`});
+			res.send({ message: `${nums} Pois were deleted successfully!` });
 		})
 		.catch(err => {
 			res.status(500).send({

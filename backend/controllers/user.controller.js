@@ -101,13 +101,14 @@ exports.update = (req, res) => {
     User.update(newValues, {
         where: { userId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "User was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "User was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
                 });
             }

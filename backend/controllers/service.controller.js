@@ -76,13 +76,14 @@ exports.update = (req, res) => {
     Service.update(newValues, {
         where: { serviceId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Service was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Service was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update Service with id=${id}. Maybe Service was not found or req.body is empty!`
                 });
             }

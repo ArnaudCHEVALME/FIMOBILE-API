@@ -78,13 +78,14 @@ exports.update = (req, res) => {
     TypeStand.update(newValues, {
         where: { typeStandId: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Type stand was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Type stand was updated successfully.", data: results[1]
                 });
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Cannot update type stand with id=${id}. Maybe Genre was not found or req.body is empty!`
                 });
             }
