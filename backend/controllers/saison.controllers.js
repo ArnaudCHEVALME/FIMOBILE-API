@@ -1,4 +1,5 @@
 const db = require("../models");
+const Pays = db.pays;
 const Saison = db.saisons;
 const Op = db.Sequelize.Op;
 
@@ -32,7 +33,7 @@ exports.findAll = (req, res) => {
     const theme = req.query.theme;
     let condition = theme ? { theme: { [Op.iLike]: `%${theme}%` } } : null;
 
-    Saison.findAll({ where: condition })
+    Saison.findAll({ where: condition }, { include: { Pays } })
         .then(data => {
             res.send({
                 message: `Saisons trouvés`,
