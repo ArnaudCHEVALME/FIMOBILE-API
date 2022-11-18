@@ -92,6 +92,7 @@ exports.delete = (req, res) => {
     Couleur.destroy({
         where: { couleurId: id }
     })
+
         .then(num => {
             if (num > 0) {
                 res.status(200).send({
