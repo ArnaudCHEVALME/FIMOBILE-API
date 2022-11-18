@@ -3,6 +3,7 @@ const Stand = db.stands;
 const Op = db.Sequelize.Op;
 const TypeStand = db.typeStand;
 const Service = db.services;
+const Saison = db.saisons;
 
 // Create and Save a new Stand type
 exports.create = (req, res) => {
@@ -21,17 +22,26 @@ exports.create = (req, res) => {
 	};
 
 	// Save Stand in the database
-	Stand.create(stand, { include: Service })
+	Stand.create(stand, {include: Service})
 		.then(result => {
 			result.addService(eval(req.body.serviceIds))
 				.then(() => {
-					res.status(200).send({ message: "Stand created", data: result.include });
+					res.status(200).send({
+						message: "Stand created",
+						data: result.include
+					});
 				}).catch(err => {
-					res.status(500).send({ message: "Stand créé mais erreur dans la liaison des services\n" + err.message, data: null });
-				})
+				res.status(500).send({
+					message: "Stand created error linking with services\n" + err.message,
+					data: null
+				});
+			})
 		})
 		.catch(err => {
-			res.status(500).send({ message: err.message || "Some error occurred while creating the Poi." });
+			res.status(500).send({
+				message:err.message || "Some error occurred while creating the Poi.",
+				data: null
+			});
 		});
 };
 
@@ -45,14 +55,17 @@ exports.findAll = (req, res) => {
 	const nom = req.query.nom;
 	const visites = req.query.visites;
 
-	Stand.findAll({ include: [TypeStand, Service] }) // pas toujours besoin de tout inclure ?
+	Stand.findAll({include: [TypeStand, Service, Saison]}) // pas toujours besoin de tout inclure ?
 		.then(data => {
-			res.send(data);
+			res.send({
+				message: null,
+				data: data
+			});
 		})
 		.catch(err => {
 			res.status(500).send({
-				message:
-					err.message || "Some error occurred while retrieving Pois."
+				message: err.message || "Some error occurred while retrieving Pois.",
+				data: null
 			});
 		});
 };
@@ -64,19 +77,23 @@ exports.findOne = (req, res) => {
 
 	const id = req.params.id;
 
-	Stand.findByPk(id)
+	Stand.findByPk(id, {include: [TypeStand, Service, Saison]})
 		.then(data => {
 			if (data) {
-				res.send(data);
+				res.send({
+					message: null ,data: data
+				});
 			} else {
 				res.status(404).send({
-					message: `Cannot find Stand with id=${id}.`
+					message: `Cannot find Stand!`,
+					data: null
 				});
 			}
 		})
 		.catch(err => {
 			res.status(500).send({
-				message: "Error retrieving Stand with id=" + id
+				message: "Error retrieving Stand!",
+				data: null
 			});
 		});
 };
@@ -116,25 +133,27 @@ exports.update = (req, res) => {
 
 // Delete a Stand with the specified id in the request
 exports.delete = (req, res) => {
-	const id = req.params.id;
 
 	Stand.destroy({
-		where: { id: id }
+		where: {standId: req.params.id}
 	})
 		.then(num => {
-			if (num == 1) {
-				res.send({
-					message: "Poi was deleted successfully!"
+			if (num >= 1) {
+				res.status(200).send({
+					message: "Stand was deleted successfully!",
+					data: num
 				});
 			} else {
-				res.send({
-					message: `Cannot delete Poi with id=${id}. Maybe Poi was not found!`
+				res.status(200).send({
+					message: `Cannot delete Stand!`,
+					data: num
 				});
 			}
 		})
 		.catch(err => {
 			res.status(500).send({
-				message: "Could not delete Poi with id=" + id
+				message: `Cannot find Stand: ${err.message}`,
+				data: null
 			});
 		});
 };
@@ -146,12 +165,14 @@ exports.deleteAll = (req, res) => {
 		truncate: false
 	})
 		.then(nums => {
-			res.send({ message: `${nums} Pois were deleted successfully!` });
+			res.send({
+				message: `Stands were deleted successfully!`,
+				data: nums});
 		})
 		.catch(err => {
 			res.status(500).send({
-				message:
-					err.message || "Some error occurred while removing all Pois."
+				message: err.message || "Some error occurred while removing Stands.",
+				data: null
 			});
 		});
 };

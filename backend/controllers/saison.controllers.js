@@ -16,6 +16,7 @@ exports.create = (req, res) => {
     const saison = {
         theme: req.body.theme,
         dateSaison: req.body.dateSaison,
+        paysHonneurId: req.body.paysHonneurId
     };
 
     // Save Saison in the database
