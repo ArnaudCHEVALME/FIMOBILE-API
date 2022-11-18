@@ -128,13 +128,15 @@ exports.delete = (req, res) => {
         where: { userId: id }
     })
         .then(num => {
-            if (num === 1) {
-                res.send({
-                    message: "User was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "User was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete User with id=${id}. Maybe User was not found!`
+                res.status(404).send({
+                    message: `Cannot delete User with id=${id}. Maybe User was not found!`,
+                    data: null
                 });
             }
         })

@@ -103,13 +103,15 @@ exports.delete = (req, res) => {
         where: { serviceId: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Service was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Service was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Service with id=${id}. Maybe Service was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Service with id=${id}. Maybe Service was not found!`,
+                    data: null
                 });
             }
         })

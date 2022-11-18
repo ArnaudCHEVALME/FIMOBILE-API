@@ -104,13 +104,15 @@ exports.delete = (req, res) => {
         where: { id: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Reseau was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Reseau was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Reseau with id=${id}. Maybe Reseau was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Reseau with id=${id}. Maybe Reseau was not found!`,
+                    data: null
                 });
             }
         })

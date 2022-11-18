@@ -105,13 +105,15 @@ exports.delete = (req, res) => {
         where: { typeStandId: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Type stand was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Type stand was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete type stand with id=${id}. Maybe Genre was not found!`
+                res.status(404).send({
+                    message: `Cannot delete type stand with id=${id}. Maybe Genre was not found!`,
+                    data: null
                 });
             }
         })

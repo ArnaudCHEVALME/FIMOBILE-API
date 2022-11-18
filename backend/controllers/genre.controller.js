@@ -107,13 +107,15 @@ exports.delete = (req, res) => {
         where: { genreId: id }
     })
         .then(num => {
-            if (num === 1) {
+            if (num > 0) {
                 res.status(200).send({
-                    message: "Genre was deleted successfully!"
+                    message: "Genre was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send.status(404)({
-                    message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`,
+                    data: null
                 });
             }
         })

@@ -104,13 +104,15 @@ exports.delete = (req, res) => {
         where: { sousGenreId: id }
     })
         .then(num => {
-            if (num === 1) {
-                res.send({
-                    message: "Subgenre was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Subgenre was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Subgenre with id=${id}. Maybe SubGenre was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Subgenre with id=${id}. Maybe SubGenre was not found!`,
+                    data: null
                 });
             }
         })

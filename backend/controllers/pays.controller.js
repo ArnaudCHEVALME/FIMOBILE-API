@@ -105,13 +105,15 @@ exports.delete = (req, res) => {
         where: { paysId: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Pays was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Pays was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Pays with id=${id}. Maybe Pays was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Pays with id=${id}. Maybe Pays was not found!`,
+                    data: null
                 });
             }
         })

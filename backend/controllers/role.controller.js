@@ -102,13 +102,15 @@ exports.delete = (req, res) => {
         where: { id: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Role was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Role was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Role with id=${id}. Maybe Role was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Role with id=${id}. Maybe Role was not found!`,
+                    data: null
                 });
             }
         })

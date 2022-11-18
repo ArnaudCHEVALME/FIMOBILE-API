@@ -122,13 +122,15 @@ exports.delete = (req, res) => {
 		where: { id: id }
 	})
 		.then(num => {
-			if (num == 1) {
-				res.send({
-					message: "Poi was deleted successfully!"
+			if (num > 0) {
+				res.status(200).send({
+					message: "Poi was deleted successfully!",
+					data: null
 				});
 			} else {
-				res.send({
-					message: `Cannot delete Poi with id=${id}. Maybe Poi was not found!`
+				res.status(404).send({
+					message: `Cannot delete Poi with id=${id}. Maybe Poi was not found!`,
+					data: null
 				});
 			}
 		})

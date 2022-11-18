@@ -133,13 +133,15 @@ exports.delete = (req, res) => {
         where: { sceneId: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Scene was deleted successfully!"
+            if (num > 0) {
+                res.status(200).send({
+                    message: "Scene was deleted successfully!",
+                    data: null
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Scene with id=${id}. Maybe Scene was not found!`
+                res.status(404).send({
+                    message: `Cannot delete Scene with id=${id}. Maybe Scene was not found!`,
+                    data: null
                 });
             }
         })
