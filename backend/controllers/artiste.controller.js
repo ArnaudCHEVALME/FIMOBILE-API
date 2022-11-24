@@ -1,15 +1,16 @@
 const db = require("../models");
 const Artiste = db.artistes;
+const sousGenre = db.sousGenres;
 const Op = db.Sequelize.Op;
 
 // Create and Save new Artiste
-exports.create = (req,res) => {
+exports.create = async (req, res) => {
     // Validate request
-    if (!req.body.name){
+    if (!req.body.name) {
         res.status(400).send({
             message: "Le contenu ne peut pas être vide!"
         });
-        return 
+        return
     }
 
     // Create a new Artiste
@@ -20,17 +21,27 @@ exports.create = (req,res) => {
         linkClip: req.body.linkClip,
         visitesPage: req.body.visitesPage,
     };
-
+    let nvArtiste;
     // Save Artiste in the database
-    Artiste.create(artiste)
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
+    try {
+        nvArtiste = await Artiste.create(artiste);
+        Promise.all(
+            nvArtiste.addSousGenres(eval(req.body.sousGenreId)),
+            nvArtiste.addConcert(eval(req.body.concertId)),
+            nvArtiste.addPays(eval(req.body.paysId))
+            );
+        } catch{
+            Artiste.destroy(nvArtiste);
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
+                message : "données incorectes : "+error.message,
+                data : null
             });
-        });
+            return;
+        }
+        res.status(200).send({
+            message: "Artistes et ses associations créé",
+            data : nvArtiste
+        })
 };
 
 // Retrieve all Artiste from the database.
@@ -44,7 +55,7 @@ exports.findAll = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -59,13 +70,13 @@ exports.findOne = (req, res) => {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Pas de genre avec id=${id}.`, data:null
+                    message: `Pas de genre avec id=${id}.`, data: null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -90,17 +101,17 @@ exports.update = (req, res) => {
         .then(data => {
             if (data[0] > 0) {
                 res.status(200).send({
-                    message: "Artiste mis à jour.", data:data[1]
+                    message: "Artiste mis à jour.", data: data[1]
                 });
             } else {
                 res.send.status(404)({
-                    message: `Pas de genre avec id=${id}.`, data:null
+                    message: `Pas de genre avec id=${id}.`, data: null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -111,7 +122,7 @@ exports.delete = (req, res) => {
     const id = parseInt(req.params.id);
 
     Artiste.destroy({
-        where: { artisteId : id }
+        where: { artisteId: id }
     })
         .then(num => {
             if (num === 1) {
@@ -139,7 +150,8 @@ exports.deleteAll = (req, res) => {
     })
         .then(nums => {
             res.status(200).send({
-                message: `${nums} Artistes ont bien été supprimé.` });
+                message: `${nums} Artistes ont bien été supprimé.`
+            });
         })
         .catch(err => {
             res.status(500).send({
