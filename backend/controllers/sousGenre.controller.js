@@ -1,5 +1,6 @@
 const db = require("../models");
 const SousGenre = db.sousGenres;
+const Genre = db.genres;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Subgenre
@@ -7,6 +8,7 @@ exports.create = (req, res) => {
     // Create a SubGenre
     const sousGenre = {
         libelle: req.body.libelle,
+        genreId: req.body.genreId,
     };
 
     // Save Subgenre in the database
@@ -25,16 +27,19 @@ exports.create = (req, res) => {
 // Retrieve all subgenres from the database.
 exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
+    const genreId = req.query.genreId;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    SousGenre.findAll({ where: condition })
+    SousGenre.findAll({ where: condition , include: Genre})
         .then(data => {
-            res.send(data);
+            res.send({
+                message: null,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Subgenres."
+                message: err.message || "Some error occurred while retrieving Subgenres."
             });
         });
 };
@@ -43,10 +48,12 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    SousGenre.findByPk(id)
+    SousGenre.findByPk(id, {include: Genre})
         .then(data => {
             if (data) {
-                res.send(data);
+                res.send({
+                    message: null, data: data
+                })
             } else {
                 res.status(404).send({
                     message: `Cannot find subgenre with id=${id}.`
@@ -64,7 +71,7 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     const id = req.params.id;
     console.log(id);
-    const newValues = { libelle: req.body.libelle };
+    const newValues = { libelle: req.body.libelle, genreId: req.body.genreId };
 
     SousGenre.update(newValues, {
         where: { sousGenreId: id }
