@@ -46,10 +46,10 @@ exports.findAll = (req, res) => {
 
 	// TODO - construct options (filters and includes)
 
-	const longitude = req.query.longitude;
-	const latitude = req.query.latitude;
-	const nom = req.query.nom;
-	const visites = req.query.visites;
+	const longitude = req.body.longitude;
+	const latitude = req.body.latitude;
+	const nom = req.body.nom;
+	const visites = req.body.visites;
 
 	Stand.findAll({ include: [TypeStand, Service, Saison] }) // pas toujours besoin de tout inclure ?
 		.then(data => {
