@@ -1,9 +1,10 @@
 const db = require("../models");
 const Artiste = db.artistes;
+const sousGenre = db.sousGenres;
 const Op = db.Sequelize.Op;
 
 // Create and Save new Artistes
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Create a new Artistes
     const artiste = {
         name: req.body.name,
@@ -12,23 +13,27 @@ exports.create = (req, res) => {
         linkClip: req.body.linkClip,
         visitesPage: req.body.visitesPage,
     };
-
+    let nvArtiste;
     // Save Artiste in the database
-    Artiste.create(artiste)
-        .then(data => {
-            res.send({
-                messages: `Artiste created`,
-                data: data
-            });
-            res.status(200).send({
-                message: `succes\n` + err.message, data: null
-            });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: `Le serveur a rencontré une erreur.\n` + err.message, data: null
-            });
+    try {
+        nvArtiste = await Artiste.create(artiste);
+        Promise.all(
+            nvArtiste.addSousGenres(eval(req.body.sousGenreId)),
+            nvArtiste.addConcert(eval(req.body.concertId)),
+            nvArtiste.addPays(eval(req.body.paysId))
+        );
+    } catch {
+        Artiste.destroy(nvArtiste);
+        res.status(500).send({
+            message: "données incorectes : " + error.message,
+            data: null
         });
+        return;
+    }
+    res.status(200).send({
+        message: "Artistes et ses associations créé",
+        data: nvArtiste
+    })
 };
 
 // Retrieve all Artiste from the database.
