@@ -12,12 +12,15 @@ exports.create = (req, res) => {
     // Save Role in the database
     Role.create(role)
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Role créé`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Role."
+                message: err.message || "Some error occurred while creating the Role.",
+                
             });
         });
 };
@@ -29,12 +32,15 @@ exports.findAll = (req, res) => {
 
     Role.findAll({ where: condition })
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Roles trouvés`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Roles."
+                message: err.message || "Some error occurred while retrieving Roles.",
+                
             });
         });
 };
@@ -46,16 +52,21 @@ exports.findOne = (req, res) => {
     Role.findByPk(id)
         .then(data => {
             if (data) {
-                res.send(data);
+                res.send({
+                    message: `Role trouvé`,
+                    data: data
+                });
             } else {
                 res.status(404).send({
-                    message: `Cannot find Role with id=${id}.`
+                    message: `Cannot find Role with id=${id}.`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Role with id=" + id
+                message: "Error retrieving Role with id=" + id,
+                
             });
         });
 };
@@ -69,19 +80,21 @@ exports.update = (req, res) => {
     })
         .then(results => {
             if (results[0] > 0) {
-
                 res.status(200).send({
-                    message: "Role was updated successfully.", data: results[1]
+                    message: "Role was updated successfully.",
+                    data: results[1]
                 });
             } else {
                 res.status(404).send({
-                    message: `Cannot update Role with id=${id}. Maybe Role was not found or req.body is empty!`
+                    message: `Cannot update Role with id=${id}. Maybe Role was not found or req.body is empty!`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Role with id=" + id
+                message: "Error updating Role with id=" + id,
+                
             });
         });
 };
@@ -97,18 +110,19 @@ exports.delete = (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Role was deleted successfully!",
-                    data: null
+                    
                 });
             } else {
                 res.status(404).send({
                     message: `Cannot delete Role with id=${id}. Maybe Role was not found!`,
-                    data: null
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Role with id=" + id
+                message: "Could not delete Role with id=" + id,
+                
             });
         });
 };
@@ -120,12 +134,15 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Roles were deleted successfully!` });
+            res.send({
+                message: `${nums} Roles were deleted successfully!`,
+                data: nums
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all Roles."
+                message: err.message || "Some error occurred while removing all Roles.",
+                
             });
         });
 };

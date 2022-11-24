@@ -8,44 +8,12 @@ const Saison = db.saisons;
 
 // Create and Save a new Concert
 exports.create = (req, res) => {
-    // Validate request data with validator
-    if (!req.body.debut) {
-        res.status(400).send({
-            message: "Debut can not be empty!"
-        });
-        return;
-    }
-    if (!req.body.duree) {
-        res.status(400).send({
-            message: "Duree can not be empty!"
-        });
-        return;
-    }
-    if (!req.body.nbPersonne) {
-        req.body.nbPersonne = 0;
-    }
-    if (!req.body.visites) {
-        req.body.visites = 0;
-    }
-    if (!req.body.sceneId) {
-        res.status(400).send({
-            message: "Scene can not be empty!"
-        });
-        return;
-    }
-    if (!req.body.artisteId) {
-        res.status(400).send({
-            message: "Artiste can not be empty!"
-        });
-        return;
-    }
-
     // Create a Concert
     const concert = {
         debut: new Date(req.body.debut),
         duree: req.body.duree,
-        nbPersonne: req.body.nbPersonne,
-        visites: req.body.visites,
+        visites: 0,
+        nbPersonne: 0,
         sceneId: req.body.sceneId,
         artisteId: req.body.artisteId
     };
@@ -53,7 +21,10 @@ exports.create = (req, res) => {
     // Save Concert in the database
     Concert.create(concert)
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Concert créé`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
@@ -67,12 +38,15 @@ exports.create = (req, res) => {
 exports.findAllPublished = (req, res) => {
     Concert.findAll({ where: { published: true } })
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Concerts publiés trouvés`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Concerts."
+                message: err.message || "Some error occurred while retrieving Concerts.",
+
             });
         });
 }
@@ -97,12 +71,15 @@ exports.findAll = (req, res) => {
         }
     })
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Concerts trouvés`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Concerts."
+                message: err.message || "Some error occurred while retrieving Concerts.",
+
             });
         });
 };
@@ -114,16 +91,21 @@ exports.findOne = (req, res) => {
     Concert.findByPk(id)
         .then(data => {
             if (data) {
-                res.send(data);
+                res.send({
+                    message: `Concert trouvé`,
+                    data: data
+                });
             } else {
                 res.status(404).send({
-                    message: `Cannot find Concert with id=${id}.`
+                    message: `Cannot find Concert with id=${id}.`,
+
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Concert with id=" + id
+                message: "Error retrieving Concert with id=" + id,
+
             });
         });
 };
@@ -135,20 +117,24 @@ exports.update = (req, res) => {
     Concert.update(req.body, {
         where: { id: id }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Concert was updated successfully."
+        .then(results => {
+            if (results[0] > 0) {
+
+                res.status(200).send({
+                    message: "Concert was updated successfully.",
+                    data: results[1]
                 });
             } else {
-                res.send({
-                    message: `Cannot update Concert with id=${id}. Maybe Concert was not found or req.body is empty!`
+                res.status(404).send({
+                    message: `Cannot update Concert with id=${id}. Maybe Concert was not found or req.body is empty!`,
+
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Concert with id=" + id
+                message: "Error updating Concert with id=" + id,
+
             });
         });
 };
@@ -173,7 +159,8 @@ exports.delete = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Concert with id=" + id
+                message: "Could not delete Concert with id=" + id,
+
             });
         });
 };
@@ -185,12 +172,15 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Concerts were deleted successfully!` });
+            res.send({
+                message: `${nums} Concerts were deleted successfully!`,
+                data: nums
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all Concerts."
+                message: err.message || "Some error occurred while removing all Concerts.",
+
             });
         });
 };

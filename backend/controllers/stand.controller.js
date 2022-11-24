@@ -29,14 +29,14 @@ exports.create = (req, res) => {
 				}).catch(err => {
 					res.status(500).send({
 						message: "Stand created error linking with services\n" + err.message,
-						data: null
+						
 					});
 				})
 		})
 		.catch(err => {
 			res.status(500).send({
 				message: err.message || "Some error occurred while creating the Poi.",
-				data: null
+				
 			});
 		});
 };
@@ -61,7 +61,7 @@ exports.findAll = (req, res) => {
 		.catch(err => {
 			res.status(500).send({
 				message: err.message || "Some error occurred while retrieving Pois.",
-				data: null
+				
 			});
 		});
 };
@@ -82,14 +82,14 @@ exports.findOne = (req, res) => {
 			} else {
 				res.status(404).send({
 					message: `Cannot find Stand!`,
-					data: null
+					
 				});
 			}
 		})
 		.catch(err => {
 			res.status(500).send({
 				message: "Error retrieving Stand!",
-				data: null
+				
 			});
 		});
 };
@@ -137,19 +137,19 @@ exports.delete = (req, res) => {
 			if (num > 0) {
 				res.status(200).send({
 					message: "Poi was deleted successfully!",
-					data: null
+					
 				});
 			} else {
 				res.status(404).send({
 					message: `Cannot delete Poi with id=${id}. Maybe Poi was not found!`,
-					data: null
+					
 				});
 			}
 		})
 		.catch(err => {
 			res.status(500).send({
 				message: `Cannot find Stand: ${err.message}`,
-				data: null
+				
 			});
 		});
 };
@@ -169,7 +169,7 @@ exports.deleteAll = (req, res) => {
 		.catch(err => {
 			res.status(500).send({
 				message: err.message || "Some error occurred while removing Stands.",
-				data: null
+				
 			});
 		});
 };

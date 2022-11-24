@@ -12,12 +12,15 @@ exports.create = (req, res) => {
     // Save Pays in the database
     Pays.create(pays)
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Pays créé`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Pays."
+                message: err.message || "Some error occurred while creating the Pays.",
+                
             });
         });
 };
@@ -29,12 +32,15 @@ exports.findAll = (req, res) => {
 
     Pays.findAll({ where: condition })
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Pays trouvés`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Pays."
+                message: err.message || "Some error occurred while retrieving Pays.",
+                
             });
         });
 };
@@ -46,16 +52,21 @@ exports.findOne = (req, res) => {
     Pays.findByPk(id)
         .then(data => {
             if (data) {
-                res.send(data);
+                res.send({
+                    message: `Pays trouvé`,
+                    data: data
+                });
             } else {
                 res.status(404).send({
-                    message: `Cannot find Pays with id=${id}.`
+                    message: `Cannot find Pays with id=${id}.`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Pays with id=" + id
+                message: "Error retrieving Pays with id=" + id,
+                
             });
         });
 };
@@ -71,19 +82,21 @@ exports.update = (req, res) => {
     })
         .then(results => {
             if (results[0] > 0) {
-
                 res.status(200).send({
-                    message: "Pays was updated successfully.", data: results[1]
+                    message: "Pays was updated successfully.",
+                    data: results[1]
                 });
             } else {
                 res.status(404).send({
-                    message: `Cannot update Pays with id=${id}. Maybe Pays was not found or req.body is empty!`
+                    message: `Cannot update Pays with id=${id}. Maybe Pays was not found or req.body is empty!`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Pays with id=" + id
+                message: "Error updating Pays with id=" + id,
+                
             });
         });
 };
@@ -99,18 +112,19 @@ exports.delete = (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Pays was deleted successfully!",
-                    data: null
+                    
                 });
             } else {
                 res.status(404).send({
                     message: `Cannot delete Pays with id=${id}. Maybe Pays was not found!`,
-                    data: null
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Pays with id=" + id
+                message: "Could not delete Pays with id=" + id,
+                
             });
         });
 };
@@ -122,12 +136,14 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Pays were deleted successfully!` });
+            res.send({
+                message: `${nums} Pays were deleted successfully!`,
+                data: nums
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all Pays."
+                message: err.message || "Some error occurred while removing all Pays.",
             });
         });
 };

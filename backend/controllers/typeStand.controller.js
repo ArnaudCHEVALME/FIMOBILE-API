@@ -100,12 +100,12 @@ exports.delete = (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Type stand was deleted successfully!",
-                    data: null
+                    
                 });
             } else {
                 res.status(404).send({
                     message: `Cannot delete type stand with id=${id}. Maybe Genre was not found!`,
-                    data: null
+                    
                 });
             }
         })

@@ -3,17 +3,9 @@ const Artiste = db.artistes;
 const sousGenre = db.sousGenres;
 const Op = db.Sequelize.Op;
 
-// Create and Save new Artiste
+// Create and Save new Artistes
 exports.create = async (req, res) => {
-    // Validate request
-    if (!req.body.name) {
-        res.status(400).send({
-            message: "Le contenu ne peut pas être vide!"
-        });
-        return
-    }
-
-    // Create a new Artiste
+    // Create a new Artistes
     const artiste = {
         name: req.body.name,
         bio: req.body.bio,
@@ -84,8 +76,7 @@ exports.findOne = (req, res) => {
 
 // Update an Artiste by the id in the request
 exports.update = (req, res) => {
-    const id = parseInt(req.params.id);
-    console.log(id);
+    const id = parseInt(req.params.artisteId);
     const newValues = {
         name: req.body.name,
         bio: req.body.bio,

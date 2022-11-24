@@ -11,12 +11,15 @@ exports.create = (req, res) => {
     // Save Couleur in the database
     Couleur.create(couleur)
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Couleur créée`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Couleur."
+                message: err.message || "Some error occurred while creating the Couleur.",
+                
             });
         });
 };
@@ -26,12 +29,15 @@ exports.findAll = (req, res) => {
 
     Couleur.findAll()
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Concerts trouvés`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Couleur."
+                message: err.message || "Some error occurred while retrieving Couleur.",
+                
             });
         });
 };
@@ -43,16 +49,21 @@ exports.findOne = (req, res) => {
     Couleur.findByPk(id)
         .then(data => {
             if (data) {
-                res.send(data);
+                res.send({
+                    message: `Couleur trouvé`,
+                    data: data
+                });
             } else {
                 res.status(404).send({
-                    message: `Cannot find Couleurs with id=${id}.`
+                    message: `Cannot find Couleurs with id=${id}.`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Couleur with id=" + id
+                message: "Error retrieving Couleur with id=" + id,
+                
             });
         });
 };
@@ -69,17 +80,20 @@ exports.update = (req, res) => {
         .then(results => {
             if (results[0] > 0) {
                 res.status(200).send({
-                    message: "Couleur was updated successfully.", data: results[1]
+                    message: "Couleur was updated successfully.",
+                    data: results[1]
                 });
             } else {
                 res.status(404).send({
-                    message: `Pas de couleurs avec id=${id}`
+                    message: `Pas de couleurs avec id=${id}`,
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Couleur with id=" + id
+                message: "Error updating Couleur with id=" + id,
+                
             });
         });
 };
@@ -96,19 +110,19 @@ exports.delete = (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Couleur supprimée",
-                    data: null
+                    
                 });
             } else {
                 res.status(404).send({
                     message: `Pas de couleur avec id=${id}`,
-                    data: null
+                    
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
                 message: "Could not delete Couleur with id=" + id,
-                data: null
+                
             });
         });
 };
@@ -122,13 +136,13 @@ exports.deleteAll = (req, res) => {
         .then(nums => {
             res.send({
                 message: `${nums} Couleurs were deleted successfully!`,
-                data: null
+                
             });
         })
         .catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while removing all Couleur.",
-                data: null
+                
             });
         });
 };

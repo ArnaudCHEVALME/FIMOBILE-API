@@ -9,6 +9,10 @@ module.exports = (sequelize, Sequelize) => {
         libelle: {
             type: Sequelize.STRING,
             allowNull: false
+        },
+        inconPath: {
+            type: Sequelize.STRING,
+            allowNull: false
         }
     });
     return CategorieReseau;
