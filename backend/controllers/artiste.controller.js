@@ -21,23 +21,23 @@ exports.create = async (req, res) => {
             nvArtiste.addSousGenres(eval(req.body.sousGenreId)),
             nvArtiste.addConcert(eval(req.body.concertId)),
             nvArtiste.addPays(eval(req.body.paysId))
-            );
-        } catch{
-            Artiste.destroy(nvArtiste);
-            res.status(500).send({
-                message : "données incorectes : "+error.message,
-                data : null
-            });
-            return;
-        }
-        res.status(200).send({
-            message: "Artistes et ses associations créé",
-            data : nvArtiste
-        })
+        );
+    } catch {
+        Artiste.destroy(nvArtiste);
+        res.status(500).send({
+            message: "données incorectes : " + error.message,
+            data: null
+        });
+        return;
+    }
+    res.status(200).send({
+        message: "Artistes et ses associations créé",
+        data: nvArtiste
+    })
 };
 
 // Retrieve all Artiste from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
     const name = req.query.name;
     let condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 
@@ -47,7 +47,8 @@ exports.findAll = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message,
+                data: null
             });
         });
 };
