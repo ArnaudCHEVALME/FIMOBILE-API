@@ -16,13 +16,17 @@ exports.create = (req, res) => {
     // Save Artiste in the database
     Artiste.create(artiste)
         .then(data => {
-            res.send({messages: `Artiste created`,
+            res.send({
+                messages: `Artiste created`,
                 data: data
+            });
+            res.status(200).send({
+                message: `succes\n` + err.message, data: null
             });
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur.\n`+err.message, data:null
+                message: `Le serveur a rencontré une erreur.\n` + err.message, data: null
             });
         });
 };
@@ -38,7 +42,7 @@ exports.findAll = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -53,13 +57,13 @@ exports.findOne = (req, res) => {
                 res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Pas de genre avec id=${id}.`, data:null
+                    message: `Pas de genre avec id=${id}.`, data: null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -83,17 +87,17 @@ exports.update = (req, res) => {
         .then(data => {
             if (data[0] > 0) {
                 res.status(200).send({
-                    message: "Artiste mis à jour.", data:data[1]
+                    message: "Artiste mis à jour.", data: data[1]
                 });
             } else {
                 res.send.status(404)({
-                    message: `Pas de genre avec id=${id}.`, data:null
+                    message: `Pas de genre avec id=${id}.`, data: null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n`+err.message, data:null
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -104,7 +108,7 @@ exports.delete = (req, res) => {
     const id = parseInt(req.params.id);
 
     Artiste.destroy({
-        where: { artisteId : id }
+        where: { artisteId: id }
     })
         .then(num => {
             if (num === 1) {
@@ -132,7 +136,8 @@ exports.deleteAll = (req, res) => {
     })
         .then(nums => {
             res.status(200).send({
-                message: `${nums} Artistes ont bien été supprimé.` });
+                message: `${nums} Artistes ont bien été supprimé.`
+            });
         })
         .catch(err => {
             res.status(500).send({
