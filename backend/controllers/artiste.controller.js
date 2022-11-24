@@ -38,10 +38,7 @@ exports.create = async (req, res) => {
 
 // Retrieve all Artiste from the database.
 exports.findAll = async (req, res) => {
-    const name = req.query.name;
-    let condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
-
-    Artiste.findAll({ where: condition })
+    Artiste.findAll()
         .then(data => {
             res.send(data);
         })

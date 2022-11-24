@@ -29,6 +29,7 @@ exports.create = (req, res) => {
 				}).catch(err => {
 					res.status(500).send({
 						message: "Stand created error linking with services\n" + err.message,
+						
 					});
 				})
 		})
@@ -45,19 +46,12 @@ exports.findAll = (req, res) => {
 
 	// TODO - construct options (filters and includes)
 
-	//const longitude = req.body.longitude;
-	//const latitude = req.body.latitude;
-	//const nom = req.body.nom;
-	//const visites = req.body.visites;
-	//const includedModel = [];
-	const typeStand = req.body.isTypeStandIncluded;
-	const services = req.body.isServicesIncluded;
-	const saison = req.body.isSaisonIncluded;
+	const longitude = req.body.longitude;
+	const latitude = req.body.latitude;
+	const nom = req.body.nom;
+	const visites = req.body.visites;
 
-	//[TypeStand, Service, Saison]
-
-
-	Stand.findAll({ include: includedModel }) // pas toujours besoin de tout inclure ?
+	Stand.findAll({ include: [TypeStand, Service, Saison] }) // pas toujours besoin de tout inclure ?
 		.then(data => {
 			res.send({
 				message: null,

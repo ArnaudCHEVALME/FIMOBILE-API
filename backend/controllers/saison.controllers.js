@@ -1,6 +1,9 @@
 const db = require("../models");
 const Pays = db.pays;
 const Saison = db.saisons;
+const Stand = db.stands;
+const TypeStand = db.typeStand;
+const Service = db.services;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Saison
@@ -29,11 +32,10 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Saison from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
     const theme = req.query.theme;
-    let condition = theme ? { theme: { [Op.iLike]: `%${theme}%` } } : null;
 
-    Saison.findAll({ where: condition }, { include: { Pays } })
+    Saison.findAll({ include: [Pays, Service, Stand, TypeStand] })
         .then(data => {
             res.send({
                 message: `Saisons trouvés`,
