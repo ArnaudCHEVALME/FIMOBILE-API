@@ -37,7 +37,7 @@ exports.create = async (req, res) => {
 };
 
 // Retrieve all Artiste from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
     const name = req.query.name;
     let condition = name ? { name: { [Op.iLike]: `%${name}%` } } : null;
 
@@ -47,7 +47,8 @@ exports.findAll = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message,
+                data: null
             });
         });
 };
