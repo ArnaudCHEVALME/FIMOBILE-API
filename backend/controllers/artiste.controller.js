@@ -11,7 +11,7 @@ exports.create = async (req, res) => {
         bio: req.body.bio,
         bannerPath: req.body.bannerPath,
         linkClip: req.body.linkClip,
-        visitesPage: req.body.visitesPage,
+        visitesPage: req.body.visitesPage,     
     };
     let nvArtiste;
     // Save Artiste in the database
