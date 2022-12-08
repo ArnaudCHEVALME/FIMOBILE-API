@@ -44,7 +44,7 @@ db.news = require("./news.model.js")(sequelize, Sequelize);
 // 1 saison a plusieurs News
 // 1 News peut appartenir à plusieurs saisons
 db.news.belongsTo(db.saisons, { foreignKey: "saisonId" });
-db.saisons.hasMany(db.news, { foreignKey: "newsId" });
+db.saisons.hasMany(db.news, { foreignKey: "saisonId" });
 
 
 // 1 saison a plusieurs couleurs
@@ -55,7 +55,7 @@ db.couleurs.belongsToMany(db.saisons, { through: db.ordreCouleurSaison, foreignK
 // 1 saison a 1 seul pays à l'honneur
 // 1 pays est à l'honneur dans plusieurs saisons
 db.saisons.belongsTo(db.pays, { foreignKey: "paysHonneurId" });
-db.pays.hasMany(db.saisons, { foreignKey: "saisonId" });
+db.pays.hasMany(db.saisons, { foreignKey: "paysHonneurId" });
 
 db.artistes.belongsToMany(db.pays, { through: "OriginesArtistes", foreignKey: "artisteId" });
 db.pays.belongsToMany(db.artistes, { through: "OriginesArtistes", foreignKey: "paysId" });
@@ -63,7 +63,7 @@ db.pays.belongsToMany(db.artistes, { through: "OriginesArtistes", foreignKey: "p
 // 1 user a 1 seul role
 // 1 role est partagé par plusieurs users
 db.users.belongsTo(db.roles, { foreignKey: "roleId" });
-db.roles.hasMany(db.users, { foreignKey: "userId" });
+db.roles.hasMany(db.users, { foreignKey: "roleId" });
 
 // 1 role a plusieurs permissions
 // 1 permission est utilisée par plusieurs rôles
@@ -73,48 +73,52 @@ db.permissions.belongsToMany(db.roles, { through: "RolesPermissions", foreignKey
 //1 stand appartient 1 saison
 //1 saison a plusieurs stands
 db.stands.belongsTo(db.saisons, { foreignKey: "saisonId" });
-db.saisons.hasMany(db.stands, { foreignKey: "standId" });
+db.saisons.hasMany(db.stands, { foreignKey: "saisonId" });
 
 // 1 artiste peut avoir n sous-genres
 // 1 sous-genre peut être lié à n artistes
 db.artistes.belongsToMany(db.sousGenres, { through: "ArtistesSousGenres", foreignKey: "artisteId" });
 db.sousGenres.belongsToMany(db.artistes, { through: "ArtistesSousGenres", foreignKey: "sousGenreId" });
 
+// 1 artiste peut avoir n sous-genres
+// 1 sous-genre peut être lié à n artistes
+db.artistes.belongsToMany(db.genres, {through:"ArtistesGenres", foreignKey:"artisteId"});
+db.genres.belongsToMany(db.artistes, {through:"ArtistesGenres", foreignKey:"genreId"});
+
 // 1 sousGenre a 1 seul genre
 // 1 genre a plusieurs sousGenres
 db.sousGenres.belongsTo(db.genres, { foreignKey: "genreId" });
-db.genres.hasMany(db.sousGenres, { foreignKey: "sousGenreId" });
+db.genres.hasMany(db.sousGenres,{ foreignKey: "genreId" });
 
 // 3 prochains couples == gros bloc pour concerts et donc la programmation
 // 1 concert a un seul artiste
 // 1 artiste participe à plusieurs concerts
 db.concerts.belongsTo(db.artistes, { foreignKey: "artisteId" });
-db.artistes.hasMany(db.concerts, { foreignKey: "concertId" });
+db.artistes.hasMany(db.concerts, { foreignKey: "artisteId" });
 
 // 1 concert a une seule scène
 // 1 scène appartient à plusieurs concerts
 db.concerts.belongsTo(db.scenes, { foreignKey: "sceneId" });
-db.scenes.hasMany(db.concerts, { foreignKey: "concertId" });
+db.scenes.hasMany(db.concerts, { foreignKey: "sceneId" });
 
 // 1 concert appartient à une seule saison
 // 1 saison a plusieurs concerts
 db.concerts.belongsTo(db.saisons, { foreignKey: "saisonId" });
-db.saisons.hasMany(db.concerts, { foreignKey: "concertId" });
+db.saisons.hasMany(db.concerts, { foreignKey: "saisonId" });
 
 // 1 lien a 1 seule catégorie
 // 1 catégorie de lien est utilisée par n liens
 db.liensReseaux.belongsTo(db.categoriesReseaux, { foreignKey: "categorieReseauId" });
-db.categoriesReseaux.hasMany(db.liensReseaux, { foreignKey: "reseauId" });
+db.categoriesReseaux.hasMany(db.liensReseaux, { foreignKey: "categorieReseauId" });
 
 // 1 stand a un seul type de stand
 // 1 type de stand appartient à plusieurs stands
 db.stands.belongsTo(db.typeStand, { foreignKey: "typeStandId" });
-db.typeStand.hasMany(db.stands, { foreignKey: "standId" });
+db.typeStand.hasMany(db.stands, { foreignKey: "typeStandId" });
 
 // 1 stand a plusieurs services
 // 1 service est proposé par plusieurs stands
 db.stands.belongsToMany(db.services, { through: "StandsServices", foreignKey: "StandId" });
 db.services.belongsToMany(db.stands, { through: "StandsServices", foreignKey: "ServiceId" });
-
 
 module.exports = db;

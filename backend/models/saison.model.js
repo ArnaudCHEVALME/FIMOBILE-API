@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Saison = sequelize.define("saison", {
+    return sequelize.define("saison", {
         saisonId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -13,7 +13,10 @@ module.exports = (sequelize, Sequelize) => {
         theme: {
             type: Sequelize.STRING,
             allowNull: false
+        },
+        bannierePath:{
+            type:Sequelize.STRING,
+            allowNull: false
         }
     });
-    return Saison;
 };

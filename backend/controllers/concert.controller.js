@@ -1,9 +1,6 @@
 const db = require("../models");
 const Concert = db.concerts;
 const Op = db.Sequelize.Op;
-const Scene = db.scenes;
-const Artiste = db.artistes;
-const Saison = db.saisons;
 
 
 // Create and Save a new Concert
@@ -15,7 +12,8 @@ exports.create = (req, res) => {
         visites: 0,
         nbPersonne: 0,
         sceneId: req.body.sceneId,
-        artisteId: req.body.artisteId
+        artisteId: req.body.artisteId,
+        saisonId:req.body.saisonId
     };
 
     // Save Concert in the database
@@ -55,6 +53,7 @@ exports.findAll = (req, res) => {
     const duree = req.query.duree;
     const sceneId = req.query.sceneId;
     const artisteId = req.query.artisteId;
+    const saisonId = req.query.saisonId;
 
     let conditionDebut = debut ? { debut: { [Op.iLike]: `%${debut}%` } } : null;
     let conditionDuree = duree ? { duree: { [Op.iLike]: `%${duree}%` } } : null;
@@ -63,12 +62,7 @@ exports.findAll = (req, res) => {
 
 
     Concert.findAll({
-        where: {
-            debut: conditionDebut,
-            duree: conditionDuree,
-            sceneId: conditionSceneId,
-            artisteId: conditionArtisteId
-        }
+
     })
         .then(data => {
             res.send({
