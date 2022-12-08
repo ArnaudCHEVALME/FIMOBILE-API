@@ -1,31 +1,27 @@
 module.exports = (sequelize, Sequelize) => {
-    const Scene = sequelize.define("scene", {
-        sceneId: {
+    const Stand = sequelize.define("stand", {
+        standId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
-            allowNull: false
-        },
-        capacite: {
-            type: Sequelize.INTEGER,
-            allowNull: true
-        },
-        latitude: {
-            type: Sequelize.REAL,
             allowNull: false
         },
         longitude: {
             type: Sequelize.REAL,
             allowNull: false
         },
-        interieur: {
-            type: Sequelize.BOOLEAN,
+        latitude: {
+            type: Sequelize.REAL,
             allowNull: false
         },
         nom: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: true
+        },
+        visites: {
+            type: Sequelize.INTEGER,
+            allowNull: true
         }
     });
-    return Scene;
+    return Stand;
 };

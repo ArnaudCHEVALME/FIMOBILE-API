@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const Service = sequelize.define("service", {
-        serviceId: {
+    const Role = sequelize.define("role", {
+        roleId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
@@ -11,5 +11,5 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         }
     });
-    return Service;
+    return Role;
 };

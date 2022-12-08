@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const Service = sequelize.define("service", {
-        serviceId: {
+    const CategorieReseau = sequelize.define("categorieReseau", {
+        categorieReseauId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
@@ -9,7 +9,11 @@ module.exports = (sequelize, Sequelize) => {
         libelle: {
             type: Sequelize.STRING,
             allowNull: false
+        },
+        inconPath: {
+            type: Sequelize.STRING,
+            allowNull: false
         }
     });
-    return Service;
-};
+    return CategorieReseau;
+}

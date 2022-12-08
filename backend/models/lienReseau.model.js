@@ -1,15 +1,16 @@
 module.exports = (sequelize, Sequelize) => {
-    const Service = sequelize.define("service", {
-        serviceId: {
+    const LienReseau = sequelize.define("lienReseau", {
+        lienReseauId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false
         },
-        libelle: {
+        lien: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: true,
+            validate: { isUrl: true }
         }
     });
-    return Service;
+    return LienReseau;
 };

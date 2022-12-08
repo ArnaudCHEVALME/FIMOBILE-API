@@ -1,0 +1,24 @@
+module.exports = app => {
+    const concerts = require("../controllers/concert.controller.js");
+    const router = require("express").Router();
+
+    // Create a new Concert
+    router.post("/", concerts.create);
+
+    // Retrieve all Concerts
+    router.get("/", concerts.findAll);
+
+    // Retrieve a single Concert with id
+    router.get("/:id", concerts.findOne);
+
+    // Update a Concert with id
+    router.put("/:id", concerts.update);
+
+    // Delete a Concert with id
+    router.delete("/:id", concerts.delete);
+
+    // Create a new Concert
+    router.delete("/", concerts.deleteAll);
+
+    app.use('/concerts', router);
+};

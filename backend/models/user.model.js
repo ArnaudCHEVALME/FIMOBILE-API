@@ -1,18 +1,8 @@
-const bcrypt = require('bcrypt');
-// function cryptPassword(password, callback) {
-//     bcrypt.genSalt(10, function (err, salt) { // Encrypt password using bycrpt module
-//         if (err)
-//             return callback(err);
-
-//         bcrypt.hash(password, salt, function (err, hash) {
-//             return callback(err, hash);
-//         });
-//     });
-// }
+const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize, Sequelize) => {
     const User = sequelize.define("user", {
-        id_user: {
+        userId: {
             autoIncrement: true,
             primaryKey: true,
             type: Sequelize.INTEGER
@@ -21,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: true
         },
-        pseudo: {
+        login: {
             type: Sequelize.STRING,
             allowNull: false
         },
@@ -35,38 +25,16 @@ module.exports = (sequelize, Sequelize) => {
             hooks: {
                 beforeCreate: async (user) => {
                     if (user.password) {
-                        const salt = await bcrypt.genSaltSync(10, 'a');
-                        user.password = bcrypt.hashSync(user.password, salt);
+                        user.password = await bcrypt.hash(user.password, 10);
                     }
                 },
                 beforeUpdate: async (user) => {
                     if (user.password) {
-                        const salt = await bcrypt.genSaltSync(10, 'a');
-                        user.password = bcrypt.hashSync(user.password, salt);
+                        user.password = await bcrypt.hash(user.password, 10);
                     }
-                }
-            },
-            instanceMethods: {
-                validPassword: (password) => {
-                    return bcrypt.compareSync(password, this.password);
                 }
             }
         }
     );
-
-    // User.beforeCreate(function (model, options, cb) {
-    //     debug('Info: ' + 'Storing the password');
-    //     cryptPassword(user.password, function (err, hash) {
-    //         if (err) return cb(err);
-    //         debug('Info: ' + 'getting ' + hash);
-
-    //         user.password = hash;
-    //         return cb(null, options);
-    //     });
-    // });
-
-    User.prototype.validPassword = async (password, hash) => {
-        return await bcrypt.compareSync(password, hash);
-    }
     return User;
 }

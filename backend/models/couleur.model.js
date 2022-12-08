@@ -1,15 +1,15 @@
 module.exports = (sequelize, Sequelize) => {
-    const Service = sequelize.define("service", {
-        serviceId: {
+    const Couleur = sequelize.define("couleur", {
+        couleurId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false
         },
-        libelle: {
+        valeurHexa: {
             type: Sequelize.STRING,
             allowNull: false
         }
     });
-    return Service;
+    return Couleur;
 };

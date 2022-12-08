@@ -1,18 +1,10 @@
 const db = require("../models");
 const Genre = db.genres;
+const SousGenre = db.sousGenres;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Genre
 exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.libelle) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
-
-    // Create a Genre
     const genre = {
         libelle: req.body.libelle,
     };
@@ -20,12 +12,14 @@ exports.create = (req, res) => {
     // Save Genre in the database
     Genre.create(genre)
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Genre créé`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Genre."
+                message: `Le serveur a rencontré une erreur.\n` + err.message, data: null
             });
         });
 };
@@ -35,14 +29,16 @@ exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    Genre.findAll({ where: condition })
+    Genre.findAll({ where: condition , include:SousGenre})
         .then(data => {
-            res.send(data);
+            res.send({
+                message: `Genres trouvés`,
+                data: data
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Genres."
+                message: "Le serveur a rencontré une erreur : " + err.message, data: null
             });
         });
 };
@@ -54,16 +50,20 @@ exports.findOne = (req, res) => {
     Genre.findByPk(id)
         .then(data => {
             if (data) {
-                res.send(data);
+                res.send({
+                    message: `Genre trouvé`,
+                    data: data
+                });
             } else {
                 res.status(404).send({
-                    message: `Cannot find Genre with id=${id}.`
+                    message: `Cannot find Genre with id=${id}.`,
+
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Genre with id=" + id
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -71,24 +71,27 @@ exports.findOne = (req, res) => {
 // Update a Genre by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
+    const newValues = { libelle: req.body.libelle };
 
-    Genre.update(req.body, {
-        where: { id: id }
+    Genre.update(newValues, {
+        where: {
+            genreId: id
+        }
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Genre was updated successfully."
+        .then(data => {
+            if (data[0] > 0) {
+                res.status(200).send({
+                    message: "Genre mis à jour.", data: data[1]
                 });
             } else {
-                res.send({
-                    message: `Cannot update Genre with id=${id}. Maybe Genre was not found or req.body is empty!`
+                res.send.status(404)({
+                    message: `Pas de genre avec id=${id}.`, data: null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Genre with id=" + id
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -98,22 +101,22 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     Genre.destroy({
-        where: { id: id }
+        where: { genreId: id }
     })
         .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Genre was deleted successfully!"
+            if (num === 1) {
+                res.status(200).send({
+                    message: "Genre a bien été supprimé."
                 });
             } else {
-                res.send({
-                    message: `Cannot delete Genre with id=${id}. Maybe Genre was not found!`
+                res.send.status(404)({
+                    message: `Pas de genre avec id=${id}.`, data: null
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete Genre with id=" + id
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
@@ -125,12 +128,13 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Genres were deleted successfully!` });
+            res.send.status(200)({
+                message: `${nums} Genres ont bien été supprimés.`
+            });
         })
         .catch(err => {
             res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all Genres."
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
             });
         });
 };
