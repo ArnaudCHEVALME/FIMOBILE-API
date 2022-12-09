@@ -7,14 +7,18 @@ const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
     // Create a SubGenre
     const sousGenre = {
-        libelle: req.body.libelle,
-        genreId: req.body.genreId,
+        libelle: req.body.libelle
     };
 
     // Save Subgenre in the database
     SousGenre.create(sousGenre)
         .then(data => {
-            res.send(data);
+            data.setGenre(eval(req.body.genreId))
+                .then(data => {
+                    res.status(200).send(data)
+                }).catch(err => {
+                res.send(err)
+            })
         })
         .catch(err => {
             res.status(500).send({

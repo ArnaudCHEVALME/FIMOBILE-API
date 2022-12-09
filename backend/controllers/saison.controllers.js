@@ -35,7 +35,7 @@ exports.create = (req, res) => {
 exports.findAll = async (req, res) => {
     const theme = req.query.theme;
 
-    Saison.findAll({ include: [Pays, Service, Stand, TypeStand] })
+    Saison.findAll({ include: [Pays, Stand] })
         .then(data => {
             res.send({
                 message: `Saisons trouvés`,

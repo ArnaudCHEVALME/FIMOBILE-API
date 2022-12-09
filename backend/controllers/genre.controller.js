@@ -1,6 +1,6 @@
 const db = require("../models");
-const { options } = require("pg/lib/defaults");
 const Genre = db.genres;
+const SousGenre = db.sousGenres;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Genre
@@ -29,7 +29,7 @@ exports.findAll = (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    Genre.findAll({ where: condition })
+    Genre.findAll({ where: condition , include:SousGenre})
         .then(data => {
             res.send({
                 message: `Genres trouvés`,
@@ -38,7 +38,7 @@ exports.findAll = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
+                message: "Le serveur a rencontré une erreur : " + err.message, data: null
             });
         });
 };
