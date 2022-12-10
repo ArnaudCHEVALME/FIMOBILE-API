@@ -12,7 +12,8 @@ exports.create = (req, res) => {
     const saison = {
         theme: req.body.theme,
         dateSaison: req.body.dateSaison,
-        paysHonneurId: req.body.paysHonneurId
+        paysHonneurId: req.body.paysHonneurId,
+        bannierePath: req.body.bannierePath
     };
 
     // Save Saison in the database
@@ -86,7 +87,7 @@ exports.update = (req, res) => {
     };
 
     Saison.update(saison, {
-        where: { IdSaison: id }
+        where: { saisonId: id }
     })
         .then(results => {
             if (results[0] > 0) {
@@ -114,7 +115,7 @@ exports.delete = (req, res) => {
     const id = req.params.id;
 
     Saison.destroy({
-        where: { IdSaison: id }
+        where: { saisonId: id }
     })
 
         .then(num => {
