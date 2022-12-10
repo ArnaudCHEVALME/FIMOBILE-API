@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Artiste = sequelize.define("artiste", {
+    return sequelize.define("artiste", {
         artisteId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -22,11 +22,10 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
-        visitesPage: {
+        nbRecherche: {
             type: Sequelize.INTEGER,
             defaultValue: 0
         }
     });
-    return Artiste;
 }
 

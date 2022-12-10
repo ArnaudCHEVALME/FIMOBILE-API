@@ -2,12 +2,12 @@ const db = require("../models");
 const User = db.users;
 const Op = db.Sequelize.Op;
 
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
 
 }
 
 // Create and Save a new User
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Create a User
     const user = {
         login: req.body.login,
@@ -29,7 +29,7 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Users from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
@@ -46,7 +46,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single User with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     const id = req.params.id;
 
     User.findByPk(id)
@@ -67,7 +67,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a User by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     const id = parseInt(req.params.id);
 
     const newValues = {
@@ -99,7 +99,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a User with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     const id = req.params.id;
 
     User.destroy({
@@ -126,7 +126,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Users from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
     User.destroy({
         where: {},
         truncate: false

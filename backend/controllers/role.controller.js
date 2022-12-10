@@ -3,7 +3,7 @@ const Role = db.roles;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Role
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Create a Role
     const role = {
         libelle: req.body.libelle,
@@ -26,7 +26,7 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Roles from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
@@ -46,7 +46,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single Role with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     const id = req.params.id;
 
     Role.findByPk(id)
@@ -72,7 +72,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Role by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     const id = req.params.id;
 
     Role.update(req.body, {
@@ -100,7 +100,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a Role with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     const id = req.params.id;
 
     Role.destroy({
@@ -128,7 +128,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Roles from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
     Role.destroy({
         where: {},
         truncate: false

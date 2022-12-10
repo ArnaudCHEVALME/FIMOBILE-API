@@ -3,7 +3,7 @@ const Couleur = db.couleurs;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Couleur
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     const couleur = {
         valeurHexa: req.body.valeurHexa
     };
@@ -25,7 +25,7 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Couleur from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
 
     Couleur.findAll()
         .then(data => {
@@ -43,7 +43,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single Couleur with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     const id = req.params.id;
 
     Couleur.findByPk(id)
@@ -69,7 +69,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Couleur by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     const id = req.params.id;
 
     let newCouleur = {
@@ -99,7 +99,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a Couleur with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     const id = req.params.id;
 
     Couleur.destroy({
@@ -128,7 +128,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Couleur from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
     Couleur.destroy({
         where: {},
         truncate: false

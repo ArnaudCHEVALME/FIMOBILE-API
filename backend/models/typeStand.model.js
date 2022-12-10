@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const TypeStand = sequelize.define("typeStand", {
+    return sequelize.define("typeStand", {
         typeStandId: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -9,7 +9,10 @@ module.exports = (sequelize, Sequelize) => {
         libelle: {
             type: Sequelize.STRING,
             allowNull: false
+        },
+        nbRecherche: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
         }
     });
-    return TypeStand;
 };

@@ -4,7 +4,7 @@ const Genre = db.genres;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Subgenre
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Create a SubGenre
     const sousGenre = {
         libelle: req.body.libelle
@@ -17,6 +17,7 @@ exports.create = (req, res) => {
                 .then(data => {
                     res.status(200).send(data)
                 }).catch(err => {
+                    SousGenre.destroy(data);
                 res.send(err)
             })
         })
@@ -29,7 +30,7 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all subgenres from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
     const libelle = req.query.libelle;
     const genreId = req.query.genreId;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
@@ -49,7 +50,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single subgenre with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     const id = req.params.id;
 
     SousGenre.findByPk(id, {include: Genre})
@@ -72,7 +73,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a subgenre by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     const id = req.params.id;
     console.log(id);
     const newValues = { libelle: req.body.libelle, genreId: req.body.genreId };
@@ -100,7 +101,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a Genre with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     const id = req.params.id;
 
     SousGenre.destroy({
@@ -127,7 +128,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Subgenres from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
     SousGenre.destroy({
         where: {},
         truncate: false

@@ -7,7 +7,7 @@ const Service = db.services;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Saison
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Create a Saison
     const saison = {
         theme: req.body.theme,
@@ -36,7 +36,7 @@ exports.create = (req, res) => {
 exports.findAll = async (req, res) => {
     const theme = req.query.theme;
 
-    Saison.findAll({ include: [Pays, Stand] })
+    Saison.findAll()
         .then(data => {
             res.send({
                 message: `Saisons trouvés`,
@@ -52,10 +52,10 @@ exports.findAll = async (req, res) => {
 };
 
 // Find a single Saison with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     const id = req.params.id;
 
-    Saison.findByPk(id)
+    Saison.findByPk(id, { include: [Pays, Stand] })
         .then(data => {
             if (data) {
                 res.send({
@@ -78,7 +78,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Saison by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     const id = req.params.id;
 
     const saison = {
@@ -111,7 +111,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a Saison with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     const id = req.params.id;
 
     Saison.destroy({
@@ -140,7 +140,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Saison from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
     Saison.destroy({
         where: {},
         truncate: false

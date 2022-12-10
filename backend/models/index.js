@@ -82,15 +82,14 @@ db.sousGenres.belongsToMany(db.artistes, { through: "ArtistesSousGenres", foreig
 
 // 1 artiste peut avoir n sous-genres
 // 1 sous-genre peut être lié à n artistes
-db.artistes.belongsToMany(db.genres, {through:"ArtistesGenres", foreignKey:"artisteId"});
-db.genres.belongsToMany(db.artistes, {through:"ArtistesGenres", foreignKey:"genreId"});
+// db.artistes.belongsToMany(db.genres, {through:"ArtistesGenres", foreignKey:"artisteId"}); // REVIEW
+// db.genres.belongsToMany(db.artistes, {through:"ArtistesGenres", foreignKey:"genreId"});
 
 // 1 sousGenre a 1 seul genre
 // 1 genre a plusieurs sousGenres
 db.sousGenres.belongsTo(db.genres, { foreignKey: "genreId" });
 db.genres.hasMany(db.sousGenres,{ foreignKey: "genreId" });
 
-// 3 prochains couples == gros bloc pour concerts et donc la programmation
 // 1 concert a un seul artiste
 // 1 artiste participe à plusieurs concerts
 db.concerts.belongsTo(db.artistes, { foreignKey: "artisteId" });

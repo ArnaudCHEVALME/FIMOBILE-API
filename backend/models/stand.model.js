@@ -18,9 +18,9 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: true
         },
-        visites: {
+        nbRecherche: {
             type: Sequelize.INTEGER,
-            allowNull: true
+            defaultValue: 0
         }
     });
     return Stand;

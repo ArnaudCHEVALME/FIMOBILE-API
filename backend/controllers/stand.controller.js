@@ -6,52 +6,52 @@ const Service = db.services;
 const Saison = db.saisons;
 
 // Create and Save a new Stand type
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
 	// Create a Stand
 	const stand = {
 		longitude: req.body.longitude,
 		latitude: req.body.latitude,
 		nom: req.body.nom,
-		visites: 0, // tous les champs visites sont pour les stats et donc à initier à 0
 		typeStandId: req.body.typeStandId,
 		saisonId: req.body.saisonId,
 	};
 
+	console.log(stand)
+
+	let serviceIds = eval(req.body.serviceIds)
+
 	// Save Stand in the database
-	Stand.create(stand, { include: Service })
-		.then(result => {
-			result.addService(eval(req.body.serviceIds))
-				.then(() => {
-					res.status(200).send({
-						message: "Stand created",
-						data: result.include
-					});
-				}).catch(err => {
-					res.status(500).send({
-						message: "Stand created error linking with services\n" + err.message,
-						
-					});
-				})
-		})
-		.catch(err => {
-			res.status(500).send({
-				message: err.message || "Some error occurred while creating the Poi.",
-				
-			});
-		});
+	let result;
+	let msg = "Stand crée"
+	let code = 200;
+	try {
+		result = await Stand.create(stand)
+		if (serviceIds) {
+			result.setServices(serviceIds)
+		}
+	} catch (err) {
+		console.error(err)
+		msg = "Le serveur a rencontré une erreur"
+		code = 500;
+		result = null;
+		Stand.destroy(result);
+	}
+	res.status(code).send({
+		message: msg,
+		data: result
+	});
 };
 
 // Retrieve all Stands from the database.-> still in progress
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
 
 	// TODO - construct options (filters and includes)
 
 	const longitude = req.body.longitude;
 	const latitude = req.body.latitude;
 	const nom = req.body.nom;
-	const visites = req.body.visites;
 
-	Stand.findAll({ include: [TypeStand, Service, Saison] }) // pas toujours besoin de tout inclure ?
+	Stand.findAll({include: TypeStand}) // pas toujours besoin de tout inclure ?
 		.then(data => {
 			res.send({
 				message: null,
@@ -61,19 +61,19 @@ exports.findAll = (req, res) => {
 		.catch(err => {
 			res.status(500).send({
 				message: err.message || "Some error occurred while retrieving Pois.",
-				
+
 			});
 		});
 };
 
 // Find a single Stand with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
 
 	// TODO - construct options (filters and includes)
 
 	const id = req.params.id;
 
-	Stand.findByPk(id, { include: [TypeStand, Service, Saison] })
+	Stand.findByPk(id, {include: [TypeStand, Service, Saison]})
 		.then(data => {
 			if (data) {
 				res.send({
@@ -82,20 +82,19 @@ exports.findOne = (req, res) => {
 			} else {
 				res.status(404).send({
 					message: `Cannot find Stand!`,
-					
+
 				});
 			}
 		})
 		.catch(err => {
 			res.status(500).send({
 				message: "Error retrieving Stand!",
-				
 			});
 		});
 };
 
 // Update a Stand by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
 	const id = req.params.id;
 
 	// Create a Stand
@@ -104,58 +103,60 @@ exports.update = (req, res) => {
 		latitude: req.body.latitude,
 		nom: req.body.nom,
 		typeStandId: req.body.typeStandId,
-		saisonId: req.body.saisonId,
+		saisonId: req.body.saisonId
 	};
-
+	console.log(req.body.serviceIds)
 	// Update Stand in the database
-	Stand.update(stand, { where: { standId: id } })
+	let msg, updatedStand, results, code;
+	try {
+		results = await Stand.update(stand, {where: {standId: id}})
+		msg = results[0] > 0 ? "Stand mis à jour" : "Pas de stand trouvé avec l'identifiant " + id;
+		updatedStand = results[0] > 0 ? await Stand.findByPk(id) : null;
+		code = results[0] > 0 ? 200 : 404
 
-		.then(results => {
-			if (results[0] > 0) {
-
-				res.status(200).send({
-					message: "Stand mis à jour", data: results[1]
-				});
-			} else {
-				res.status(404).send({
-					message: "Stand mis à jour mais problème dans la liaison des services\n" + err.message
-				});
-			}
-		})
-		.catch(err => {
-			res.status(500).send({ message: err.message || "Erreur pendant la mise à jour du Stand" });
-		});
+		if (req.body.serviceIds && results[0] > 0) { // check if a stand was updated. Should be 1
+			await updatedStand.setServices(eval(req.body.serviceIds))
+		}
+	} catch (e) {
+		msg = "Il y a eu une erreur au niveau du serveur"
+		code = 500
+		console.error(e)
+	}
+	res.status(code).send({
+		message: msg,
+		data: null
+	})
 };
 
 // Delete a Stand with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
 
 	Stand.destroy({
-		where: { standId: req.params.id }
+		where: {standId: req.params.id}
 	})
 		.then(num => {
 			if (num > 0) {
 				res.status(200).send({
 					message: "Poi was deleted successfully!",
-					
+
 				});
 			} else {
 				res.status(404).send({
 					message: `Cannot delete Poi with id=${id}. Maybe Poi was not found!`,
-					
+
 				});
 			}
 		})
 		.catch(err => {
 			res.status(500).send({
 				message: `Cannot find Stand: ${err.message}`,
-				
+
 			});
 		});
 };
 
 // Delete all Stand from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
 	Stand.destroy({
 		where: {},
 		truncate: false
@@ -169,7 +170,7 @@ exports.deleteAll = (req, res) => {
 		.catch(err => {
 			res.status(500).send({
 				message: err.message || "Some error occurred while removing Stands.",
-				
+
 			});
 		});
 };

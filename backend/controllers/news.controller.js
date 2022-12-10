@@ -3,7 +3,7 @@ const News = db.news;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Genre
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
 
 	// Create a Genre
 	const news = {
@@ -27,7 +27,7 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Genres from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
 	const saisonId = req.query.saisonId;
 	let condition = saisonId ? {saisonId: {[Op.eq]: saisonId}} : null;
 
@@ -44,7 +44,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single Genre with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
 	const id = req.params.id;
 
 	News.findByPk(id)
@@ -67,7 +67,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Genre by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
 	const id = req.params.id;
 	const newValues =
 		{
@@ -103,7 +103,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a Genre with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
 	const id = req.params.id;
 
 	News.destroy({
@@ -131,7 +131,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Genres from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
 	News.destroy({
 		where: {},
 		truncate: false

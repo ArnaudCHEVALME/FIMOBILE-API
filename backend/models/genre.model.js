@@ -9,6 +9,10 @@ module.exports = (sequelize, Sequelize) => {
         libelle: {
             type: Sequelize.STRING,
             allowNull: false
+        },
+        nbRecherche: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
         }
     });
     return Genre;

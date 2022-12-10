@@ -4,13 +4,11 @@ const Op = db.Sequelize.Op;
 
 
 // Create and Save a new Concert
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Create a Concert
     const concert = {
         debut: new Date(req.body.debut),
         duree: req.body.duree,
-        visites: 0,
-        nbPersonne: 0,
         sceneId: req.body.sceneId,
         artisteId: req.body.artisteId,
         saisonId:req.body.saisonId
@@ -33,7 +31,7 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Concerts from the database. => WIP maybe middleware
-exports.findAllPublished = (req, res) => {
+exports.findAllPublished = async (req, res) => {
     Concert.findAll({ where: { published: true } })
         .then(data => {
             res.send({
@@ -48,7 +46,7 @@ exports.findAllPublished = (req, res) => {
             });
         });
 }
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
     const debut = req.query.debut;
     const duree = req.query.duree;
     const sceneId = req.query.sceneId;
@@ -79,7 +77,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single Concert with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     const id = req.params.concertId;
 
     Concert.findByPk(id)
@@ -105,7 +103,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Concert by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     const id = req.params.id;
 
     Concert.update(req.body, {
@@ -134,7 +132,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a Concert with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     const id = req.params.concertId;
 
     Concert.destroy({
@@ -160,7 +158,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Concerts from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
     Concert.destroy({
         where: {},
         truncate: false

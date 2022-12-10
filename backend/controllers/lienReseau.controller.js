@@ -1,16 +1,17 @@
 const db = require("../models");
-const Reseau = db.liensReseaux;
+const LienReseau = db.liensReseaux;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Reseau
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Create a Reseau
-    const reseau = {
+    const lien = {
         lien: req.body.lien,
+        categorieReseauId : req.body.categorieId
     };
-
+    console.log(lien)
     // Save Reseau in the database
-    Reseau.create(reseau)
+    LienReseau.create(lien)
         .then(data => {
             res.send({
                 message: `Reseau créé`,
@@ -26,11 +27,11 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Reseaux from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
     const lien = req.query.lien;
     let condition = lien ? { lien: { [Op.iLike]: `%${lien}%` } } : null;
 
-    Reseau.findAll({ where: condition })
+    LienReseau.findAll({ where: condition })
         .then(data => {
             res.send({
                 message: `Réseaux trouvés`,
@@ -46,10 +47,10 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single Reseau with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     const id = req.params.id;
 
-    Reseau.findByPk(id)
+    LienReseau.findByPk(id)
         .then(data => {
             if (data) {
                 res.send(data);
@@ -69,12 +70,12 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Reseau by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     const id = req.params.id;
     console.log(id);
     const newValues = { lien: req.body.lien };
 
-    Reseau.update(newValues, {
+    LienReseau.update(newValues, {
         where: { id: id }
     })
         .then(results => {
@@ -100,10 +101,10 @@ exports.update = (req, res) => {
 };
 
 // Delete a Reseau with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     const id = req.params.id;
 
-    Reseau.destroy({
+    LienReseau.destroy({
         where: { id: id }
     })
         .then(num => {
@@ -128,8 +129,8 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Reseaux from the database.
-exports.deleteAll = (req, res) => {
-    Reseau.destroy({
+exports.deleteAll = async (req, res) => {
+    LienReseau.destroy({
         where: {},
         truncate: false
     })

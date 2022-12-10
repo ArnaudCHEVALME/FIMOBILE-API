@@ -16,11 +16,11 @@ module.exports = (sequelize, Sequelize) => {
         },
         nbPersonne: {
             type: Sequelize.INTEGER,
-            allowNull: true
+            defaultValue: 0
         },
-        visites: {
+        nbRecherche: {
             type: Sequelize.INTEGER,
-            allowNull: true
+            defaultValue: 0
         },
     });
     return Concert;

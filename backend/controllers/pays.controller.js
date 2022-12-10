@@ -3,7 +3,7 @@ const Pays = db.pays;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Pays
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Create a Pays
     const pays = {
         nompays: req.body.nompays,
@@ -26,7 +26,7 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all Pays from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
     const nompays = req.query.nompays;
     let condition = nompays ? { nompays: { [Op.iLike]: `%${nompays}%` } } : null;
 
@@ -46,7 +46,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single Pays with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     const id = req.params.id;
 
     Pays.findByPk(id)
@@ -72,7 +72,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Pays by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     const id = req.params.id;
 
     const newNomPays = { nompays: req.body.nompays };
@@ -102,7 +102,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a Pays with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     const id = req.params.id;
 
     Pays.destroy({
@@ -130,7 +130,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Pays from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
     Pays.destroy({
         where: {},
         truncate: false

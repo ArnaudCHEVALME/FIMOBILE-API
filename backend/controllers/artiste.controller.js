@@ -1,5 +1,7 @@
 const db = require("../models");
 const Artiste = db.artistes;
+const Concert = db.concerts;
+const Saison = db.saisons;
 const sousGenre = db.sousGenres;
 const Op = db.Sequelize.Op;
 
@@ -39,20 +41,34 @@ exports.create = async (req, res) => {
 
 // Retrieve all Artiste from the database.
 exports.findAll = async (req, res) => {
-	Artiste.findAll()
+	let saisonId = req.body.saisonId
+	let condition = null
+
+	if (saisonId) {
+		condition = {
+			attributes: Artiste.getAttributes(),
+			include: {
+				model: Concert,
+				where: {saisonId: saisonId},
+				required:false,
+			}
+		}
+	}
+
+	Artiste.findAll(condition)
 		.then(data => {
 			res.send(data);
 		})
 		.catch(err => {
 			res.status(500).send({
-				message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message,
+				message: `Le serveur a rencontré une erreur.\n` + err.message,
 				data: null
 			});
 		});
 };
 
 // Find a single Artiste with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
 	const id = req.params.id;
 
 	Artiste.findByPk(id)
@@ -74,7 +90,7 @@ exports.findOne = (req, res) => {
 
 
 // Update an Artiste by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
 	const id = parseInt(req.params.artisteId);
 	const newValues = {
 		name: req.body.name,
@@ -108,7 +124,7 @@ exports.update = (req, res) => {
 
 
 // Delete an Artiste with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
 	const id = parseInt(req.params.id);
 
 	Artiste.destroy({
@@ -133,7 +149,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Artiste from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
 	Artiste.destroy({
 		where: {},
 		truncate: false

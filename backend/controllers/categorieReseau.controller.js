@@ -3,11 +3,10 @@ const CategorieReseau = db.categoriesReseaux;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new CategorieReseau
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Create a CategorieReseau
     const categorieReseau = {
-        libelle: req.body.libelle,
-        iconPath: req.body.iconPath
+        libelle: req.body.libelle
     };
 
     // Save CategorieReseau in the database
@@ -27,7 +26,7 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all CategoriesReseaux from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
     const libelle = req.query.libelle;
     let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
@@ -47,7 +46,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single CategorieReseau with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     const id = req.params.id;
 
     CategorieReseau.findByPk(id)
@@ -70,11 +69,10 @@ exports.findOne = (req, res) => {
 };
 
 // Update a CategorieReseau by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     const id = parseInt(req.params.id);
     const newValues = {
         libelle: req.body.libelle,
-        iconPath: req.body.iconPath
     };
 
     CategorieReseau.update(newValues, {
@@ -102,7 +100,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a CategorieReseau with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     const id = req.params.id;
 
     CategorieReseau.destroy({
@@ -130,7 +128,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all CategoriesReseaux from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
     CategorieReseau.destroy({
         where: {},
         truncate: false

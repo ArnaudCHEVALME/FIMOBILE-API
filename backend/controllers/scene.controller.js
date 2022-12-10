@@ -3,7 +3,7 @@ const Scene = db.scenes;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new scene type
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     // Create a Scene
     const scene = {
         longitude: req.body.longitude,
@@ -30,11 +30,10 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all scene from the database. -> still in progress
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
     const longitude = req.query.longitude;
     const latitude = req.query.latitude;
     const nom = req.query.nom;
-    const visites = req.query.visites;
 
 
     let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
@@ -56,7 +55,7 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single Scene with an id
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     const id = req.params.id;
 
     Scene.findByPk(id)
@@ -82,7 +81,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Scene by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     const id = req.params.id;
 
     Scene.update(req.body, {
@@ -110,7 +109,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a Scene with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     const id = req.params.id;
 
     Scene.destroy({
@@ -138,7 +137,7 @@ exports.delete = (req, res) => {
 };
 
 // Delete all Scene from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = async (req, res) => {
     Scene.destroy({
         where: {},
         truncate: false
