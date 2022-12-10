@@ -1,5 +1,6 @@
 const db = require("../models");
 const Artiste = db.artistes;
+const LienReseau = db.liensReseaux;
 const Concert = db.concerts;
 const Saison = db.saisons;
 const sousGenre = db.sousGenres;
@@ -7,13 +8,31 @@ const Op = db.Sequelize.Op;
 
 // Create and Save new Artistes
 exports.create = async (req, res) => {
+	console.log(req.body.liensReseaux)
 	// Create a new Artistes
 	const artiste = {
 		name: req.body.name,
 		bio: req.body.bio,
 		bannerPath: req.body.bannerPath,
-		linkClip: req.body.linkClip,
+		linkClip: req.body.linkClip
 	};
+
+	let nvLiens;
+	try {
+		nvLiens = await LienReseau.bulkCreate(eval(req.body.liensReseaux));
+		console.log(nvLiens)
+	} catch (err) {
+		console.error(err)
+		if (nvLiens) {
+			nvLiens.forEach(lien => LienReseau.destroy({where: {lienReseauId: lien.lienReseauId}}));
+			return res.status(500).send({
+					message: "Le serveur a rencontré une erreur",
+					data: null
+				}
+			)
+		}
+	}
+
 	let nvArtiste;
 	// Save Artiste in the database
 	try {
@@ -22,13 +41,14 @@ exports.create = async (req, res) => {
 			[
 				nvArtiste.addSousGenre(eval(req.body.sousGenreId)),
 				nvArtiste.addConcert(eval(req.body.concertId)),
-				nvArtiste.addPays(eval(req.body.paysId))
+				nvArtiste.addPays(eval(req.body.paysId)),
+				nvArtiste.setLienReseaus(nvLiens)
 			]
 		);
-	} catch {
-		Artiste.destroy(nvArtiste);
+	} catch (err) {
+		Artiste.destroy({where: {artisteId: nvArtiste.artisteId}});
 		res.status(500).send({
-			message: "données incorectes : " + error.message,
+			message: "données incorectes : " + err.message,
 			data: null
 		});
 		return;
@@ -50,7 +70,7 @@ exports.findAll = async (req, res) => {
 			include: {
 				model: Concert,
 				where: {saisonId: saisonId},
-				required:false,
+				required: false,
 			}
 		}
 	}
@@ -71,13 +91,13 @@ exports.findAll = async (req, res) => {
 exports.findOne = async (req, res) => {
 	const id = req.params.id;
 
-	Artiste.findByPk(id)
+	Artiste.findByPk(id,{include:{model:LienReseau, through:"LiensArtistes"}})
 		.then(data => {
 			if (data) {
 				res.send(data);
 			} else {
 				res.status(404).send({
-					message: `Pas de genre avec id=${id}.`, data: null
+					message: `Pas d'Artiste avec id=${id}.`, data: null
 				});
 			}
 		})
@@ -161,7 +181,7 @@ exports.deleteAll = async (req, res) => {
 		})
 		.catch(err => {
 			res.status(500).send({
-				message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
+				message: `Le serveur a rencontré une erreur.\n` + err.message, data: null
 			});
 		});
 };

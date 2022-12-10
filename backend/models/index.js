@@ -120,4 +120,9 @@ db.typeStand.hasMany(db.stands, { foreignKey: "typeStandId" });
 db.stands.belongsToMany(db.services, { through: "StandsServices", foreignKey: "StandId" });
 db.services.belongsToMany(db.stands, { through: "StandsServices", foreignKey: "ServiceId" });
 
+// 1 stand a plusieurs services
+// 1 service est proposé par plusieurs stands
+db.artistes.belongsToMany(db.liensReseaux, { through: "LiensArtistes", foreignKey: "ArtisteId" });
+db.liensReseaux.belongsToMany(db.artistes, { through: "LiensArtistes", foreignKey: "LienId" });
+
 module.exports = db;

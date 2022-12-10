@@ -9,6 +9,7 @@ exports.create = async (req, res) => {
         lien: req.body.lien,
         categorieReseauId : req.body.categorieId
     };
+
     console.log(lien)
     // Save Reseau in the database
     LienReseau.create(lien)
@@ -19,6 +20,7 @@ exports.create = async (req, res) => {
             });
         })
         .catch(err => {
+            console.error(err)
             res.status(500).send({
                 message: err.message || "Some error occurred while creating the Reseau.",
                 

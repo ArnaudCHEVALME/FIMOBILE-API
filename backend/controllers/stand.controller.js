@@ -118,7 +118,7 @@ exports.update = async (req, res) => {
 			await updatedStand.setServices(eval(req.body.serviceIds))
 		}
 	} catch (e) {
-		msg = "Il y a eu une erreur au niveau du serveur"
+		msg = "le serveur a rencontré une erreur"
 		code = 500
 		console.error(e)
 	}

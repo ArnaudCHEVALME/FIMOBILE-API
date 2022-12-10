@@ -59,9 +59,7 @@ exports.findAll = async (req, res) => {
     let conditionArtisteId = artisteId ? { artisteId: { [Op.eq]: `%${artisteId}%` } } : null;
 
 
-    Concert.findAll({
-
-    })
+    Concert.findAll({where: {saisonId:saisonId}})
         .then(data => {
             res.send({
                 message: `Concerts trouvés`,
