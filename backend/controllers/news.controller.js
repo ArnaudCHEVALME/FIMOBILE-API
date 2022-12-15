@@ -1,5 +1,6 @@
 const db = require("../models");
 const News = db.news;
+const sequelize = db.sequelize;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Genre
