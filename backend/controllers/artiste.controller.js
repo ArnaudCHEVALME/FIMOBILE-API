@@ -1,4 +1,5 @@
 const db = require("../models");
+const sequelize = db.sequelize;
 const Artiste = db.artistes;
 const LienReseau = db.liensReseaux;
 const Concert = db.concerts;
@@ -64,18 +65,13 @@ exports.findAll = async (req, res) => {
 	let saisonId = req.body.saisonId
 	let condition = null
 
-	if (saisonId) {
-		condition = {
-			attributes: Artiste.getAttributes(),
-			include: {
-				model: Concert,
-				where: {saisonId: saisonId},
-				required: false,
-			}
-		}
+	let sql = "SELECT * FROM artistes"
+	if (saisonId){
+		sql += "JOIN concerts c on artistes.'artisteId' = c.'artisteId' WHERE 'saisonId' = $1"
 	}
 
-	Artiste.findAll(condition)
+
+	sequelize.query(sql, saisonId)
 		.then(data => {
 			res.send(data);
 		})
@@ -90,7 +86,6 @@ exports.findAll = async (req, res) => {
 // Find a single Artiste with an id
 exports.findOne = async (req, res) => {
 	const id = req.params.id;
-
 	Artiste.findByPk(id,{include:{model:LienReseau, through:"LiensArtistes"}})
 		.then(data => {
 			if (data) {
