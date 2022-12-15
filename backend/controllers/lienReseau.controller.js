@@ -7,7 +7,8 @@ exports.create = async (req, res) => {
     // Create a Reseau
     const lien = {
         lien: req.body.lien,
-        categorieReseauId : req.body.categorieId
+        artisteId : req.body.artisteId,
+        categorieReseauId : req.body.categorieId,
     };
 
     console.log(lien)
