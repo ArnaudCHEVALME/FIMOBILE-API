@@ -46,6 +46,10 @@ db.news = require("./news.model.js")(sequelize, Sequelize);
 db.news.belongsTo(db.saisons, { foreignKey: "saisonId" });
 db.saisons.hasMany(db.news, { foreignKey: "saisonId" });
 
+// 1 lienReseau a 1 seul artiste
+// 1 artiste a plusieurs liensReseaux
+db.liensReseaux.belongsTo(db.artistes, { foreignKey: "artisteId" });
+db.artistes.hasMany(db.liensReseaux, { foreignKey: "lienReseauId" });
 
 // 1 saison a plusieurs couleurs
 // 1 couleur peut appartenir à plusieurs saisons
@@ -75,10 +79,12 @@ db.permissions.belongsToMany(db.roles, { through: "RolesPermissions", foreignKey
 db.stands.belongsTo(db.saisons, { foreignKey: "saisonId" });
 db.saisons.hasMany(db.stands, { foreignKey: "saisonId" });
 
+//* ARTISTES *//
 // 1 artiste peut avoir n sous-genres
 // 1 sous-genre peut être lié à n artistes
 db.artistes.belongsToMany(db.sousGenres, { through: "ArtistesSousGenres", foreignKey: "artisteId" });
 db.sousGenres.belongsToMany(db.artistes, { through: "ArtistesSousGenres", foreignKey: "sousGenreId" });
+
 
 // 1 sousGenre a 1 seul genre
 // 1 genre a plusieurs sousGenres
@@ -112,8 +118,8 @@ db.typeStand.hasMany(db.stands, { foreignKey: "typeStandId" });
 
 // 1 stand a plusieurs services
 // 1 service est proposé par plusieurs stands
-db.stands.belongsToMany(db.services, { through: "StandsServices", foreignKey: "StandId" });
-db.services.belongsToMany(db.stands, { through: "StandsServices", foreignKey: "ServiceId" });
+db.stands.belongsToMany(db.services, { through: "StandsServices", foreignKey: "standId" });
+db.services.belongsToMany(db.stands, { through: "StandsServices", foreignKey: "serviceId" });
 
 // 1 stand a plusieurs services
 // 1 service est proposé par plusieurs stands
