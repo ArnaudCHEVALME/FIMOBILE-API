@@ -1,6 +1,7 @@
 const db = require("../models");
 const TypeStand = db.typeStand;
 const Op = db.Sequelize.Op;
+const sequelize = db.sequelize;
 
 // Create and Save a new Stand type
 exports.create = async (req, res) => {
@@ -25,11 +26,18 @@ exports.create = async (req, res) => {
 // Retrieve all Stand types from the database.
 exports.findAll = async (req, res) => {
     const libelle = req.query.libelle;
-    //let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
+    const saisonId = req.body.saisonId;
 
-    TypeStand.findAll()
+    let sql = "SELECT \"typeStands\".\"libelle\", \"typeStands\".\"nbRecherche\" FROM \"typeStands\""
+    if(saisonId){
+        sql += "JOIN stands s ON \"typeStands\".\"typeStandId\" = s.\"typeStandId\"\n" +
+            "JOIN saisons s2 ON s2.\"saisonId\" = s.\"saisonId\"\n" +
+            "WHERE s2.\"saisonId\" = $1;"
+    }
+
+    sequelize.query(sql, {bind: [saisonId]})
         .then(data => {
-            res.send(data);
+            res.send(data[0]);
         })
         .catch(err => {
             res.status(500).send({
