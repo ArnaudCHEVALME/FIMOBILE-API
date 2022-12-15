@@ -63,13 +63,11 @@ exports.create = async (req, res) => {
 // Retrieve all Artiste from the database.
 exports.findAll = async (req, res) => {
 	let saisonId = req.body.saisonId
-	let condition = null
 
 	let sql = "SELECT * FROM artistes"
 	if (saisonId){
 		sql += "JOIN concerts c on artistes.'artisteId' = c.'artisteId' WHERE 'saisonId' = $1"
 	}
-
 
 	sequelize.query(sql, saisonId)
 		.then(data => {
