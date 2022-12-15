@@ -25,9 +25,9 @@ exports.create = async (req, res) => {
 // Retrieve all Stand types from the database.
 exports.findAll = async (req, res) => {
     const libelle = req.query.libelle;
-    let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
+    //let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
 
-    TypeStand.findAll({ where: condition })
+    TypeStand.findAll()
         .then(data => {
             res.send(data);
         })

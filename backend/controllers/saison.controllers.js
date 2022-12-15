@@ -122,7 +122,7 @@ exports.delete = async (req, res) => {
             if (num > 0) {
                 res.status(200).send({
                     message: "Saison was deleted successfully!",
-                    
+
                 });
             } else {
                 res.status(404).send({

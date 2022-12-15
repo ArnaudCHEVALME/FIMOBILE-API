@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./backend/models");
 
 db.sequelize.sync()
-// db.sequelize.sync({ force: true }) // For developpement, drop every table
+//db.sequelize.sync({ force: true }) // For developpement, drop every table
     .then(() => {
         console.log("Synced db.");
     })
