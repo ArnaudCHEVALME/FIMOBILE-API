@@ -26,20 +26,23 @@ exports.create = async (req, res) => {
 
 // Retrieve all Couleur from the database.
 exports.findAll = async (req, res) => {
+	let saisonId = req.body.saisonId
 
-    Couleur.findAll()
-        .then(data => {
-            res.send({
-                message: `Concerts trouvés`,
-                data: data
-            });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving Couleur.",
-                
-            });
-        });
+	let sql = "SELECT * FROM couleurs"
+	if (saisonId){
+		sql += " WHERE 'saisonId' = $1"
+	}
+
+	sequelize.query(sql, saisonId)
+		.then(data => {
+			res.send(data);
+		})
+		.catch(err => {
+			res.status(500).send({
+				message: `Le serveur a rencontré une erreur.\n` + err.message,
+				data: null
+			});
+		});
 };
 
 // Find a single Couleur with an id

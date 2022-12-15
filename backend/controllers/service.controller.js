@@ -27,18 +27,36 @@ exports.create = async (req, res) => {
 
 // Retrieve all Services from the database.
 exports.findAll = async (req, res) => {
-    const libelle = req.query.libelle;
-    let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
+    let saisonId = req.body.saisonId
 
-    Service.findAll({ where: condition })
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving Services.",
-            });
-        });
+	let sql = "SELECT * FROM services"
+	if (saisonId){
+		sql += " JOIN stand s on services.'serviceId' = s.'serviceId' WHERE 'saisonId' = $1"//FIXME
+	}
+
+	sequelize.query(sql, saisonId)
+		.then(data => {
+			res.send(data);
+		})
+		.catch(err => {
+			res.status(500).send({
+				message: `Le serveur a rencontré une erreur.\n` + err.message,
+				data: null
+			});
+		});
+
+    // const libelle = req.query.libelle;
+    // let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
+
+    // Service.findAll({ where: condition })
+    //     .then(data => {
+    //         res.send(data);
+    //     })
+    //     .catch(err => {
+    //         res.status(500).send({
+    //             message: err.message || "Some error occurred while retrieving Services.",
+    //         });
+    //     });
 };
 
 // Find a single Service with an id
