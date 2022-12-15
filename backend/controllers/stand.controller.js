@@ -1,4 +1,5 @@
 const db = require("../models");
+const sequelize = db.sequelize;
 const Stand = db.stands;
 const Op = db.Sequelize.Op;
 const TypeStand = db.typeStand;
@@ -50,12 +51,21 @@ exports.findAll = async (req, res) => {
 	const longitude = req.body.longitude;
 	const latitude = req.body.latitude;
 	const nom = req.body.nom;
+	const saisonId = req.body.saisonId
 
-	Stand.findAll({include: TypeStand}) // pas toujours besoin de tout inclure ?
+	//console.log()
+	sql = "SELECT * FROM stands\n"
+	if(saisonId){
+		console.log("pute")
+		sql += "JOIN saisons s on s.\"saisonId\" = stands.\"saisonId\"\n" +
+			"WHERE s.\"saisonId\" = $1;"
+	}
+	console.log(sql)
+	sequelize.query(sql, {bind: [saisonId]})
 		.then(data => {
 			res.send({
 				message: null,
-				data: data
+				data: data[0]
 			});
 		})
 		.catch(err => {

@@ -1,6 +1,8 @@
 const db = require("../models");
 const Service = db.services;
 const Op = db.Sequelize.Op;
+const sequelize = db.sequelize;
+
 
 // Create and Save a new Service
 exports.create = async (req, res) => {
@@ -28,11 +30,22 @@ exports.create = async (req, res) => {
 // Retrieve all Services from the database.
 exports.findAll = async (req, res) => {
     const libelle = req.query.libelle;
-    let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
+    const saisonId = req.body.saisonId;
+    let sql ="SELECT services.\"libelle\", services.\"nbRecherche\" FROM services\n"
+    if(saisonId){
+        sql += "JOIN \"StandsServices\" SS ON services.\"serviceId\" = SS.\"ServiceId\"\n" +
+            "JOIN stands s ON s.\"standId\" = SS.\"StandId\"\n" +
+            "JOIN saisons s2 ON s2.\"saisonId\" = s.\"saisonId\"\n" +
+            "WHERE s.\"saisonId\" = $1;"
+    }
 
-    Service.findAll({ where: condition })
+
+
+
+
+    sequelize.query(sql, {bind: [saisonId]})
         .then(data => {
-            res.send(data);
+            res.send(data[0]);
         })
         .catch(err => {
             res.status(500).send({
