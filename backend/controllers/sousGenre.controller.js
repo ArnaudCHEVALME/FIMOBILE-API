@@ -33,11 +33,12 @@ exports.create = async (req, res) => {
 exports.findAll = async (req, res) => {
     let saisonId = req.body.saisonId
 
-    let sql = "SELECT * FROM sousGenre"
+    let sql = "SELECT * FROM sousGenres"
     if (saisonId){
-        sql+="JOIN artistes a on sousGenre.'sousGenreId' = a.'sousGenreId' " +
-            "JOIN concert c  on a.'artisteId' = c.'artisteId' " +
-            "WHERE 'saisonId' = $1"
+        sql+="JOIN artistes a on sousGenres.\"sousGenreId\" = a.\"sousGenreId\" " +
+            "JOIN concerts c  on a.\"artisteId\" = c.\"artisteId\" " +
+            "JOIN saisons s on s.\"saisonId\" = c.\"saisonId\" " +
+            "WHERE s.\"saisonId\" = $1"
     }
 };
 

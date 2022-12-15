@@ -31,27 +31,14 @@ exports.create = async (req, res) => {
 
 // Retrieve all scene from the database. -> still in progress
 exports.findAll = async (req, res) => {
-    const longitude = req.query.longitude;
-    const latitude = req.query.latitude;
-    const nom = req.query.nom;
+    let saisonId = req.body.saisonId
 
-
-    let condition_longitude = longitude ? { longitude: { [Op.iLike]: longitude } } : null;
-
-
-    Scene.findAll()
-        .then(data => {
-            res.send({
-                message: `Scenes trouvés`,
-                data: data
-            });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving Scenes.",
-                
-            });
-        });
+    let sql = "SELECT * FROM scenes"
+    if (saisonId){
+        sql += "JOIN concerts c on scenes.\"sceneId\" = c.\"sceneId\" " +
+            "JOIN saisons s on s.\"saisonId\" = c.\"saisonId\"" +
+            "WHERE s.\"saisonId\" = $id"
+    }
 };
 
 // Find a single Scene with an id
