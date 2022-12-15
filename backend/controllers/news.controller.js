@@ -29,23 +29,24 @@ exports.create = async (req, res) => {
 
 // Retrieve all Genres from the database.
 exports.findAll = async (req, res) => {
-    const saisonId = req.query.saisonId;
+    const saisonId = req.query.saisonId ? req.query.saisonId : null;
 
     let sql = "SELECT * FROM news";
-    if (saisonId) {
-        sql += " WHERE 'saisonId' = $1";
-    }
-
-    sequelize.query(sql, saisonId)
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: `Le serveur a rencontré une erreur.\n` + err.message,
-                data: null
-            });
+    let news;
+    try {
+        if (saisonId) {
+            sql += " WHERE \"saisonId\" = $1";
+            news = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
+        } else {
+            news = await sequelize.query
+        }
+        res.send(news);
+    } catch (e) {
+        res.status(500).send({
+            message: `Le serveur a rencontré une erreur.\n` + e.message,
+            data: null
         });
+    }
 };
 
 // Find a single Genre with an id
