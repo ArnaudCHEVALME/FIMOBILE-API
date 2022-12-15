@@ -1,6 +1,8 @@
 const db = require("../models");
 const Pays = db.pays;
 const Op = db.Sequelize.Op;
+const sequelize = db.sequelize;
+
 
 // Create and Save a new Pays
 exports.create = async (req, res) => {
@@ -27,22 +29,43 @@ exports.create = async (req, res) => {
 
 // Retrieve all Pays from the database.
 exports.findAll = async (req, res) => {
-    const nompays = req.query.nompays;
-    let condition = nompays ? { nompays: { [Op.iLike]: `%${nompays}%` } } : null;
 
-    Pays.findAll({ where: condition })
-        .then(data => {
-            res.send({
-                message: `Pays trouvés`,
-                data: data
-            });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving Pays.",
+
+    let saisonId = req.body.saisonId
+
+	let sql = "SELECT * FROM pays"
+	if (saisonId){
+		sql += " JOIN saisons s on pays.\"paysId\" = s.\"saisonId\" WHERE s.\"saisonId\" = $1"//FIXME
+	}
+
+
+	sequelize.query(sql, {bind: [saisonId]})
+		.then(data => {
+			res.send(data[0]);
+		})
+		.catch(err => {
+			res.status(500).send({
+				message: `Le serveur a rencontré une erreur.\n` + err.message,
+				data: null
+			});
+		});
+
+    // const nompays = req.query.nompays;
+    // let condition = nompays ? { nompays: { [Op.iLike]: `%${nompays}%` } } : null;
+
+    // Pays.findAll({ where: condition })
+    //     .then(data => {
+    //         res.send({
+    //             message: `Pays trouvés`,
+    //             data: data
+    //         });
+    //     })
+    //     .catch(err => {
+    //         res.status(500).send({
+    //             message: err.message || "Some error occurred while retrieving Pays.",
                 
-            });
-        });
+    //         });
+    //     });
 };
 
 // Find a single Pays with an id
