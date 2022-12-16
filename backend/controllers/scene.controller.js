@@ -45,8 +45,7 @@ exports.findAll = async (req, res) => {
             scene = await sequelize.query
         }
         res.send(scene)
-    }
-    catch (e){
+    } catch (e){
         console.error(e)
         res.status(500).send({
             message: `Le serveur a rencontré une erreur. \n` + e.message,
