@@ -29,7 +29,7 @@ exports.create = async (req, res) => {
 
 // Retrieve all Genres from the database.
 exports.findAll = async (req, res) => {
-    const saisonId = req.query.saisonId;
+    const saisonId = req.body.saisonId;
 
     let sql = "SELECT * FROM news";
     let news;
