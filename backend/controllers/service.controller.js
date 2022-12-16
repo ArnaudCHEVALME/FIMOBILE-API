@@ -42,8 +42,9 @@ exports.findAll = async (req, res) => {
         let services = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
         res.send(services);
     } catch(e){
+        console.error(e.message)
         res.status(500).send({
-            message: "Le server a rencontrer une érreur.\n" + e.message
+            message: "Le server a rencontrer une érreur."
         });
     }
 };

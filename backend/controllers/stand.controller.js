@@ -59,9 +59,9 @@ exports.findAll = async (req, res) => {
 		let stands = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
 		res.send(stands)
 	}catch(e) {
+		console.error(e.message)
 		res.status(500).send({
-			message: "Le server a rencontré un problème.\n" + e.message
-
+			message: "Le server a rencontré un problème."
 		});
 	}
 };

@@ -26,21 +26,23 @@ exports.create = async (req, res) => {
 // Retrieve all Stand types from the database.
 exports.findAll = async (req, res) => {
     const saisonId = req.body.saisonId;
-
+    //let sql = "SELECT  \"typeStands\".\"libelle\", \"typeStands\".\"nbRecherche\" FROM \"typeStands\""
+    let sql = "SELECT  * FROM \"typeStands\""
+    let typeStands
     try{
-        let sql = "SELECT \"typeStands\".\"libelle\", \"typeStands\".\"nbRecherche\" FROM \"typeStands\""
         if(saisonId){
             sql += "JOIN stands s ON \"typeStands\".\"typeStandId\" = s.\"typeStandId\"\n" +
                 "JOIN saisons s2 ON s2.\"saisonId\" = s.\"saisonId\"\n" +
                 "WHERE s2.\"saisonId\" = $1;"
-        let typeStand = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
-        res.send(typeStand);
+        typeStands = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
+        res.send(typeStands);
         }
     }
     catch(e) {
-            res.status(500).send({
-                message: "Le server a rencontrer un problème.\n" + e.message
-            });
+        console.error(e.message)
+        res.status(500).send({
+            message: "Le server a rencontrer un problème."
+        });
     }
 
 };
