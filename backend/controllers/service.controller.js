@@ -30,16 +30,20 @@ exports.create = async (req, res) => {
 // Retrieve all Services from the database.
 exports.findAll = async (req, res) => {
     const saisonId = req.body.saisonId;
+    let sql ="SELECT * FROM services\n"
+    let services
 
     try{
-        let sql ="SELECT services.\"libelle\", services.\"nbRecherche\" FROM services\n"
         if(saisonId){
             sql += "JOIN \"StandsServices\" SS ON services.\"serviceId\" = SS.\"ServiceId\"\n" +
                 "JOIN stands s ON s.\"standId\" = SS.\"StandId\"\n" +
                 "JOIN saisons s2 ON s2.\"saisonId\" = s.\"saisonId\"\n" +
                 "WHERE s.\"saisonId\" = $1;"
+            services = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
         }
-        let services = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
+        else{
+            services = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
+        }
         res.send(services);
     } catch(e){
         console.error(e.message)

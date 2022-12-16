@@ -29,14 +29,18 @@ exports.findAll = async (req, res) => {
     //let sql = "SELECT  \"typeStands\".\"libelle\", \"typeStands\".\"nbRecherche\" FROM \"typeStands\""
     let sql = "SELECT  * FROM \"typeStands\""
     let typeStands
+
     try{
         if(saisonId){
             sql += "JOIN stands s ON \"typeStands\".\"typeStandId\" = s.\"typeStandId\"\n" +
                 "JOIN saisons s2 ON s2.\"saisonId\" = s.\"saisonId\"\n" +
                 "WHERE s2.\"saisonId\" = $1;"
-        typeStands = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
-        res.send(typeStands);
+            typeStands = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
         }
+        else {
+            typeStands = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
+        }
+        res.send(typeStands);
     }
     catch(e) {
         console.error(e.message)

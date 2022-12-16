@@ -46,17 +46,18 @@ exports.create = async (req, res) => {
 // Retrieve all Stands from the database.-> still in progress
 exports.findAll = async (req, res) => {
 	const saisonId = req.body.saisonId
-
-
+	let sql = "SELECT * FROM stands\n"
+	let stands
 
 	try {
-		sql = "SELECT * FROM stands\n"
 		if(saisonId){
-			console.log("pute")
 			sql += "JOIN saisons s on s.\"saisonId\" = stands.\"saisonId\"\n" +
 				"WHERE s.\"saisonId\" = $1;"
+			stands = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
 		}
-		let stands = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
+		else{
+			stands = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
+		}
 		res.send(stands)
 	}catch(e) {
 		console.error(e.message)
