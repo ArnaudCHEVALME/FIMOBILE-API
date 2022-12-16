@@ -1,6 +1,7 @@
 const db = require("../models");
 const SousGenre = db.sousGenres;
 const Genre = db.genres;
+const sequelize = db.sequelize;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Subgenre
@@ -31,14 +32,26 @@ exports.create = async (req, res) => {
 
 // Retrieve all subgenres from the database.
 exports.findAll = async (req, res) => {
-    let saisonId = req.body.saisonId
+    const saisonId = req.query.saisonId ? req.query.saisonId : null;
 
     let sql = "SELECT * FROM sousGenres"
-    if (saisonId){
-        sql+="JOIN artistes a on sousGenres.\"sousGenreId\" = a.\"sousGenreId\" " +
-            "JOIN concerts c  on a.\"artisteId\" = c.\"artisteId\" " +
-            "JOIN saisons s on s.\"saisonId\" = c.\"saisonId\" " +
-            "WHERE s.\"saisonId\" = $1"
+    let sousGenres;
+    try{
+        if (saisonId){
+            sql+="JOIN artistes a on sousGenres.\"sousGenreId\" = a.\"sousGenreId\" " +
+                "JOIN concerts c  on a.\"artisteId\" = c.\"artisteId\" " +
+                "WHERE c.\"saisonId\" = $1"
+            sousGenres = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
+        } else {
+            sousGenres = await sequelize.query
+        }
+        res.send(sousGenres);
+    } catch (e) {
+        console.error(e)
+        res.status(500).send({
+            message: `Le serveur a rencontré une erreur. \n` +e.message,
+            data: null
+        });
     }
 };
 
