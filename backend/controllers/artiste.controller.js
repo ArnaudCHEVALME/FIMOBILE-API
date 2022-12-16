@@ -64,12 +64,12 @@ exports.create = async (req, res) => {
 exports.findAll = async (req, res) => {
 	let saisonId = req.body.saisonId
 
-	let sql = "SELECT * FROM artistes"
+	let sql = "SELECT * FROM artistes "
 	if (saisonId){
-		sql += "JOIN concerts c on artistes.'artisteId' = c.'artisteId' WHERE 'saisonId' = $1"
+		sql += "JOIN concerts c on artistes.\"artisteId\" = c.\"artisteId\" WHERE \"saisonId\" = $1"
 	}
 
-	sequelize.query(sql, saisonId)
+	sequelize.query(sql, {bind: [saisonId]})
 		.then(data => {
 			res.send(data);
 		})

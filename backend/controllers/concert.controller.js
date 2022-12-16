@@ -1,4 +1,5 @@
 const db = require("../models");
+const sequelize = db.sequelize;
 const Concert = db.concerts;
 const Op = db.Sequelize.Op;
 
@@ -13,6 +14,8 @@ exports.create = async (req, res) => {
         artisteId: req.body.artisteId,
         saisonId:req.body.saisonId
     };
+
+    console.log(concert)
 
     // Save Concert in the database
     Concert.create(concert)
@@ -47,19 +50,28 @@ exports.findAllPublished = async (req, res) => {
         });
 }
 exports.findAll = async (req, res) => {
-    const debut = req.query.debut;
-    const duree = req.query.duree;
-    const sceneId = req.query.sceneId;
-    const artisteId = req.query.artisteId;
-    const saisonId = req.query.saisonId;
 
-    let conditionDebut = debut ? { debut: { [Op.iLike]: `%${debut}%` } } : null;
-    let conditionDuree = duree ? { duree: { [Op.iLike]: `%${duree}%` } } : null;
-    let conditionSceneId = sceneId ? { sceneId: { [Op.eq]: `%${sceneId}%` } } : null;
-    let conditionArtisteId = artisteId ? { artisteId: { [Op.eq]: `%${artisteId}%` } } : null;
+    let sql = "SELECT * FROM concerts "
 
+    let options = [];
 
-    Concert.findAll({where: {saisonId:saisonId}})
+    let params = {
+        sceneId: req.query.sceneId,
+        artisteId : req.query.artisteId,
+        saisonId : req.query.saisonId,
+    }
+
+    let optionPresente = false;
+
+    Object.keys(params).forEach(param =>{
+        if (params[param]){
+            optionPresente=true;
+            options.push(param+="=$"+param)
+        }
+    })
+    if (optionPresente) sql+=" WHERE ";
+
+    sequelize.query(sql, options.join(" AND "))
         .then(data => {
             res.send({
                 message: `Concerts trouvés`,
