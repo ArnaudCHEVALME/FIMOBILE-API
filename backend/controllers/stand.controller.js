@@ -45,35 +45,26 @@ exports.create = async (req, res) => {
 
 // Retrieve all Stands from the database.-> still in progress
 exports.findAll = async (req, res) => {
-
-	// TODO - construct options (filters and includes)
-
-	const longitude = req.body.longitude;
-	const latitude = req.body.latitude;
-	const nom = req.body.nom;
 	const saisonId = req.body.saisonId
+	let sql = "SELECT * FROM stands\n"
+	let stands
 
-	//console.log()
-	sql = "SELECT * FROM stands\n"
-	if(saisonId){
-		console.log("pute")
-		sql += "JOIN saisons s on s.\"saisonId\" = stands.\"saisonId\"\n" +
-			"WHERE s.\"saisonId\" = $1;"
-	}
-	console.log(sql)
-	sequelize.query(sql, {bind: [saisonId]})
-		.then(data => {
-			res.send({
-				message: null,
-				data: data[0]
-			});
-		})
-		.catch(err => {
-			res.status(500).send({
-				message: err.message || "Some error occurred while retrieving Pois.",
-
-			});
+	try {
+		if(saisonId){
+			sql += "JOIN saisons s on s.\"saisonId\" = stands.\"saisonId\"\n" +
+				"WHERE s.\"saisonId\" = $1;"
+			stands = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
+		}
+		else{
+			stands = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
+		}
+		res.send(stands)
+	}catch(e) {
+		console.error(e.message)
+		res.status(500).send({
+			message: "Le server a rencontré un problème."
 		});
+	}
 };
 
 // Find a single Stand with an id

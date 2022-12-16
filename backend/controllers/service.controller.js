@@ -29,29 +29,28 @@ exports.create = async (req, res) => {
 
 // Retrieve all Services from the database.
 exports.findAll = async (req, res) => {
-    const libelle = req.query.libelle;
     const saisonId = req.body.saisonId;
-    let sql ="SELECT services.\"libelle\", services.\"nbRecherche\" FROM services\n"
-    if(saisonId){
-        sql += "JOIN \"StandsServices\" SS ON services.\"serviceId\" = SS.\"ServiceId\"\n" +
-            "JOIN stands s ON s.\"standId\" = SS.\"StandId\"\n" +
-            "JOIN saisons s2 ON s2.\"saisonId\" = s.\"saisonId\"\n" +
-            "WHERE s.\"saisonId\" = $1;"
-    }
+    let sql ="SELECT * FROM services\n"
+    let services
 
-
-
-
-
-    sequelize.query(sql, {bind: [saisonId]})
-        .then(data => {
-            res.send(data[0]);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving Services.",
-            });
+    try{
+        if(saisonId){
+            sql += "JOIN \"StandsServices\" SS ON services.\"serviceId\" = SS.\"ServiceId\"\n" +
+                "JOIN stands s ON s.\"standId\" = SS.\"StandId\"\n" +
+                "JOIN saisons s2 ON s2.\"saisonId\" = s.\"saisonId\"\n" +
+                "WHERE s.\"saisonId\" = $1;"
+            services = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
+        }
+        else{
+            services = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
+        }
+        res.send(services);
+    } catch(e){
+        console.error(e.message)
+        res.status(500).send({
+            message: "Le server a rencontrer une érreur."
         });
+    }
 };
 
 // Find a single Service with an id
