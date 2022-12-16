@@ -31,22 +31,15 @@ exports.create = async (req, res) => {
 
 // Retrieve all subgenres from the database.
 exports.findAll = async (req, res) => {
-    const libelle = req.query.libelle;
-    const genreId = req.query.genreId;
-    let condition = libelle ? { libelle: { [Op.iLike]: `%${libelle}%` } } : null;
+    let saisonId = req.body.saisonId
 
-    SousGenre.findAll({ where: condition , include: Genre})
-        .then(data => {
-            res.send({
-                message: null,
-                data: data
-            });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving Subgenres."
-            });
-        });
+    let sql = "SELECT * FROM sousGenres"
+    if (saisonId){
+        sql+="JOIN artistes a on sousGenres.\"sousGenreId\" = a.\"sousGenreId\" " +
+            "JOIN concerts c  on a.\"artisteId\" = c.\"artisteId\" " +
+            "JOIN saisons s on s.\"saisonId\" = c.\"saisonId\" " +
+            "WHERE s.\"saisonId\" = $1"
+    }
 };
 
 // Find a single subgenre with an id
