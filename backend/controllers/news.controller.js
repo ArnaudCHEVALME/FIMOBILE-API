@@ -38,10 +38,11 @@ exports.findAll = async (req, res) => {
             sql += " WHERE \"saisonId\" = $1";
             news = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
         } else {
-            news = await sequelize.query
+            news = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
         }
         res.send(news);
     } catch (e) {
+        console.error(e)
         res.status(500).send({
             message: `Le serveur a rencontré une erreur.\n` + e.message,
             data: null

@@ -65,20 +65,22 @@ exports.findAll = async (req, res) => {
 	let saisonId = req.body.saisonId
 
 	let sql = "SELECT * FROM artistes "
-	if (saisonId){
-		sql += "JOIN concerts c on artistes.\"artisteId\" = c.\"artisteId\" WHERE \"saisonId\" = $1"
-	}
+	if (saisonId) sql += "JOIN concerts c on artistes.\"artisteId\" = c.\"artisteId\" WHERE \"saisonId\" = $1"
+	try {
+		let artistes;
+		if (saisonId)
+			artistes = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
+		else
+			artistes = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
 
-	sequelize.query(sql, {bind: [saisonId]})
-		.then(data => {
-			res.send(data);
-		})
-		.catch(err => {
+		res.send(artistes);
+	}catch (e) {
+		console.error(e)
 			res.status(500).send({
-				message: `Le serveur a rencontré une erreur.\n` + err.message,
+				message: `Le serveur a rencontré une erreur.\n`,
 				data: null
 			});
-		});
+	}
 };
 
 // Find a single Artiste with an id
