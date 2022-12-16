@@ -25,26 +25,24 @@ exports.create = async (req, res) => {
 
 // Retrieve all Stand types from the database.
 exports.findAll = async (req, res) => {
-    const libelle = req.query.libelle;
     const saisonId = req.body.saisonId;
 
-    let sql = "SELECT \"typeStands\".\"libelle\", \"typeStands\".\"nbRecherche\" FROM \"typeStands\""
-    if(saisonId){
-        sql += "JOIN stands s ON \"typeStands\".\"typeStandId\" = s.\"typeStandId\"\n" +
-            "JOIN saisons s2 ON s2.\"saisonId\" = s.\"saisonId\"\n" +
-            "WHERE s2.\"saisonId\" = $1;"
+    try{
+        let sql = "SELECT \"typeStands\".\"libelle\", \"typeStands\".\"nbRecherche\" FROM \"typeStands\""
+        if(saisonId){
+            sql += "JOIN stands s ON \"typeStands\".\"typeStandId\" = s.\"typeStandId\"\n" +
+                "JOIN saisons s2 ON s2.\"saisonId\" = s.\"saisonId\"\n" +
+                "WHERE s2.\"saisonId\" = $1;"
+        let typeStand = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
+        res.send(typeStand);
+        }
+    }
+    catch(e) {
+            res.status(500).send({
+                message: "Le server a rencontrer un problème.\n" + e.message
+            });
     }
 
-    sequelize.query(sql, {bind: [saisonId]})
-        .then(data => {
-            res.send(data[0]);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving stand types."
-            });
-        });
 };
 
 // Find a single Stand type with an id
