@@ -30,42 +30,24 @@ exports.create = async (req, res) => {
 // Retrieve all Pays from the database.
 exports.findAll = async (req, res) => {
 
+    const saisonId = req.query.saisonId ? req.query.saisonId : null;
 
-    let saisonId = req.body.saisonId
-
-	let sql = "SELECT * FROM pays"
-	if (saisonId){
-		sql += " JOIN saisons s on pays.\"paysId\" = s.\"saisonId\" WHERE s.\"saisonId\" = $1"//FIXME
-	}
-
-
-	sequelize.query(sql, {bind: [saisonId]})
-		.then(data => {
-			res.send(data[0]);
-		})
-		.catch(err => {
-			res.status(500).send({
-				message: `Le serveur a rencontré une erreur.\n` + err.message,
-				data: null
-			});
-		});
-
-    // const nompays = req.query.nompays;
-    // let condition = nompays ? { nompays: { [Op.iLike]: `%${nompays}%` } } : null;
-
-    // Pays.findAll({ where: condition })
-    //     .then(data => {
-    //         res.send({
-    //             message: `Pays trouvés`,
-    //             data: data
-    //         });
-    //     })
-    //     .catch(err => {
-    //         res.status(500).send({
-    //             message: err.message || "Some error occurred while retrieving Pays.",
-                
-    //         });
-    //     });
+    let sql = "SELECT * FROM pays";
+    let news;
+    try {
+        if (saisonId) {
+            sql += " JOIN saisons s on pays.\"paysId\" = s.\"saisonId\" WHERE s.\"saisonId\" = $1"
+            news = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
+        } else {
+            news = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
+        }
+        res.send(news);
+    } catch (e) {
+        res.status(500).send({
+            message: `Le serveur a rencontré une erreur.\n` + e.message,
+            data: null
+        });
+    }
 };
 
 // Find a single Pays with an id
