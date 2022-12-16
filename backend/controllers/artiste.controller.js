@@ -9,51 +9,41 @@ const Op = db.Sequelize.Op;
 
 // Create and Save new Artistes
 exports.create = async (req, res) => {
-	console.log(req.body.liensReseaux)
+
 	// Create a new Artistes
-	const artiste = {
+	const artisteData = {
 		name: req.body.name,
 		bio: req.body.bio,
 		bannerPath: req.body.bannerPath,
-		linkClip: req.body.linkClip
+		linkClip: req.body.linkClip,
 	};
 
-	let nvLiens;
-	try {
-		nvLiens = await LienReseau.bulkCreate(eval(req.body.liensReseaux));
-		console.log(nvLiens)
-	} catch (err) {
-		console.error(err)
-		if (nvLiens) {
-			nvLiens.forEach(lien => LienReseau.destroy({where: {lienReseauId: lien.lienReseauId}}));
-			return res.status(500).send({
-					message: "Le serveur a rencontré une erreur",
-					data: null
-				}
-			)
-		}
-	}
+	let liens = eval(req.body.liensReseaux);
 
 	let nvArtiste;
 	// Save Artiste in the database
 	try {
-		nvArtiste = await Artiste.create(artiste);
+		nvArtiste = await Artiste.create(artisteData);
+		if (liens){
+			liens.forEach(lien => lien.artisteId = nvArtiste.artisteId)
+			await LienReseau.bulkCreate(liens)
+		}
 		await Promise.all(
 			[
 				nvArtiste.addSousGenre(eval(req.body.sousGenreId)),
 				nvArtiste.addConcert(eval(req.body.concertId)),
 				nvArtiste.addPays(eval(req.body.paysId)),
-				nvArtiste.setLienReseaus(nvLiens)
 			]
 		);
 	} catch (err) {
-		Artiste.destroy({where: {artisteId: nvArtiste.artisteId}});
-		res.status(500).send({
-			message: "données incorectes : " + err.message,
+		console.error(err)
+		await Artiste.destroy({where: {artisteId: nvArtiste.artisteId}});
+		return res.status(500).send({
+			message: "données incorectes : ",
 			data: null
 		});
-		return;
 	}
+
 	res.status(200).send({
 		message: "Artistes et ses associations créé",
 		data: nvArtiste
@@ -72,14 +62,16 @@ exports.findAll = async (req, res) => {
 			artistes = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
 		else
 			artistes = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
-
-		res.send(artistes);
+		res.send({
+			message: "Artistes séléctionnés",
+			data:artistes
+		});
 	}catch (e) {
 		console.error(e)
-			res.status(500).send({
-				message: `Le serveur a rencontré une erreur.\n`,
-				data: null
-			});
+		res.status(500).send({
+			message: `Le serveur a rencontré une erreur.\n`,
+			data: null
+		});
 	}
 };
 

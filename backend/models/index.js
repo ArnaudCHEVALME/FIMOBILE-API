@@ -49,7 +49,7 @@ db.saisons.hasMany(db.news, { foreignKey: "saisonId" });
 // 1 lienReseau a 1 seul artiste
 // 1 artiste a plusieurs liensReseaux
 db.liensReseaux.belongsTo(db.artistes, { foreignKey: "artisteId" });
-db.artistes.hasMany(db.liensReseaux, { foreignKey: "lienReseauId" });
+db.artistes.hasMany(db.liensReseaux, { foreignKey: "artisteId" });
 
 // 1 saison a plusieurs couleurs
 // 1 couleur peut appartenir à plusieurs saisons

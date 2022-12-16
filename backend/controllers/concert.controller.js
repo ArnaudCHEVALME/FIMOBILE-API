@@ -61,7 +61,7 @@ exports.findAll = async (req, res) => {
         if (saisonId){
             data = await sequelize.query(sql, {bind:[saisonId], type: sequelize.QueryTypes.SELECT})
         } else {
-            data = await sequelize.query(sql, {bind:[saisonId], type: sequelize.QueryTypes.SELECT})
+            data = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
         }
         res.send({
             message: `Concerts trouvés`,
@@ -70,7 +70,8 @@ exports.findAll = async (req, res) => {
     } catch (e){
         console.error(e)
         res.status(500).send({
-            message: "Le serveur .",
+            message: "Le serveur a rencontré une erreur.",
+            data:null
         });
     }
 };
