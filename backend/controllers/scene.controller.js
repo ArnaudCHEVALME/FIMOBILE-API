@@ -1,5 +1,6 @@
 const db = require("../models");
 const Scene = db.scenes;
+const sequelize = db.sequelize;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new scene type
@@ -31,13 +32,26 @@ exports.create = async (req, res) => {
 
 // Retrieve all scene from the database. -> still in progress
 exports.findAll = async (req, res) => {
-    let saisonId = req.body.saisonId
+    const saisonId = req.query.saisonId ? req.query.saisonId : null;
 
-    let sql = "SELECT * FROM scenes"
-    if (saisonId){
-        sql += "JOIN concerts c on scenes.\"sceneId\" = c.\"sceneId\" " +
-            "JOIN saisons s on s.\"saisonId\" = c.\"saisonId\"" +
-            "WHERE s.\"saisonId\" = $id"
+    let sql = "SELECT * FROM scenes";
+    let scene
+    try{
+        if (saisonId){
+            sql += "JOIN concerts c on scenes.\"sceneId\" = c.\"sceneId\" " +
+                "WHERE c.\"saisonId\" = $id"
+            scene = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
+        } else {
+            scene = await sequelize.query
+        }
+        res.send(scene)
+    }
+    catch (e){
+        console.error(e)
+        res.status(500).send({
+            message: `Le serveur a rencontré une erreur. \n` + e.message,
+            data: null
+        });
     }
 };
 
@@ -90,7 +104,7 @@ exports.update = async (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: "Error updating Scene with id=" + id,
-                
+
             });
         });
 };
