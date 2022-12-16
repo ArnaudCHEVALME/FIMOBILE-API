@@ -12,7 +12,6 @@ exports.create = async (req, res) => {
         duree: req.body.duree,
         sceneId: req.body.sceneId,
         artisteId: req.body.artisteId,
-        saisonId:req.body.saisonId
     };
 
     console.log(concert)
@@ -20,6 +19,7 @@ exports.create = async (req, res) => {
     // Save Concert in the database
     Concert.create(concert)
         .then(data => {
+            data.setSaison(req.body.saisonId);
             res.send({
                 message: `Concert créé`,
                 data: data
@@ -49,41 +49,30 @@ exports.findAllPublished = async (req, res) => {
             });
         });
 }
+
 exports.findAll = async (req, res) => {
+    let saisonId = req.query.saisonId
 
-    let sql = "SELECT * FROM concerts "
+    let sql = "SELECT * FROM concerts"
+    if (saisonId) sql+=" WHERE saisonId=$1"
 
-    let options = [];
-
-    let params = {
-        sceneId: req.query.sceneId,
-        artisteId : req.query.artisteId,
-        saisonId : req.query.saisonId,
-    }
-
-    let optionPresente = false;
-
-    Object.keys(params).forEach(param =>{
-        if (params[param]){
-            optionPresente=true;
-            options.push(param+="=$"+param)
+    let data;
+    try{
+        if (saisonId){
+            data = await sequelize.query(sql, {bind:[saisonId], type: sequelize.QueryTypes.SELECT})
+        } else {
+            data = await sequelize.query(sql, {bind:[saisonId], type: sequelize.QueryTypes.SELECT})
         }
-    })
-    if (optionPresente) sql+=" WHERE ";
-
-    sequelize.query(sql, options.join(" AND "))
-        .then(data => {
-            res.send({
-                message: `Concerts trouvés`,
-                data: data
-            });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving Concerts.",
-
-            });
+        res.send({
+            message: `Concerts trouvés`,
+            data: data
         });
+    } catch (e){
+        console.error(e)
+        res.status(500).send({
+            message: "Le serveur .",
+        });
+    }
 };
 
 // Find a single Concert with an id
