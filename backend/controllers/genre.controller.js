@@ -15,14 +15,12 @@ exports.create = async (req, res) => {
     // Save Genre in the database
     Genre.create(genre)
         .then(data => {
-            res.send({
-                message: `Genre créé`,
-                data: data
-            });
+            res.send(data);
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur.\n` + err.message, data: null
+                message: "données incorrectes : " + err.message,
+                data: null
             });
         });
 };
@@ -31,18 +29,27 @@ exports.create = async (req, res) => {
 exports.findAll = async (req, res) => {
     const saisonId = req.body.saisonId;
 
-    Genre.findAll()
-        .then(data => {
-            res.send({
-                message: `Genres trouvés`,
-                data: data
-            });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: "Le serveur a rencontré une erreur : " + err.message, data: null
-            });
+    let sql = "SELECT * FROM genres";
+    let genres;
+    try {
+        if (saisonId) {
+            sql += " JOIN sousGenres sG on genres.\"genreId\" = sG.\"genreId\"" +
+            "JOIN ArtistesSousGenres ASG on sG.\"sousGenreId\" = ASG.\"sousGenreId\"" +
+            "JOIN artistes a on ASG.\"artisteId\" = a.\"artisteId\"" +
+            "JOIN concerts c on a.\"artisteId\" = c.\"artisteId\"" +
+            "WHERE c.\"saisonId\" = $1;";
+            genres = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT});
+        } else {
+            genres = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT});
+        }
+        res.send(genres);
+    } catch (e) {
+        console.log(e);
+        res.status(500).send({
+            message: `Le serveur a rencontré une erreur.\n` + e.message,
+            data: null
         });
+    }
 };
 
 // Find a single Genre with an id
@@ -52,20 +59,19 @@ exports.findOne = async (req, res) => {
     Genre.findByPk(id, {include:SousGenre})
         .then(data => {
             if (data) {
-                res.send({
-                    message: `Genre trouvé`,
-                    data: data
-                });
+                res.send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Genre with id=${id}.`,
+                    message: `Pas de Genre avec id=${id}.`,
+                    data: null
 
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message, data: null
+                message: `Le serveur a rencontré une erreur pour l'id=${id}.\n` + err.message,
+                data: null
             });
         });
 };
