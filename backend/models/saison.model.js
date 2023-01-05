@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         bannierePath:{
             type:Sequelize.STRING,
-            allowNull: false
+            allowNull: true
         }
     });
 };
