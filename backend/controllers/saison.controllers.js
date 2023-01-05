@@ -16,6 +16,8 @@ exports.create = async (req, res) => {
         bannierePath: req.body.bannierePath
     };
 
+    console.log(saison)
+
     // Save Saison in the database
     Saison.create(saison)
         .then(data => {
@@ -27,18 +29,15 @@ exports.create = async (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while creating the Saison.",
-                
             });
         });
 };
 
 // Retrieve all Saison from the database.
 exports.findAll = async (req, res) => {
-    const theme = req.query.theme;
-
     Saison.findAll()
         .then(data => {
-            res.send({
+            res.status(200).send({
                 message: `Saisons trouvés`,
                 data: data
             });
@@ -46,7 +45,6 @@ exports.findAll = async (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving Saison.",
-                
             });
         });
 };

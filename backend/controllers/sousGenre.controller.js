@@ -34,17 +34,17 @@ exports.create = async (req, res) => {
 exports.findAll = async (req, res) => {
     const saisonId = req.query.saisonId ? req.query.saisonId : null;
 
-    let sql = "SELECT * FROM sousGenres"
+    let sql = "SELECT * FROM \"sousGenres\""
     let sousGenres;
     try{
         if (saisonId){
-            sql+= "JOIN ArtistesSousGenres s on sousGenres.\"sousGenreId\" = s.\"sousGenreId\" "+
+            sql+= "JOIN \"ArtistesSousGenres\" s on sousGenres.\"sousGenreId\" = s.\"sousGenreId\" "+
                 "JOIN artistes a on s.\"sousGenreId\" = a.\"sousGenreId\" " +
                 "JOIN concerts c  on a.\"artisteId\" = c.\"artisteId\" " +
                 "WHERE c.\"saisonId\" = $1"
             sousGenres = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
         } else {
-            sousGenres = await sequelize.query
+            sousGenres = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
         }
         res.send(sousGenres);
     } catch (e) {

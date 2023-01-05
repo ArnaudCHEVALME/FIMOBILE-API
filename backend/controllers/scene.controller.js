@@ -34,7 +34,7 @@ exports.create = async (req, res) => {
 exports.findAll = async (req, res) => {
     const saisonId = req.query.saisonId ? req.query.saisonId : null;
 
-    let sql = "SELECT * FROM scenes";
+    let sql = "SELECT * FROM scenes ";
     let scene
     try{
         if (saisonId){
@@ -42,7 +42,7 @@ exports.findAll = async (req, res) => {
                 "WHERE c.\"saisonId\" = $id"
             scene = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT})
         } else {
-            scene = await sequelize.query
+            scene = await sequelize.query(sql, {type: sequelize.QueryTypes.SELECT})
         }
         res.send(scene)
     } catch (e){

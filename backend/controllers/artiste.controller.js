@@ -20,8 +20,8 @@ exports.create = async (req, res) => {
 
 	let liens = eval(req.body.liensReseaux);
 
-	let nvArtiste;
 	// Save Artiste in the database
+	let nvArtiste;
 	try {
 		nvArtiste = await Artiste.create(artisteData);
 		if (liens){
@@ -30,7 +30,7 @@ exports.create = async (req, res) => {
 		}
 		await Promise.all(
 			[
-				nvArtiste.addSousGenre(eval(req.body.sousGenreId)),
+				nvArtiste.addSousGenre(eval(req.body.sousGenreIds)),
 				nvArtiste.addConcert(eval(req.body.concertId)),
 				nvArtiste.addPays(eval(req.body.paysId)),
 			]

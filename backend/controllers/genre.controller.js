@@ -33,8 +33,8 @@ exports.findAll = async (req, res) => {
     let genres;
     try {
         if (saisonId) {
-            sql += " JOIN sousGenres sG on genres.\"genreId\" = sG.\"genreId\"" +
-            "JOIN ArtistesSousGenres ASG on sG.\"sousGenreId\" = ASG.\"sousGenreId\"" +
+            sql += " JOIN \"sousGenres\" sG on genres.\"genreId\" = sG.\"genreId\"" +
+            "JOIN \"ArtistesSousGenres\" ASG on sG.\"sousGenreId\" = ASG.\"sousGenreId\"" +
             "JOIN artistes a on ASG.\"artisteId\" = a.\"artisteId\"" +
             "JOIN concerts c on a.\"artisteId\" = c.\"artisteId\"" +
             "WHERE c.\"saisonId\" = $1;";
@@ -64,7 +64,6 @@ exports.findOne = async (req, res) => {
                 res.status(404).send({
                     message: `Pas de Genre avec id=${id}.`,
                     data: null
-
                 });
             }
         })
