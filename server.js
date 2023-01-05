@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-
+const swaggerUi = require("swagger-ui-express");
+const YAML = require('yamljs');
 
 const path = require('path')
 require('dotenv').config({
@@ -49,6 +50,10 @@ require("./backend/routers/typeStand.router")(app);
 require("./backend/routers/user.router")(app);
 require("./backend/routers/news.router")(app);
 
+
+const swaggerDocument = YAML.load('./backend/config/swagger-config.yaml');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

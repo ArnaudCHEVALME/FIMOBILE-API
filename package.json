@@ -27,6 +27,10 @@
     "express-validator": "^6.14.2",
     "pg": "^8.8.0",
     "sequelize": "^6.25.3",
-    "xlsx": "^0.18.5"
+    "swagger-jsdoc": "^6.2.7",
+    "swagger-tools": "^0.10.4",
+    "swagger-ui-express": "^4.6.0",
+    "xlsx": "^0.18.5",
+    "yamljs": "^0.3.0"
   }
 }
