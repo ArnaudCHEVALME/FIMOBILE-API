@@ -33,10 +33,10 @@ exports.findAll = async (req, res) => {
     let genres;
     try {
         if (saisonId) {
-            sql += " JOIN sousGenres sG on genres.\"genreId\" = sG.\"genreId\"" +
-            "JOIN ArtistesSousGenres ASG on sG.\"sousGenreId\" = ASG.\"sousGenreId\"" +
-            "JOIN artistes a on ASG.\"artisteId\" = a.\"artisteId\"" +
-            "JOIN concerts c on a.\"artisteId\" = c.\"artisteId\"" +
+            sql += " INNER JOIN \"sousGenres\" sG on genres.\"genreId\" = sG.\"genreId\"" +
+            "INNER JOIN \"ArtistesSousGenres\" ASG on sG.\"sousGenreId\" = ASG.\"sousGenreId\"" +
+            "INNER JOIN artistes a on ASG.\"artisteId\" = a.\"artisteId\"" +
+            "INNER JOIN concerts c on a.\"artisteId\" = c.\"artisteId\"" +
             "WHERE c.\"saisonId\" = $1;";
             genres = await sequelize.query(sql, {bind: [saisonId], type: sequelize.QueryTypes.SELECT});
         } else {

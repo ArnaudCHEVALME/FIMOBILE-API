@@ -1,0 +1,279 @@
+openapi: 3.0.0
+info:
+  title: FIMU API
+  description: FIMU API Information
+servers:
+  - url: http://localhost:8080
+    description: Local server
+tags:
+  - name: artistes
+    description: Tout concernant les artistes
+  - name: store
+basePath: /
+schemes:
+  - https
+consumes:
+  - application/x-www-form-urlencoded
+produces:
+  - application/json
+
+paths:
+  /artistes:
+    post:
+      tags:
+          - artistes
+      summary: "Create a new artiste"
+      operationId: "createArtiste"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "formData"
+          name: "name"
+          type: "string"
+          required: true
+          example: "John Smith"
+        - in: "formData"
+          name: "bio"
+          type: "string"
+          required: true
+          example: "John Smith is a singer"
+        - in: "formData"
+          name: "bannerPath"
+          type: "string"
+          required: true
+          example: "/images/banners/JohnSmith.jpg"
+        - in: "formData"
+          name: "linkClip"
+          type: "string"
+          required: true
+          example: "https://www.youtube.com/watch?v=123456789"
+        - in: "formData"
+          name: "liensReseaux"
+          type: "array"
+          items:
+            type: "string"
+          required: true
+          example: ["https://www.facebook.com/JohnSmith", "https://www.instagram.com/JohnSmith"]
+        - in: "formData"
+          name: "sousGenreId"
+          type: "array"
+          items:
+            type: "string"
+          required: true
+          example: [ "1", "2" ]
+        - in: "formData"
+          name: "concertId"
+          type: "array"
+          items:
+            type: "string"
+          required: true
+          example: [ "1", "2" ]
+        - in: "formData"
+          name: "paysId"
+          type: "array"
+          items:
+            type: "string"
+          required: true
+          example: [ "1", "2" ]
+          responses:
+            "200":
+              description: "Successful operation"
+              schema:
+                $ref: "#/definitions/Artiste"
+            "400":
+              description: "Invalid input"
+
+    get:
+      tags:
+        - artistes
+      summary: "Retrieve all artistes"
+      operationId: "findAllArtistes"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "formData"
+          name: "saisonId"
+          type: "string"
+          required: false
+          example: "1"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Artiste"
+        "500":
+          description: "Server error"
+  artistes/{id}:
+    get:
+      tags:
+        - artistes
+      summary: "Retrieve a single artiste by id"
+      operationId: "findArtisteById"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "id"
+          type: "string"
+          required: true
+          example: "1"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Artiste"
+        "404":
+          description: "Artiste not found"
+        "500":
+          description: "Server error"
+  /genres:
+    post:
+      summary: Create a new genre
+      operationId: createGenre
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              libelle:
+                type: string
+      responses:
+        '200':
+          description: Genre created successfully
+          schema:
+            type: object
+            properties:
+              genre:
+                $ref: '#/definitions/Genre'
+        '400':
+          description: Invalid input
+    get:
+      summary: Get all genres
+      operationId: getAllGenres
+      parameters:
+        - name: saisonId
+          in: body
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Genre'
+  /genres/{id}:
+    get:
+      summary: Get a single genre by id
+      operationId: getGenreById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Genre'
+        '404':
+          description: Genre not found
+    put:
+      summary: Update a genre by id
+      operationId: updateGenreById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              libelle:
+                type: string
+      responses:
+        '200':
+          description: Genre updated successfully
+          schema:
+            type: object
+            properties:
+              genre:
+                $ref: '#/definitions/Genre'
+        '404':
+          description: Genre not found
+        '500':
+          description: Server error
+    delete:
+      summary: Delete a genre by id
+      operationId: deleteGenreById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Genre deleted successfully
+          schema:
+            type: object
+            properties:
+              genre:
+                $ref: '#/definitions/Genre'
+        '404':
+          description: Genre not found
+        '500':
+          description: Server error
+
+definitions:
+  Genre:
+    type: object
+    properties:
+      genreId:
+        type: integer
+      libelle:
+        type: string
+      sousGenres:
+        type: array
+        items:
+          $ref: '#/definitions/SousGenre'
+  SousGenre:
+    type: object
+    properties:
+      sousGenreId:
+        type: integer
+      libelle:
+        type: string
+      artistes:
+        type: array
+        items:
+          $ref: '#/definitions/Artiste'
+  Artiste:
+    type: object
+    properties:
+      artisteId:
+        type: integer
+      nom:
+        type: string
+      concerts:
+        type: array
+        items:
+          $ref: '#/definitions/Concert'
+  Concert:
+    type: object
+    properties:
+      concertId:
+        type: integer
+      saisonId:
+        type: integer
